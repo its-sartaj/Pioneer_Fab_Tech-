@@ -249,7 +249,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-700/80 text-slate-400 group-hover:border-[#ff7a00] group-hover:text-[#ff7a00] flex items-center justify-center shrink-0 transition-colors">
                       <ChevronRight className="w-3 h-3 stroke-[2.5]" />
                     </span>
-                    <span className="font-medium tracking-wide">{link.label}</span>
+                    <span className="font-medium tracking-wide group-hover-underline-burgundy">{link.label}</span>
                   </button>
                 </li>
               ))}
@@ -318,7 +318,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       <span className="w-6 h-6 rounded-md bg-slate-900 border border-slate-700/80 text-slate-300 group-hover:border-[#ff7a00] group-hover:text-[#ff7a00] flex items-center justify-center shrink-0 transition-colors">
                         <IconComponent className="w-3.5 h-3.5 stroke-[2]" />
                       </span>
-                      <span className="font-medium tracking-wide truncate">{item.title}</span>
+                      <span className="font-medium tracking-wide truncate group-hover-underline-burgundy">{item.title}</span>
                     </button>
                   </li>
                 );

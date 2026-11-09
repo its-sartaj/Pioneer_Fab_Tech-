@@ -287,7 +287,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                 return (
                   <div 
                     key={link.id}
-                    className="relative h-full flex items-center border-r last:border-r-0 border-slate-200 group/navitem"
+                    className="relative h-full flex items-center border-r last:border-r-0 border-slate-200 group"
                     onMouseEnter={() => handleMouseEnter(link.id, link.hasDropdown)}
                   >
                     {/* Clean cell link with exact bold typography from reference screenshot */}
@@ -311,7 +311,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                       {link.hasDropdown && (
                         <ChevronDown 
                           className={`w-3.5 h-3.5 stroke-[2.8] transition-transform duration-200 ${
-                            isDropdownOpen ? 'rotate-180 text-[#8B2E1D]' : 'text-slate-600 group-hover/navitem:text-[#8B2E1D]'
+                            isDropdownOpen ? 'rotate-180 text-[#8B2E1D]' : 'text-slate-600 group-hover:text-[#8B2E1D]'
                           }`} 
                         />
                       )}
@@ -320,7 +320,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                     {/* Full-Width Bottom Border Hover Animation:
                         Only active when hovering with mouse, never stays stuck on active tab, smoothly retracts as soon as mouse leaves */}
                     <span 
-                      className="absolute bottom-0 left-0 right-0 h-[3.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none z-10 scale-x-0 group-hover/navitem:scale-x-100" 
+                      className="absolute bottom-0 left-0 right-0 h-[3.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none z-10 scale-x-0 group-hover:scale-x-100" 
                     />
 
                     {/* Interactive Dropdown - Single Column Name List Only (No Image, with Bottom Animation) */}
