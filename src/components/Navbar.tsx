@@ -4,6 +4,7 @@ import {
   Mail, 
   ChevronDown, 
   X, 
+  Menu,
   ChevronRight,
   ArrowRight,
   Sparkles,
@@ -372,18 +373,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
               })}
             </nav>
 
-            {/* Mobile View - 3-DOT MENU BUTTON ON RIGHT */}
+            {/* Mobile View - Professional 3-Line Hamburger Menu Button */}
             <div className="flex lg:hidden items-center">
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
-                className="relative group p-2.5 rounded-xl bg-slate-900 text-white shadow-md border border-slate-700 hover:border-amber-400 transition-all active:scale-95 cursor-pointer flex flex-col items-center justify-center gap-1 w-10 h-10"
-                aria-label="Open navigation menu from left"
+                className="relative group p-2 rounded-xl bg-slate-900 text-white shadow-md border border-slate-700 hover:border-amber-400 hover:bg-slate-800 transition-all active:scale-95 cursor-pointer flex items-center justify-center w-10 h-10"
+                aria-label="Open navigation menu"
                 title="Open menu"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-amber-400 transition-colors" />
-                <span className="w-2 h-2 rounded-full bg-amber-500 ring-2 ring-amber-400/30 group-hover:scale-115 transition-transform" />
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-amber-400 transition-colors" />
+                <Menu className="w-5 h-5 text-white group-hover:text-amber-400 transition-colors" strokeWidth={2.4} />
               </button>
             </div>
 
