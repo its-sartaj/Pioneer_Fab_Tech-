@@ -1,0 +1,421 @@
+@import "tailwindcss";
+
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    border-top: none !important;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+  
+  header {
+    border-top: none !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Urbanist', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.02em;
+  }
+}
+
+/* Premium Typography Classes */
+.font-display {
+  font-family: 'Urbanist', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-hero-desc {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: 0.005em;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Hero Slider Animations */
+@keyframes heroProgressBar {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+@keyframes heroSlideUp {
+  0% { 
+    opacity: 0; 
+    transform: translateY(18px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes heroSlideDown {
+  0% { 
+    opacity: 0; 
+    transform: translateY(-18px); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.animate-hero-up {
+  animation: heroSlideUp 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-hero-down {
+  animation: heroSlideDown 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-hero-progress {
+  animation: heroProgressBar 4.5s linear forwards;
+}
+
+/* Dropdown Sub-Items Staggered Slide-Up From Bottom */
+@keyframes dropdownItemSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-dropdown-item {
+  opacity: 0;
+  animation: dropdownItemSlideUp 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ========================================================
+   Fast, Subtle Scrolling Reveal Animations (Speed Optimized)
+   ======================================================== */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.28s ease-out, transform 0.28s ease-out;
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Word & Text Reveal: fast, subtle slide up */
+.reveal-word {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.24s ease-out, transform 0.24s ease-out;
+  will-change: opacity, transform;
+}
+
+.reveal-word.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Image Reveal: fast, subtle fade-in */
+.reveal-image {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.28s ease-out, transform 0.28s ease-out;
+  will-change: opacity, transform;
+}
+
+.reveal-image.is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Directional Reveals */
+.reveal-from-left {
+  opacity: 0;
+  transform: translateX(-14px);
+  transition: opacity 0.28s ease-out, transform 0.28s ease-out;
+  will-change: opacity, transform;
+}
+
+.reveal-from-left.is-revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-from-right {
+  opacity: 0;
+  transform: translateX(18px);
+  transition: opacity 0.28s ease-out, transform 0.28s ease-out;
+  will-change: opacity, transform;
+}
+
+.reveal-from-right.is-revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Stagger Delays - Snappy & Immediate */
+.delay-75  { transition-delay: 20ms; }
+.delay-150 { transition-delay: 40ms; }
+.delay-200 { transition-delay: 60ms; }
+.delay-300 { transition-delay: 80ms; }
+.delay-400 { transition-delay: 100ms; }
+.delay-500 { transition-delay: 120ms; }
+.delay-600 { transition-delay: 140ms; }
+
+/* ========================================================
+   CSS Left-to-Right Animated Underline Hover Effect
+   Using transform: scaleX() and transition
+   Color: Deep Burgundy (#8B2E1D)
+   ======================================================== */
+
+.hover-underline-burgundy {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.hover-underline-burgundy::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2.5px;
+  bottom: -2px;
+  left: 0;
+  background-color: #8B2E1D;
+  transform: scaleX(0);
+  transform-origin: bottom left;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-underline-burgundy:hover::after,
+.hover-underline-burgundy:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Sweep variant: expands from left, exits toward right */
+.hover-underline-burgundy-sweep {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+}
+
+.hover-underline-burgundy-sweep::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2.5px;
+  bottom: -2px;
+  left: 0;
+  background-color: #8B2E1D;
+  transform: scaleX(0);
+  transform-origin: bottom right;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hover-underline-burgundy-sweep:hover::after,
+.hover-underline-burgundy-sweep:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* Group hover variant for parent containers (e.g., buttons, cards, list items) */
+.group-hover-underline-burgundy {
+  position: relative;
+  display: inline-block;
+}
+
+.group-hover-underline-burgundy::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2.5px;
+  bottom: -2px;
+  left: 0;
+  background-color: #8B2E1D;
+  transform: scaleX(0);
+  transform-origin: bottom left;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .group-hover-underline-burgundy::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+/* ========================================================
+   Full-Width Bottom Border Hover Animation
+   ======================================================== */
+
+/* 1. Left-to-Right Full-Width Bottom Border */
+.full-width-bottom-border-ltr {
+  position: relative;
+}
+
+.full-width-bottom-border-ltr::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--border-hover-color, #8B2E1D);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.full-width-bottom-border-ltr:hover::after,
+.full-width-bottom-border-ltr:focus-within::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* 2. Center-Outward Full-Width Bottom Border */
+.full-width-bottom-border-center {
+  position: relative;
+}
+
+.full-width-bottom-border-center::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--border-hover-color, #8B2E1D);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.full-width-bottom-border-center:hover::after,
+.full-width-bottom-border-center:focus-within::after {
+  transform: scaleX(1);
+  transform-origin: center;
+}
+
+/* 3. Left-In / Right-Out Sweep Full-Width Bottom Border */
+.full-width-bottom-border-sweep {
+  position: relative;
+}
+
+.full-width-bottom-border-sweep::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--border-hover-color, #8B2E1D);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.full-width-bottom-border-sweep:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Parent/Group Hover Full-Width Bottom Border */
+.group-full-width-border-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #8B2E1D;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.group:hover .group-full-width-border-bottom,
+.group-hover\/navitem:hover .group-full-width-border-bottom {
+  transform: scaleX(1);
+}
+
+/* Lightbox Modal Keyframes */
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalScaleIn {
+  from { 
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to { 
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-scaleIn {
+  animation: modalScaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Animated Blue Liquid Fill for Achievement Metric Cards */
+.achievement-card-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #1e40af 0%, #2563eb 55%, #38bdf8 100%);
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.group:hover .achievement-card-fill {
+  transform: scaleY(1);
+}
+
+/* Animated Burnt Orange Liquid Fill for Client Cards */
+.client-card-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #7c2d12 0%, #9a3412 35%, #c2410c 70%, #ea580c 100%);
+  box-shadow: inset 0 2px 0 0 rgba(255, 255, 255, 0.4);
+  transform-origin: bottom;
+  transform: scaleY(0);
+  transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.group:hover .client-card-fill {
+  transform: scaleY(1);
+}
+
+
+
