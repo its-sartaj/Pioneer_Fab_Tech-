@@ -249,7 +249,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                     <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-700/80 text-slate-400 group-hover:border-[#ff7a00] group-hover:text-[#ff7a00] flex items-center justify-center shrink-0 transition-colors">
                       <ChevronRight className="w-3 h-3 stroke-[2.5]" />
                     </span>
-                    <span className="font-medium tracking-wide group-hover-underline-burgundy">{link.label}</span>
+                    <div className="relative inline-block">
+                      <span className="font-medium tracking-wide pb-0.5 block">{link.label}</span>
+                      <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none scale-x-0 group-hover:scale-x-100" />
+                    </div>
                   </button>
                 </li>
               ))}
@@ -318,7 +321,12 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       <span className="w-6 h-6 rounded-md bg-slate-900 border border-slate-700/80 text-slate-300 group-hover:border-[#ff7a00] group-hover:text-[#ff7a00] flex items-center justify-center shrink-0 transition-colors">
                         <IconComponent className="w-3.5 h-3.5 stroke-[2]" />
                       </span>
-                      <span className="font-medium tracking-wide truncate group-hover-underline-burgundy">{item.title}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="relative inline-block max-w-full">
+                          <span className="font-medium tracking-wide block truncate pb-0.5">{item.title}</span>
+                          <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none scale-x-0 group-hover:scale-x-100" />
+                        </div>
+                      </div>
                     </button>
                   </li>
                 );
@@ -365,9 +373,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </div>
                 <a 
                   href={`tel:${COMPANY_INFO.phoneRaw}`}
-                  className="text-base sm:text-lg font-black text-white hover:text-[#ff9500] tracking-wide transition-colors"
+                  className="group relative inline-block text-base sm:text-lg font-black text-white hover:text-[#ff9500] tracking-wide transition-colors"
                 >
-                  {COMPANY_INFO.phone}
+                  <span className="pb-0.5 block">{COMPANY_INFO.phone}</span>
+                  <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none scale-x-0 group-hover:scale-x-100" />
                 </a>
               </div>
 
@@ -378,9 +387,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </div>
                 <a 
                   href={`mailto:${COMPANY_INFO.email}`}
-                  className="text-[13px] text-slate-200 hover:text-[#ff9500] transition-colors break-all font-medium"
+                  className="group relative inline-block text-[13px] text-slate-200 hover:text-[#ff9500] transition-colors break-all font-medium"
                 >
-                  {COMPANY_INFO.email}
+                  <span className="pb-0.5 block">{COMPANY_INFO.email}</span>
+                  <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none scale-x-0 group-hover:scale-x-100" />
                 </a>
               </div>
 
