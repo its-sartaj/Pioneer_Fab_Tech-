@@ -85,26 +85,24 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
           </h1>
           
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center justify-center gap-2 text-xs sm:text-sm font-medium text-slate-300">
+          <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-200 font-medium pt-1">
             <button 
               onClick={() => onNavigate('home')} 
-              className="hover:text-[#ff7a00] transition-colors cursor-pointer"
+              className="hover:text-amber-400 transition-colors cursor-pointer"
             >
               Home
             </button>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
             <button 
               onClick={() => setSelectedProductId('all')}
-              className={`hover:text-[#ff7a00] transition-colors cursor-pointer ${
-                selectedProductId === 'all' ? 'text-[#ff7a00] font-semibold' : 'text-slate-300'
-              }`}
+              className="text-white font-bold select-none hover:text-amber-400 transition-colors cursor-pointer"
             >
               Material Supply
             </button>
             {currentProduct && (
               <>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
-                <span className="text-[#ff7a00] font-semibold">{currentProduct.name}</span>
+                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                <span className="text-white font-bold select-none">{currentProduct.name}</span>
               </>
             )}
           </div>
