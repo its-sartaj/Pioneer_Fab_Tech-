@@ -82,12 +82,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* 3. Our Core Fabrication Services Section (Exact match to Our Material design) */}
-      <section className="py-12 sm:py-16 bg-[#802a00] text-white relative overflow-hidden">
+      <section className="py-12 sm:py-16 bg-[#c2410c] text-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-7 sm:space-y-9">
           
           {/* Centered Heading */}
           <div className="text-center reveal-word">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#eb8858] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
               Our Core Fabrication Services
             </h2>
           </div>
@@ -112,9 +112,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                     />
                   </div>
 
-                  {/* Centered Bold Title in Rich Rust-Brown */}
+                  {/* Centered Bold Title in Burnt Orange */}
                   <div className="pt-3.5 pb-1 text-center">
-                    <h3 className="text-base sm:text-lg font-bold text-[#802a00] group-hover:text-[#a03400] transition-colors leading-tight line-clamp-1">
+                    <h3 className="text-base sm:text-lg font-bold text-[#c2410c] group-hover:text-[#9a3412] transition-colors leading-tight line-clamp-1">
                       {service.title}
                     </h3>
                   </div>
@@ -232,12 +232,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <OurAchievementsSection />
 
       {/* 6. Our Material Section (Exact match to reference design image_8a251916.png) */}
-      <section className="py-12 sm:py-16 bg-[#802a00] text-white relative overflow-hidden">
+      <section className="py-12 sm:py-16 bg-[#c2410c] text-white relative overflow-hidden">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-7 sm:space-y-9">
           
           {/* Exact Heading - keep name only "Our Material" */}
           <div className="text-center reveal-word">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#eb8858] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
               Our Material
             </h2>
           </div>
@@ -318,9 +318,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                     />
                   </div>
 
-                  {/* Centered Bold Title in Rich Rust-Brown */}
+                  {/* Centered Bold Title in Burnt Orange */}
                   <div className="pt-3.5 pb-1 text-center">
-                    <h3 className="text-base sm:text-lg font-bold text-[#802a00] group-hover:text-[#a03400] transition-colors leading-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-[#c2410c] group-hover:text-[#9a3412] transition-colors leading-tight">
                       {item.title}
                     </h3>
                   </div>
