@@ -159,17 +159,34 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedPhotoIndex, handleNext, handlePrev]);
 
-  // Lock background page scroll while mobile lightbox is open; restore cleanly on close
+  // Lock background page scroll while lightbox is open; compensate scrollbar width on desktop to prevent jump
   useEffect(() => {
-    if (!isMobileView || selectedPhotoIndex === null) return;
+    if (selectedPhotoIndex === null) return;
     const prevBodyOverflow = document.body.style.overflow;
     const prevHtmlOverflow = document.documentElement.style.overflow;
+
+    if (isMobileView) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = prevBodyOverflow;
+        document.documentElement.style.overflow = prevHtmlOverflow;
+      };
+    }
+
+    const prevBodyPaddingRight = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarWidth > 0) {
+      const computedPaddingRight = parseFloat(getComputedStyle(document.body).paddingRight) || 0;
+      document.body.style.paddingRight = `${computedPaddingRight + scrollbarWidth}px`;
+    }
     document.body.style.overflow = 'hidden';
     document.documentElement.style.overflow = 'hidden';
 
     return () => {
       document.body.style.overflow = prevBodyOverflow;
       document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.paddingRight = prevBodyPaddingRight;
     };
   }, [isMobileView, selectedPhotoIndex]);
 
@@ -177,7 +194,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
     selectedPhotoIndex !== null && GALLERY_ITEMS[selectedPhotoIndex] ? (
       <div
         className={`fixed inset-0 z-50 bg-black/95 md:backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn touch-pan-y ${
-          isMobileView ? 'gallery-mobile-lightbox' : ''
+          isMobileView ? 'gallery-mobile-lightbox' : 'gallery-desktop-lightbox'
         }`}
         role="dialog"
         aria-modal="true"
@@ -197,8 +214,10 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
       >
         {/* Top Bar with Counter and Close Button */}
         <div
-          className={`absolute left-4 right-4 flex items-center justify-between text-white pointer-events-none ${
-            isMobileView ? 'top-[max(1rem,env(safe-area-inset-top))] z-[10000]' : 'top-4 z-30'
+          className={`absolute flex items-center justify-between text-white pointer-events-none z-[10000] ${
+            isMobileView
+              ? 'left-4 right-4 top-[max(1rem,env(safe-area-inset-top))]'
+              : 'left-6 right-6 top-4'
           }`}
         >
           <span className="text-xs sm:text-sm font-semibold text-slate-300 px-3.5 py-1.5 rounded-full bg-slate-800/85 shadow-md pointer-events-auto">
@@ -210,9 +229,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
               e.stopPropagation();
               setSelectedPhotoIndex(null);
             }}
-            className={`rounded-full bg-slate-800/90 hover:bg-slate-700 text-white transition-colors cursor-pointer shadow-lg pointer-events-auto flex items-center justify-center ${
-              isMobileView ? 'w-11 h-11 border border-white/25' : 'p-2.5'
-            }`}
+            className="w-11 h-11 rounded-full bg-slate-800/90 hover:bg-slate-700 text-white border border-white/25 transition-colors cursor-pointer shadow-lg pointer-events-auto flex items-center justify-center"
             title="Close (Esc)"
             aria-label="Close gallery lightbox"
           >
@@ -224,9 +241,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
         <button
           type="button"
           onClick={handlePrev}
-          className={`absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 ${
-            isMobileView ? 'z-[10000] border border-white/15' : 'z-30'
-          }`}
+          className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white border border-white/15 transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 z-[10000]"
           title="Previous (Arrow Left)"
           aria-label="Previous photo"
         >
@@ -235,24 +250,17 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
 
         {/* Centered Image Viewport */}
         <div
-          className={
-            isMobileView
-              ? 'gallery-mobile-lightbox-stage'
-              : 'max-w-5xl max-h-[85vh] w-full flex items-center justify-center p-2 sm:p-4'
-          }
-          onClick={isMobileView ? undefined : (e) => e.stopPropagation()}
+          className={isMobileView ? 'gallery-mobile-lightbox-stage' : 'gallery-desktop-lightbox-stage'}
         >
           <img
             src={GALLERY_ITEMS[selectedPhotoIndex].src}
             alt="Enlarged Gallery View"
             key={selectedPhotoIndex}
             decoding="async"
-            onClick={isMobileView ? (e) => e.stopPropagation() : undefined}
-            className={
-              isMobileView
-                ? 'gallery-mobile-lightbox-img rounded-xl shadow-2xl select-none animate-scaleIn'
-                : 'max-h-[82vh] sm:max-h-[85vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl select-none animate-scaleIn'
-            }
+            onClick={(e) => e.stopPropagation()}
+            className={`${
+              isMobileView ? 'gallery-mobile-lightbox-img' : 'gallery-desktop-lightbox-img'
+            } rounded-xl shadow-2xl select-none animate-scaleIn`}
           />
         </div>
 
@@ -260,9 +268,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
         <button
           type="button"
           onClick={handleNext}
-          className={`absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 ${
-            isMobileView ? 'z-[10000] border border-white/15' : 'z-30'
-          }`}
+          className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white border border-white/15 transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 z-[10000]"
           title="Next (Arrow Right)"
           aria-label="Next photo"
         >
@@ -364,9 +370,9 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
         )}
       </div>
 
-      {/* 4. Fullscreen Lightbox: on mobile (<= 768px) portal to document.body outside any parent transforms */}
-      {isMobileView && typeof document !== 'undefined'
-        ? lightboxModal && createPortal(lightboxModal, document.body)
+      {/* 4. Fullscreen Lightbox: portaled directly to document.body outside any parent transforms */}
+      {typeof document !== 'undefined' && lightboxModal
+        ? createPortal(lightboxModal, document.body)
         : lightboxModal}
 
     </div>

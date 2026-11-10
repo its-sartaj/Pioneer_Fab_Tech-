@@ -581,4 +581,46 @@
   }
 }
 
+/* ========================================================
+   Desktop/Laptop-Only Lightbox Rules (min-width: 769px)
+   Mobile view (<= 768px) remains 100% untouched
+   ======================================================== */
+@media (min-width: 769px) {
+  .gallery-desktop-lightbox {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overscroll-behavior: contain;
+  }
+
+  .gallery-desktop-lightbox-stage {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    pointer-events: none;
+  }
+
+  .gallery-desktop-lightbox-img {
+    max-width: 90vw !important;
+    max-height: 88vh !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    pointer-events: auto;
+  }
+}
+
 
