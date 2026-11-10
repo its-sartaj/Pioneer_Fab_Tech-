@@ -7,6 +7,7 @@ import { AutoSliderRow } from '../components/AutoSliderRow';
 import { PageId } from '../components/Navbar';
 import { HeroSlider } from '../components/HeroSlider';
 import { OurAchievementsSection } from '../components/OurAchievementsSection';
+import { DarkOrangeLiquidFill } from '../components/DarkOrangeLiquidFill';
 
 interface HomePageProps {
   onNavigate: (page: PageId, itemId?: string) => void;
@@ -194,22 +195,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             ].map((card) => (
               <div
                 key={card.num}
-                className="group relative overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+                className="group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
               >
                 {/* Animated Dark Orange Liquid Fill Layer with Rising Wave */}
-                <div className="why-choose-card-fill">
-                  <svg
-                    className="why-choose-wave"
-                    viewBox="0 0 1200 60"
-                    preserveAspectRatio="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M0,30 Q150,0 300,30 T600,30 Q750,0 900,30 T1200,30 L1200,60 L0,60 Z"
-                      fill="#ea6800"
-                    />
-                  </svg>
-                </div>
+                <DarkOrangeLiquidFill />
 
                 <div className="relative z-10">
                   <div className="flex items-start justify-between">

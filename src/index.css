@@ -384,22 +384,6 @@
   animation: modalScaleIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Animated Blue Liquid Fill for Achievement Metric Cards */
-.achievement-card-fill {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, #1e40af 0%, #2563eb 55%, #38bdf8 100%);
-  transform-origin: bottom;
-  transform: scaleY(0);
-  transition: transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.group:hover .achievement-card-fill {
-  transform: scaleY(1);
-}
-
 /* Animated Burnt Orange Liquid Fill for Client Cards */
 .client-card-fill {
   position: absolute;
@@ -417,8 +401,8 @@
   transform: scaleY(1);
 }
 
-/* Animated Dark Orange Liquid Fill with Wave Crest for Why Choose Us Cards */
-@keyframes whyChooseWaveSlide {
+/* Shared Dark Orange Wavy Liquid Fill Animation for Hover Cards */
+@keyframes darkOrangeWaveSlide {
   0% {
     transform: translateX(0);
   }
@@ -427,7 +411,7 @@
   }
 }
 
-.why-choose-card-fill {
+.liquid-fill-dark-orange {
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, #b84400 0%, #c95100 35%, #db5d00 75%, #ea6800 100%);
@@ -437,17 +421,17 @@
   z-index: 0;
 }
 
-.group:hover .why-choose-card-fill {
+.group:hover .liquid-fill-dark-orange {
   transform: translateY(0%);
 }
 
-.why-choose-wave {
+.liquid-wave-dark-orange {
   position: absolute;
   top: -24px;
   left: 0;
   width: 200%;
   height: 25px;
-  animation: whyChooseWaveSlide 2s linear infinite;
+  animation: darkOrangeWaveSlide 2s linear infinite;
   pointer-events: none;
 }
 

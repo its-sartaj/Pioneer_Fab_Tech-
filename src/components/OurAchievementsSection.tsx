@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { DarkOrangeLiquidFill } from './DarkOrangeLiquidFill';
 
 interface AchievementMetric {
   id: string;
@@ -250,14 +251,14 @@ export const OurAchievementsSection: React.FC = () => {
               <div
                 key={item.id}
                 style={delayStyle}
-                className={`relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/35 bg-white/[0.04] backdrop-blur-xs p-8 sm:p-9 text-center flex flex-col items-center justify-between min-h-[300px] sm:min-h-[340px] shadow-xl hover:border-cyan-400/90 hover:shadow-[0_12px_35px_rgba(37,99,235,0.45)] transition-all duration-300 ease-out group hover:-translate-y-2 cursor-pointer ${
+                className={`relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border border-white/35 bg-white/[0.04] backdrop-blur-xs p-8 sm:p-9 text-center flex flex-col items-center justify-between min-h-[300px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-all duration-300 ease-out group hover:-translate-y-2 cursor-pointer ${
                   isRevealed
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-3 pointer-events-none'
                 }`}
               >
-                {/* Animated Blue Fill: Scales up from bottom on hover, scales down on cursor leave */}
-                <div className="achievement-card-fill" />
+                {/* Animated Dark Orange Liquid Fill with Rising Wave */}
+                <DarkOrangeLiquidFill />
                 
                 {/* Subtle soft sheen highlight */}
                 <div 
@@ -269,8 +270,8 @@ export const OurAchievementsSection: React.FC = () => {
                   {renderIcon(item.icon)}
                 </div>
 
-                {/* 2. Red-Orange Accent Divider Line */}
-                <div className="relative z-10 w-12 sm:w-14 h-0.5 bg-[#e26922] mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-amber-300" />
+                {/* 2. Dark Orange Accent Divider Line */}
+                <div className="relative z-10 w-12 sm:w-14 h-0.5 bg-[#e26922] mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-white" />
 
                 {/* 3. Big Countable Number with + suffix */}
                 <div className="relative z-10 flex items-baseline justify-center">
