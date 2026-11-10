@@ -17,34 +17,8 @@ export interface GalleryItem {
   direction: 'bottom' | 'left' | 'right';
 }
 
-// 24 High-resolution fabrication images - ALL WITH THE EXACT SAME UNIFORM BOX SIZE (aspect-[4/3])
-export const GALLERY_ITEMS: GalleryItem[] = [
-  { id: 'gal-1', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.03.58_PM_2f881ee9.jpeg', direction: 'bottom' },
-  { id: 'gal-2', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.03.59_PM_28dd008a.jpeg', direction: 'right' },
-  { id: 'gal-3', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.03.59_PM__1__bb8af710.jpeg', direction: 'left' },
-  { id: 'gal-4', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.03.59_PM__2__e75816fa.jpeg', direction: 'left' },
-  { id: 'gal-5', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.00_PM_a92b3d59.jpeg', direction: 'bottom' },
-  { id: 'gal-6', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.00_PM__1__3cfa08e4.jpeg', direction: 'right' },
-  { id: 'gal-7', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.01_PM_5eb73795.jpeg', direction: 'right' },
-  { id: 'gal-8', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.02_PM_cf3743ac.jpeg', direction: 'bottom' },
-  { id: 'gal-9', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.02_PM__1__b8d93cd1.jpeg', direction: 'left' },
-  { id: 'gal-10', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM_2f9ff5e2.jpeg', direction: 'bottom' },
-  { id: 'gal-11', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM__1__58f268a1.jpeg', direction: 'left' },
-  { id: 'gal-12', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM__2__e0b466fd.jpeg', direction: 'right' },
-  { id: 'gal-13', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.04_PM__1__313234b2.jpeg', direction: 'bottom' },
-  { id: 'gal-14', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.05_PM_0a02320f.jpeg', direction: 'left' },
-  { id: 'gal-15', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.05_PM__1__7d891123.jpeg', direction: 'right' },
-  { id: 'gal-16', src: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.05_PM__2__0873d20e.jpeg', direction: 'bottom' },
-  { id: 'gal-18', src: '/assets/precision_pipe_fittings.jpg', direction: 'right' },
-  { id: 'gal-19', src: '/assets/gallery/nexus_mall_hyderabad_1793776855387.jpg', direction: 'bottom' },
-  { id: 'gal-20', src: '/assets/gallery/nexus_hyd_balustrade_1793776925839.jpg', direction: 'left' },
-  { id: 'gal-21', src: '/assets/gallery/westend_mall_pune_1793776873429.jpg', direction: 'right' },
-  { id: 'gal-22', src: '/assets/gallery/nexus_mall_mumbai_1793776888521.jpg', direction: 'bottom' },
-  { id: 'gal-23', src: '/assets/gallery/nexus_mall_pune_1793776906431.jpg', direction: 'left' },
-  { id: 'gal-24', src: '/assets/gallery/westend_pune_facade_1793776941787.jpg', direction: 'right' },
-  { id: 'gal-25', src: '/assets/gallery/nexus_mumbai_portal_1793776959410.jpg', direction: 'bottom' },
-  { id: 'gal-26', src: '/assets/gallery/nexus_pune_facade_1793776973954.jpg', direction: 'left' },
-];
+// Gallery photos (currently cleared — ready for new photos)
+export const GALLERY_ITEMS: GalleryItem[] = [];
 
 export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
@@ -200,47 +174,55 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
 
       {/* 3. Uniform Grid - Sabka Box Size Exactly Same (Uniform aspect-[4/3] for every box) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {GALLERY_ITEMS.map((item, idx) => (
-            <div
-              key={item.id}
-              data-direction={item.direction}
-              className="gallery-grid-card will-change-transform will-change-opacity"
-            >
-              {/* Every box has the exact same aspect-[4/3] uniform dimension */}
+        {GALLERY_ITEMS.length === 0 ? (
+          <div className="py-16 sm:py-24 text-center rounded-2xl border border-dashed border-slate-300 bg-white/70">
+            <p className="text-base sm:text-lg font-semibold text-slate-600">
+              Project Gallery photos will be updated soon.
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {GALLERY_ITEMS.map((item, idx) => (
               <div
-                onClick={() => setSelectedPhotoIndex(idx)}
-                className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm hover:shadow-xl transition-shadow duration-400 cursor-pointer group"
+                key={item.id}
+                data-direction={item.direction}
+                className="gallery-grid-card will-change-transform will-change-opacity"
               >
-                {/* Parallax inner image wrapper: headroom for 10-15px parallax movement */}
-                <div className="absolute inset-0 overflow-hidden">
-                  <img
-                    src={item.src}
-                    alt="Fabrication Work"
-                    onLoad={() => ScrollTrigger.refresh()}
-                    className="gallery-parallax-img w-full h-[114%] -top-[7%] relative object-cover transition-transform duration-400 ease-out group-hover:scale-104 select-none"
-                    loading="lazy"
-                  />
-                </div>
+                {/* Every box has the exact same aspect-[4/3] uniform dimension */}
+                <div
+                  onClick={() => setSelectedPhotoIndex(idx)}
+                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm hover:shadow-xl transition-shadow duration-400 cursor-pointer group"
+                >
+                  {/* Parallax inner image wrapper: headroom for 10-15px parallax movement */}
+                  <div className="absolute inset-0 overflow-hidden">
+                    <img
+                      src={item.src}
+                      alt="Fabrication Work"
+                      onLoad={() => ScrollTrigger.refresh()}
+                      className="gallery-parallax-img w-full h-[114%] -top-[7%] relative object-cover transition-transform duration-400 ease-out group-hover:scale-104 select-none"
+                      loading="lazy"
+                    />
+                  </div>
 
-                {/* Subtle dark overlay on hover */}
-                <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/35 transition-colors duration-400" />
+                  {/* Subtle dark overlay on hover */}
+                  <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/35 transition-colors duration-400" />
 
-                {/* Subtle "View ↗" reveal badge on hover */}
-                <div className="absolute bottom-4 right-4 z-10 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 ease-out">
-                  <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-slate-900 text-xs font-bold shadow-lg tracking-tight hover:bg-white">
-                    <span>View</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-amber-600" />
-                  </span>
+                  {/* Subtle "View ↗" reveal badge on hover */}
+                  <div className="absolute bottom-4 right-4 z-10 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 ease-out">
+                    <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-slate-900 text-xs font-bold shadow-lg tracking-tight hover:bg-white">
+                      <span>View</span>
+                      <ArrowUpRight className="w-3.5 h-3.5 text-amber-600" />
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* 4. Fullscreen Lightbox Gallery with smooth scale & fade transition */}
-      {selectedPhotoIndex !== null && (
+      {selectedPhotoIndex !== null && GALLERY_ITEMS[selectedPhotoIndex] && (
         <div
           className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
           onClick={() => setSelectedPhotoIndex(null)}

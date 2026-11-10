@@ -129,60 +129,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </svg>
       </div>
 
-      {/* 5. Polished Stainless Steel Pipes / Tubes (Bottom-Left Corner Graphic) */}
-      <div className="absolute bottom-6 left-3 w-48 h-24 pointer-events-none opacity-85 hidden xl:block">
-        <svg viewBox="0 0 180 80" fill="none" className="w-full h-full">
-          {/* Cylinder 1 (Front Large Round Pipe) */}
-          <g>
-            {/* Pipe Body */}
-            <path d="M28 28 L140 28 L140 68 L28 68 Z" fill="url(#metalPipeGrad)" />
-            {/* Front Ellipse Opening */}
-            <ellipse cx="28" cy="48" rx="16" ry="20" fill="url(#metalBevelGrad)" stroke="#cbd5e1" strokeWidth="2.5" />
-            <ellipse cx="28" cy="48" rx="11" ry="15" fill="#020917" stroke="#475569" strokeWidth="1.5" />
-            {/* Chrome Specular Highlights */}
-            <line x1="28" y1="33" x2="140" y2="33" stroke="#ffffff" strokeWidth="2" strokeOpacity="0.8" />
-            <line x1="28" y1="37" x2="140" y2="37" stroke="#94a3b8" strokeWidth="1" strokeOpacity="0.6" />
-          </g>
-
-          {/* Square Hollow Section 2 (Middle) */}
-          <g>
-            <rect x="70" y="44" width="28" height="24" rx="2" fill="#030c1d" stroke="#cbd5e1" strokeWidth="2" />
-            <rect x="74" y="48" width="20" height="16" rx="1" fill="#020610" stroke="#64748b" strokeWidth="1.2" />
-            <path d="M98 44 L150 44 L150 68 L98 68 Z" fill="url(#metalSquareGrad)" />
-            <line x1="98" y1="46" x2="150" y2="46" stroke="#ffffff" strokeWidth="1.5" strokeOpacity="0.7" />
-          </g>
-
-          {/* Smaller Square Hollow Section 3 (Right) */}
-          <g>
-            <rect x="110" y="50" width="22" height="18" rx="2" fill="#030c1d" stroke="#e2e8f0" strokeWidth="1.8" />
-            <rect x="113" y="53" width="16" height="12" rx="1" fill="#01040a" stroke="#475569" strokeWidth="1" />
-            <path d="M132 50 L175 50 L175 68 L132 68 Z" fill="url(#metalSquareGrad)" />
-          </g>
-
-          <defs>
-            <linearGradient id="metalPipeGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#64748b" />
-              <stop offset="15%" stopColor="#f8fafc" />
-              <stop offset="45%" stopColor="#475569" />
-              <stop offset="70%" stopColor="#1e293b" />
-              <stop offset="90%" stopColor="#334155" />
-              <stop offset="100%" stopColor="#0f172a" />
-            </linearGradient>
-            <linearGradient id="metalSquareGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#94a3b8" />
-              <stop offset="30%" stopColor="#ffffff" />
-              <stop offset="70%" stopColor="#334155" />
-              <stop offset="100%" stopColor="#0f172a" />
-            </linearGradient>
-            <linearGradient id="metalBevelGrad" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#ffffff" />
-              <stop offset="50%" stopColor="#94a3b8" />
-              <stop offset="100%" stopColor="#334155" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-
       {/* =========================================================================
           MAIN 4-COLUMN FOOTER CONTENT
          ========================================================================= */}
