@@ -8,6 +8,7 @@ import { PageId } from '../components/Navbar';
 import { HeroSlider } from '../components/HeroSlider';
 import { OurAchievementsSection } from '../components/OurAchievementsSection';
 import { DarkOrangeLiquidFill } from '../components/DarkOrangeLiquidFill';
+import { ReachOutSection } from '../components/ReachOutSection';
 
 interface HomePageProps {
   onNavigate: (page: PageId, itemId?: string) => void;
@@ -326,6 +327,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
 
         </div>
+      </section>
+
+      {/* 7. Reach Out Now! Section (Get A Quote Form + Workshop Map) */}
+      <section className="py-14 sm:py-20 bg-white">
+        <ReachOutSection containerClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 reveal-on-scroll" />
       </section>
 
     </div>
