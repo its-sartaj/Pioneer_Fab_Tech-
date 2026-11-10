@@ -417,5 +417,38 @@
   transform: scaleY(1);
 }
 
+/* Animated Dark Orange Liquid Fill with Wave Crest for Why Choose Us Cards */
+@keyframes whyChooseWaveSlide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.why-choose-card-fill {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, #b84400 0%, #c95100 35%, #db5d00 75%, #ea6800 100%);
+  transform: translateY(calc(100% + 28px));
+  transition: transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.group:hover .why-choose-card-fill {
+  transform: translateY(0%);
+}
+
+.why-choose-wave {
+  position: absolute;
+  top: -24px;
+  left: 0;
+  width: 200%;
+  height: 25px;
+  animation: whyChooseWaveSlide 2s linear infinite;
+  pointer-events: none;
+}
 
 

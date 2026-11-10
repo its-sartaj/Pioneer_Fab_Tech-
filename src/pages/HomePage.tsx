@@ -138,92 +138,97 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             </h2>
           </div>
 
-          {/* 3 Clean Elevated White Cards */}
+          {/* 3 Clean Elevated White Cards with Dark Orange Liquid Fill Animation */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 reveal-on-scroll delay-150">
-            
-            {/* Card 1: 01 Timely Delivery */}
-            <div className="bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
-              <div>
-                <div className="flex items-start justify-between">
-                  <div className="text-[#D87633]">
-                    <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M19 6h10v6H19z" />
-                      <path d="M22 12v3c-6.5 1.5-12 7-12 15h28c0-8-5.5-13.5-12-15v-3" />
-                      <path d="M8 30v4h32v-4" />
-                      <path d="M6 34h36" />
-                      <circle cx="24" cy="23" r="3" />
-                      <path d="M13 18h-4v6h4" />
-                      <circle cx="9" cy="16" r="2" />
-                    </svg>
-                  </div>
-                  <span className="text-6xl sm:text-7xl font-bold text-slate-100/90 select-none leading-none tracking-tighter">
-                    01
-                  </span>
+            {[
+              {
+                num: '01',
+                title: 'Timely Delivery',
+                description:
+                  'Count on Pioneer Fab Tech for punctual delivery, ensuring your projects stay on schedule.',
+                icon: (
+                  <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M19 6h10v6H19z" />
+                    <path d="M22 12v3c-6.5 1.5-12 7-12 15h28c0-8-5.5-13.5-12-15v-3" />
+                    <path d="M8 30v4h32v-4" />
+                    <path d="M6 34h36" />
+                    <circle cx="24" cy="23" r="3" />
+                    <path d="M13 18h-4v6h4" />
+                    <circle cx="9" cy="16" r="2" />
+                  </svg>
+                ),
+              },
+              {
+                num: '02',
+                title: 'Wide Range of Products',
+                description:
+                  'Explore a diverse spectrum of stainless steel solutions at Pioneer Fab Tech, catering to all your needs.',
+                icon: (
+                  <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="14" y="6" width="20" height="26" rx="9" />
+                    <circle cx="24" cy="17" r="3" />
+                    <path d="M24 20v4" />
+                    <path d="M14 26h20" />
+                    <path d="M16 32l-3 10" />
+                    <path d="M32 32l3 10" />
+                    <path d="M16 37h16" />
+                    <path d="M20 37l4 5 4-5" />
+                  </svg>
+                ),
+              },
+              {
+                num: '03',
+                title: 'Quality Assurance',
+                description:
+                  'Trust in the quality benchmarks set by Pioneer Fab Tech, ensuring precision and excellence in every product.',
+                icon: (
+                  <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M6 10h6l4 18h20l4-14H14" />
+                    <path d="M18 17h18" />
+                    <path d="M19 22h16" />
+                    <circle cx="19" cy="35" r="3" />
+                    <circle cx="33" cy="35" r="3" />
+                  </svg>
+                ),
+              },
+            ].map((card) => (
+              <div
+                key={card.num}
+                className="group relative overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
+              >
+                {/* Animated Dark Orange Liquid Fill Layer with Rising Wave */}
+                <div className="why-choose-card-fill">
+                  <svg
+                    className="why-choose-wave"
+                    viewBox="0 0 1200 60"
+                    preserveAspectRatio="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M0,30 Q150,0 300,30 T600,30 Q750,0 900,30 T1200,30 L1200,60 L0,60 Z"
+                      fill="#ea6800"
+                    />
+                  </svg>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-[#9e3f14] mt-7 mb-3.5 tracking-tight">
-                  Timely Delivery
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                  Count on Pioneer Fab Tech for punctual delivery, ensuring your projects stay on schedule.
-                </p>
-              </div>
-            </div>
 
-            {/* Card 2: 02 Wide Range of Products */}
-            <div className="bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
-              <div>
-                <div className="flex items-start justify-between">
-                  <div className="text-[#D87633]">
-                    <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="14" y="6" width="20" height="26" rx="9" />
-                      <circle cx="24" cy="17" r="3" />
-                      <path d="M24 20v4" />
-                      <path d="M14 26h20" />
-                      <path d="M16 32l-3 10" />
-                      <path d="M32 32l3 10" />
-                      <path d="M16 37h16" />
-                      <path d="M20 37l4 5 4-5" />
-                    </svg>
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between">
+                    <div className="text-[#D87633] group-hover:text-white transition-all duration-300 group-hover:scale-110 origin-left">
+                      {card.icon}
+                    </div>
+                    <span className="text-6xl sm:text-7xl font-bold text-slate-100/90 group-hover:text-white/25 transition-colors duration-300 select-none leading-none tracking-tighter">
+                      {card.num}
+                    </span>
                   </div>
-                  <span className="text-6xl sm:text-7xl font-bold text-slate-100/90 select-none leading-none tracking-tighter">
-                    02
-                  </span>
+                  <h3 className="text-lg sm:text-xl font-bold text-[#9e3f14] group-hover:text-white transition-colors duration-300 mt-7 mb-3.5 tracking-tight">
+                    {card.title}
+                  </h3>
+                  <p className="text-sm text-slate-600 group-hover:text-orange-50 transition-colors duration-300 leading-relaxed font-normal">
+                    {card.description}
+                  </p>
                 </div>
-                <h3 className="text-lg sm:text-xl font-bold text-[#9e3f14] mt-7 mb-3.5 tracking-tight">
-                  Wide Range of Products
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                  Explore a diverse spectrum of stainless steel solutions at Pioneer Fab Tech, catering to all your needs.
-                </p>
               </div>
-            </div>
-
-            {/* Card 3: 03 Quality Assurance */}
-            <div className="bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between">
-              <div>
-                <div className="flex items-start justify-between">
-                  <div className="text-[#D87633]">
-                    <svg className="w-12 h-12" viewBox="0 0 48 48" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 10h6l4 18h20l4-14H14" />
-                      <path d="M18 17h18" />
-                      <path d="M19 22h16" />
-                      <circle cx="19" cy="35" r="3" />
-                      <circle cx="33" cy="35" r="3" />
-                    </svg>
-                  </div>
-                  <span className="text-6xl sm:text-7xl font-bold text-slate-100/90 select-none leading-none tracking-tighter">
-                    03
-                  </span>
-                </div>
-                <h3 className="text-lg sm:text-xl font-bold text-[#9e3f14] mt-7 mb-3.5 tracking-tight">
-                  Quality Assurance
-                </h3>
-                <p className="text-sm text-slate-600 leading-relaxed font-normal">
-                  Trust in the quality benchmarks set by Pioneer Fab Tech, ensuring precision and excellence in every product.
-                </p>
-              </div>
-            </div>
-
+            ))}
           </div>
 
         </div>
