@@ -17,8 +17,30 @@ export interface GalleryItem {
   direction: 'bottom' | 'left' | 'right';
 }
 
-// Gallery photos (currently cleared — ready for new photos)
-export const GALLERY_ITEMS: GalleryItem[] = [];
+// 21 Architectural & Industrial Fabrication Gallery Photos
+export const GALLERY_ITEMS: GalleryItem[] = [
+  { id: 'gal-1', src: '/assets/gallery/work_01.jpeg', direction: 'bottom' },
+  { id: 'gal-2', src: '/assets/gallery/work_02.jpeg', direction: 'right' },
+  { id: 'gal-3', src: '/assets/gallery/work_03.jpeg', direction: 'left' },
+  { id: 'gal-4', src: '/assets/gallery/work_04.jpeg', direction: 'left' },
+  { id: 'gal-5', src: '/assets/gallery/work_05.jpeg', direction: 'bottom' },
+  { id: 'gal-6', src: '/assets/gallery/work_06.jpeg', direction: 'right' },
+  { id: 'gal-7', src: '/assets/gallery/work_07.jpeg', direction: 'right' },
+  { id: 'gal-8', src: '/assets/gallery/work_08.jpeg', direction: 'bottom' },
+  { id: 'gal-9', src: '/assets/gallery/work_09.jpeg', direction: 'left' },
+  { id: 'gal-10', src: '/assets/gallery/work_10.jpeg', direction: 'bottom' },
+  { id: 'gal-11', src: '/assets/gallery/work_11.jpeg', direction: 'left' },
+  { id: 'gal-12', src: '/assets/gallery/work_12.jpeg', direction: 'right' },
+  { id: 'gal-13', src: '/assets/gallery/work_13.jpeg', direction: 'bottom' },
+  { id: 'gal-14', src: '/assets/gallery/work_14.jpeg', direction: 'left' },
+  { id: 'gal-15', src: '/assets/gallery/work_15.jpeg', direction: 'right' },
+  { id: 'gal-16', src: '/assets/gallery/work_16.jpeg', direction: 'bottom' },
+  { id: 'gal-17', src: '/assets/gallery/work_17.jpeg', direction: 'right' },
+  { id: 'gal-18', src: '/assets/gallery/work_18.jpeg', direction: 'left' },
+  { id: 'gal-19', src: '/assets/gallery/work_19.jpeg', direction: 'bottom' },
+  { id: 'gal-20', src: '/assets/gallery/work_20.jpeg', direction: 'right' },
+  { id: 'gal-21', src: '/assets/gallery/work_21.jpeg', direction: 'left' },
+];
 
 export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
