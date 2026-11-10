@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PageId } from '../components/Navbar';
+import { useIsMobileView } from '../utils/useIsMobileView';
 
 // Register GSAP ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
@@ -46,6 +48,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const lightboxTouchStartXRef = useRef<number | null>(null);
+  const isMobileView = useIsMobileView(768);
 
   // GSAP ScrollTrigger: crisp reveal everywhere, parallax only on fine-pointer desktop
   useEffect(() => {
@@ -156,6 +159,118 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedPhotoIndex, handleNext, handlePrev]);
 
+  // Lock background page scroll while mobile lightbox is open; restore cleanly on close
+  useEffect(() => {
+    if (!isMobileView || selectedPhotoIndex === null) return;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+    };
+  }, [isMobileView, selectedPhotoIndex]);
+
+  const lightboxModal =
+    selectedPhotoIndex !== null && GALLERY_ITEMS[selectedPhotoIndex] ? (
+      <div
+        className={`fixed inset-0 z-50 bg-black/95 md:backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn touch-pan-y ${
+          isMobileView ? 'gallery-mobile-lightbox' : ''
+        }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Gallery photo preview"
+        onClick={() => setSelectedPhotoIndex(null)}
+        onTouchStart={(e) => {
+          lightboxTouchStartXRef.current = e.touches[0]?.clientX ?? null;
+        }}
+        onTouchEnd={(e) => {
+          if (lightboxTouchStartXRef.current === null) return;
+          const deltaX =
+            (e.changedTouches[0]?.clientX ?? lightboxTouchStartXRef.current) - lightboxTouchStartXRef.current;
+          lightboxTouchStartXRef.current = null;
+          if (deltaX < -45) handleNext();
+          else if (deltaX > 45) handlePrev();
+        }}
+      >
+        {/* Top Bar with Counter and Close Button */}
+        <div
+          className={`absolute left-4 right-4 flex items-center justify-between text-white pointer-events-none ${
+            isMobileView ? 'top-[max(1rem,env(safe-area-inset-top))] z-[10000]' : 'top-4 z-30'
+          }`}
+        >
+          <span className="text-xs sm:text-sm font-semibold text-slate-300 px-3.5 py-1.5 rounded-full bg-slate-800/85 shadow-md pointer-events-auto">
+            {String(selectedPhotoIndex + 1).padStart(2, '0')} / {String(GALLERY_ITEMS.length).padStart(2, '0')}
+          </span>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedPhotoIndex(null);
+            }}
+            className={`rounded-full bg-slate-800/90 hover:bg-slate-700 text-white transition-colors cursor-pointer shadow-lg pointer-events-auto flex items-center justify-center ${
+              isMobileView ? 'w-11 h-11 border border-white/25' : 'p-2.5'
+            }`}
+            title="Close (Esc)"
+            aria-label="Close gallery lightbox"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Navigation Prev Button */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          className={`absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 ${
+            isMobileView ? 'z-[10000] border border-white/15' : 'z-30'
+          }`}
+          title="Previous (Arrow Left)"
+          aria-label="Previous photo"
+        >
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
+
+        {/* Centered Image Viewport */}
+        <div
+          className={
+            isMobileView
+              ? 'gallery-mobile-lightbox-stage'
+              : 'max-w-5xl max-h-[85vh] w-full flex items-center justify-center p-2 sm:p-4'
+          }
+          onClick={isMobileView ? undefined : (e) => e.stopPropagation()}
+        >
+          <img
+            src={GALLERY_ITEMS[selectedPhotoIndex].src}
+            alt="Enlarged Gallery View"
+            key={selectedPhotoIndex}
+            decoding="async"
+            onClick={isMobileView ? (e) => e.stopPropagation() : undefined}
+            className={
+              isMobileView
+                ? 'gallery-mobile-lightbox-img rounded-xl shadow-2xl select-none animate-scaleIn'
+                : 'max-h-[82vh] sm:max-h-[85vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl select-none animate-scaleIn'
+            }
+          />
+        </div>
+
+        {/* Navigation Next Button */}
+        <button
+          type="button"
+          onClick={handleNext}
+          className={`absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95 ${
+            isMobileView ? 'z-[10000] border border-white/15' : 'z-30'
+          }`}
+          title="Next (Arrow Right)"
+          aria-label="Next photo"
+        >
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
+      </div>
+    ) : null;
+
   return (
     <div className="bg-slate-50 min-h-screen" ref={containerRef}>
       
@@ -249,72 +364,10 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
         )}
       </div>
 
-      {/* 4. Fullscreen Lightbox Gallery with mobile swipe left/right & smooth scale transition */}
-      {selectedPhotoIndex !== null && GALLERY_ITEMS[selectedPhotoIndex] && (
-        <div
-          className="fixed inset-0 z-50 bg-black/95 md:backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn touch-pan-y"
-          onClick={() => setSelectedPhotoIndex(null)}
-          onTouchStart={(e) => {
-            lightboxTouchStartXRef.current = e.touches[0]?.clientX ?? null;
-          }}
-          onTouchEnd={(e) => {
-            if (lightboxTouchStartXRef.current === null) return;
-            const deltaX = (e.changedTouches[0]?.clientX ?? lightboxTouchStartXRef.current) - lightboxTouchStartXRef.current;
-            lightboxTouchStartXRef.current = null;
-            if (deltaX < -45) handleNext();
-            else if (deltaX > 45) handlePrev();
-          }}
-        >
-          {/* Top Bar with Counter and Close Button */}
-          <div className="absolute top-4 left-4 right-4 z-30 flex items-center justify-between text-white pointer-events-none">
-            <span className="text-xs sm:text-sm font-semibold text-slate-300 px-3.5 py-1.5 rounded-full bg-slate-800/85 shadow-md pointer-events-auto">
-              {String(selectedPhotoIndex + 1).padStart(2, '0')} / {String(GALLERY_ITEMS.length).padStart(2, '0')}
-            </span>
-            <button
-              onClick={() => setSelectedPhotoIndex(null)}
-              className="p-2.5 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-colors cursor-pointer shadow-lg pointer-events-auto"
-              title="Close (Esc)"
-              aria-label="Close gallery lightbox"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-
-          {/* Navigation Prev Button */}
-          <button
-            onClick={handlePrev}
-            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
-            title="Previous (Arrow Left)"
-            aria-label="Previous photo"
-          >
-            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-
-          {/* Centered Image Viewport with smooth scale-in */}
-          <div
-            className="max-w-5xl max-h-[85vh] w-full flex items-center justify-center p-2 sm:p-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={GALLERY_ITEMS[selectedPhotoIndex].src}
-              alt="Enlarged Gallery View"
-              key={selectedPhotoIndex}
-              decoding="async"
-              className="max-h-[82vh] sm:max-h-[85vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl select-none animate-scaleIn"
-            />
-          </div>
-
-          {/* Navigation Next Button */}
-          <button
-            onClick={handleNext}
-            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
-            title="Next (Arrow Right)"
-            aria-label="Next photo"
-          >
-            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-        </div>
-      )}
+      {/* 4. Fullscreen Lightbox: on mobile (<= 768px) portal to document.body outside any parent transforms */}
+      {isMobileView && typeof document !== 'undefined'
+        ? lightboxModal && createPortal(lightboxModal, document.body)
+        : lightboxModal}
 
     </div>
   );

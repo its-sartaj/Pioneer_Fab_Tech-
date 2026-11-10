@@ -11,6 +11,7 @@ import {
 import { COMPANY_INFO } from '../data/siteData';
 import { PageId } from './Navbar';
 import { WhatsAppIcon } from './FloatingActions';
+import { useIsMobileView } from '../utils/useIsMobileView';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -82,6 +83,7 @@ const SafetyIcon: React.FC<{ className?: string }> = ({ className = "w-3.5 h-3.5
 );
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  const isMobileView = useIsMobileView(768);
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -357,48 +359,54 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       {/* Clean Divider Line */}
       <div className="w-full h-px bg-slate-800/80" />
 
-      {/* Bottom Copyright Bar & Action Dock */}
+      {/* Bottom Copyright Bar (& Action Dock on Desktop/Tablet > 768px only) */}
       <div className="relative z-10 bg-[#030914] py-3.5 px-4 sm:px-6 lg:px-10">
-        <div className="max-w-[1440px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div
+          className={`max-w-[1440px] mx-auto flex flex-col md:flex-row items-center ${
+            isMobileView ? 'justify-center gap-0' : 'justify-between gap-4'
+          }`}
+        >
           
-          <div className="text-xs sm:text-[13px] text-slate-400 tracking-wide font-normal text-center md:text-left">
+          <div className={`text-xs sm:text-[13px] text-slate-400 tracking-wide font-normal text-center ${isMobileView ? '' : 'md:text-left'}`}>
             © 2026 Pioneer Fab Tech. All Rights Reserved. &nbsp;|&nbsp; Designed & Developed by Sajid Web Solution
           </div>
 
-          {/* Clean Curved Capsule Housing 3 Buttons */}
-          <div className="flex items-center gap-2.5 p-1.5 rounded-full bg-slate-900 border border-slate-800">
-            {/* Button 1: Scroll to top */}
-            <button
-              onClick={scrollToTop}
-              className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white text-slate-900 flex items-center justify-center hover:bg-slate-200 transition-colors cursor-pointer"
-              title="Scroll to Top"
-              aria-label="Back to Top"
-            >
-              <ArrowUp className="w-4 h-4 stroke-[2.5]" />
-            </button>
+          {/* Clean Curved Capsule Housing 3 Buttons (Desktop & Tablet > 768px only) */}
+          {!isMobileView && (
+            <div className="footer-bottom-capsule flex items-center gap-2.5 p-1.5 rounded-full bg-slate-900 border border-slate-800">
+              {/* Button 1: Scroll to top */}
+              <button
+                onClick={scrollToTop}
+                className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-white text-slate-900 flex items-center justify-center hover:bg-slate-200 transition-colors cursor-pointer"
+                title="Scroll to Top"
+                aria-label="Back to Top"
+              >
+                <ArrowUp className="w-4 h-4 stroke-[2.5]" />
+              </button>
 
-            {/* Button 2: Call */}
-            <a
-              href={`tel:${COMPANY_INFO.phoneRaw}`}
-              className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-colors shadow-xs"
-              title="Call Pioneer Fab Tech"
-              aria-label={`Call ${COMPANY_INFO.phone}`}
-            >
-              <Phone className="w-3.5 h-3.5 text-white" />
-            </a>
+              {/* Button 2: Call */}
+              <a
+                href={`tel:${COMPANY_INFO.phoneRaw}`}
+                className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-colors shadow-xs"
+                title="Call Pioneer Fab Tech"
+                aria-label={`Call ${COMPANY_INFO.phone}`}
+              >
+                <Phone className="w-3.5 h-3.5 text-white" />
+              </a>
 
-            {/* Button 3: WhatsApp */}
-            <a
-              href={COMPANY_INFO.whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition-colors shadow-xs"
-              title="Chat on WhatsApp"
-              aria-label="WhatsApp Us Direct"
-            >
-              <WhatsAppIcon className="w-4 h-4 text-white" />
-            </a>
-          </div>
+              {/* Button 3: WhatsApp */}
+              <a
+                href={COMPANY_INFO.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-[#25D366] hover:bg-[#20ba59] text-white flex items-center justify-center transition-colors shadow-xs"
+                title="Chat on WhatsApp"
+                aria-label="WhatsApp Us Direct"
+              >
+                <WhatsAppIcon className="w-4 h-4 text-white" />
+              </a>
+            </div>
+          )}
 
         </div>
       </div>
