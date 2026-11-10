@@ -102,23 +102,6 @@ export const useGlobalScrollReveal = (triggerKey?: unknown) => {
       return;
     }
 
-    const revealIfVisible = (el: Element, observer: IntersectionObserver) => {
-      const rect = el.getBoundingClientRect();
-      // Trigger once element enters viewport or if already scrolled above viewport
-      if (rect.top <= window.innerHeight * 0.96 && rect.bottom >= 0) {
-        el.classList.add('is-revealed');
-        observer.unobserve(el);
-        return true;
-      }
-      if (rect.bottom < 0) {
-        // Already scrolled past on initial load / back-navigation: reveal immediately
-        el.classList.add('is-revealed');
-        observer.unobserve(el);
-        return true;
-      }
-      return false;
-    };
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -129,15 +112,27 @@ export const useGlobalScrollReveal = (triggerKey?: unknown) => {
         });
       },
       {
-        threshold: 0.04,
-        rootMargin: '0px 0px -24px 0px',
+        threshold: 0.01,
+        rootMargin: '40px 0px -12px 0px',
       }
     );
 
+    const observedSet = new WeakSet<Element>();
+    let pendingObserveRaf: number | null = null;
+
     const observeAll = () => {
       const targets = document.querySelectorAll(UNREVEALED_SELECTOR);
+      const viewportBottom = window.innerHeight * 0.98;
+
       targets.forEach((target) => {
-        if (!revealIfVisible(target, observer)) {
+        if (observedSet.has(target)) return;
+        const rect = target.getBoundingClientRect();
+
+        if (rect.top <= viewportBottom) {
+          // Already in view or scrolled past on initial load / back navigation
+          target.classList.add('is-revealed');
+        } else {
+          observedSet.add(target);
           observer.observe(target);
         }
       });
@@ -145,31 +140,34 @@ export const useGlobalScrollReveal = (triggerKey?: unknown) => {
 
     // Initial observation
     observeAll();
-    const timer = setTimeout(observeAll, 120);
+    const timer = setTimeout(observeAll, 140);
 
-    // Watch dynamic DOM changes (filter tabs, single-item views, async content)
-    const mutationObserver = new MutationObserver(() => {
-      observeAll();
+    // Watch ONLY structural DOM additions (skip counter text ticks & attribute flips)
+    const mutationObserver = new MutationObserver((mutations) => {
+      let hasNewElements = false;
+      for (let i = 0; i < mutations.length; i++) {
+        const added = mutations[i].addedNodes;
+        for (let j = 0; j < added.length; j++) {
+          if (added[j].nodeType === 1) {
+            hasNewElements = true;
+            break;
+          }
+        }
+        if (hasNewElements) break;
+      }
+
+      if (hasNewElements && pendingObserveRaf === null) {
+        pendingObserveRaf = requestAnimationFrame(() => {
+          pendingObserveRaf = null;
+          observeAll();
+        });
+      }
     });
     mutationObserver.observe(document.body, { childList: true, subtree: true });
 
-    // Scroll failsafe for very tall sections or fast programmatic jumps
-    let rafId: number | null = null;
-    const onScrollCheck = () => {
-      if (rafId !== null) return;
-      rafId = requestAnimationFrame(() => {
-        rafId = null;
-        document.querySelectorAll(UNREVEALED_SELECTOR).forEach((el) => {
-          revealIfVisible(el, observer);
-        });
-      });
-    };
-    window.addEventListener('scroll', onScrollCheck, { passive: true });
-
     return () => {
       clearTimeout(timer);
-      if (rafId !== null) cancelAnimationFrame(rafId);
-      window.removeEventListener('scroll', onScrollCheck);
+      if (pendingObserveRaf !== null) cancelAnimationFrame(pendingObserveRaf);
       mutationObserver.disconnect();
       observer.disconnect();
     };

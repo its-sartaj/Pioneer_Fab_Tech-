@@ -22,6 +22,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         <img
           src="/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM_2f9ff5e2.jpeg"
           alt="Contact Industrial Banner"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
         {/* Blue/black gradient overlay matching reference */}

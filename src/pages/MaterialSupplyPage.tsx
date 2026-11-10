@@ -152,16 +152,17 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                       <img 
                         src={currentProduct.image} 
                         alt={currentProduct.name}
+                        decoding="async"
                         className="w-full h-full object-cover"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />
                       
                       {/* Top Badges */}
                       <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                        <span className="bg-slate-900/90 backdrop-blur-md text-amber-400 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider">
+                        <span className="bg-slate-900/95 md:backdrop-blur-md text-amber-400 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider">
                           Item #{currentProduct.itemNumber}
                         </span>
-                        <span className="bg-emerald-600/95 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold shadow-xs">
+                        <span className="bg-emerald-600/95 md:backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold shadow-xs">
                           Ready Stock Available
                         </span>
                       </div>
@@ -368,11 +369,12 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                               alt={item.name}
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               loading="lazy"
+                              decoding="async"
                             />
-                            <div className="absolute top-3 right-3 bg-emerald-600/90 backdrop-blur-xs text-white px-2.5 py-0.5 rounded-full text-[11px] font-semibold">
+                            <div className="absolute top-3 right-3 bg-emerald-600/95 md:backdrop-blur-xs text-white px-2.5 py-0.5 rounded-full text-[11px] font-semibold">
                               Ready Stock
                             </div>
-                            <div className="absolute bottom-3 left-3 bg-slate-900/80 backdrop-blur-xs text-slate-200 px-2 py-0.5 rounded text-[11px] font-medium">
+                            <div className="absolute bottom-3 left-3 bg-slate-900/90 md:backdrop-blur-xs text-slate-200 px-2 py-0.5 rounded text-[11px] font-medium">
                               {item.categoryLabel}
                             </div>
                           </div>

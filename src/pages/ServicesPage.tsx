@@ -85,9 +85,10 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate, selected
                 <img 
                   src={activeService.heroImage} 
                   alt={activeService.title} 
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute top-4 left-4 bg-slate-900/90 backdrop-blur-xs text-white text-xs font-bold px-3 py-1 rounded-md">
+                <div className="absolute top-4 left-4 bg-slate-900/95 md:backdrop-blur-xs text-white text-xs font-bold px-3 py-1 rounded-md">
                   {activeService.category}
                 </div>
               </div>

@@ -43,6 +43,7 @@ const ACHIEVEMENTS: AchievementMetric[] = [
 export const OurAchievementsSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const hasAnimatedRef = useRef(false);
+  const [activeCardId, setActiveCardId] = useState<string | null>(null);
   const [counts, setCounts] = useState<Record<string, number>>({
     clients: 0,
     experience: 0,
@@ -218,6 +219,8 @@ export const OurAchievementsSection: React.FC = () => {
       <img
         src="/assets/achievements_bg.jpg"
         alt="Industrial Engineering Plant"
+        loading="lazy"
+        decoding="async"
         className="absolute inset-0 w-full h-full object-cover object-center opacity-30 select-none pointer-events-none"
       />
       {/* Deep blue/slate overlay matching reference image */}
@@ -238,25 +241,35 @@ export const OurAchievementsSection: React.FC = () => {
             const currentNumber = counts[item.id] || 0;
             const delayClasses = ['', 'delay-75', 'delay-150', 'delay-200'];
             const staggerClass = delayClasses[idx] || '';
+            const isTouchFilled = activeCardId === item.id;
 
             return (
               <div key={item.id} className={`reveal-on-scroll ${staggerClass}`}>
-                <div className="relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border border-white/35 bg-white/[0.04] backdrop-blur-xs p-8 sm:p-9 text-center flex flex-col items-center justify-between min-h-[300px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-all duration-300 ease-out group hover:-translate-y-2 cursor-pointer">
+                <div
+                  onClick={() => setActiveCardId((prev) => (prev === item.id ? null : item.id))}
+                  className={`relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border bg-[#0a1d37]/75 md:bg-white/[0.04] md:backdrop-blur-xs p-7 sm:p-9 text-center flex flex-col items-center justify-between min-h-[260px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-all duration-300 ease-out group hover:-translate-y-2 cursor-pointer ${
+                    isTouchFilled
+                      ? 'is-touch-active border-[#ea6800]/90 shadow-[0_14px_38px_rgba(219,93,0,0.45)] -translate-y-1'
+                      : 'border-white/35'
+                  }`}
+                >
                   {/* Animated Dark Orange Liquid Fill with Rising Wave */}
                   <DarkOrangeLiquidFill />
                   
                   {/* Subtle soft sheen highlight */}
                   <div 
-                    className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent transition-opacity duration-500 opacity-0 group-hover:opacity-100 pointer-events-none z-0" 
+                    className={`absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent transition-opacity duration-500 pointer-events-none z-0 ${
+                      isTouchFilled ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                    }`}
                   />
 
                   {/* 1. White Line Icon */}
-                  <div className="relative z-10 pt-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                  <div className={`relative z-10 pt-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${isTouchFilled ? 'scale-110' : ''}`}>
                     {renderIcon(item.icon)}
                   </div>
 
                   {/* 2. Dark Orange Accent Divider Line */}
-                  <div className="relative z-10 w-12 sm:w-14 h-0.5 bg-[#ea6800] mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-white" />
+                  <div className={`relative z-10 h-0.5 mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-white ${isTouchFilled ? 'w-18 bg-white' : 'w-12 sm:w-14 bg-[#ea6800]'}`} />
 
                   {/* 3. Big Countable Number with + suffix */}
                   <div className="relative z-10 flex items-baseline justify-center">

@@ -145,6 +145,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <img 
                 src={COMPANY_INFO.logoUrl} 
                 alt="Pioneer Fab Tech - Innovation Precision Excellence" 
+                loading="lazy"
+                decoding="async"
                 className="h-12 sm:h-14 w-auto object-contain max-w-full"
               />
             </div>

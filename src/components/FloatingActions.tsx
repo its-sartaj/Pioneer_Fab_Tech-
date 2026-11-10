@@ -30,7 +30,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
 }) => {
   return (
     <div
-      className={`fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2.5 sm:gap-3 transition-all duration-300 ${
+      className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 flex items-center gap-2 sm:gap-3 transition-[opacity,transform] duration-250 ease-out transform-gpu ${
         isAtBottom || isMobileMenuOpen ? 'opacity-0 pointer-events-none translate-y-4' : 'opacity-100 translate-y-0'
       }`}
       role="region"
@@ -41,7 +41,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
         <div className="relative group">
           <button
             onClick={onScrollToTop}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 backdrop-blur-md text-slate-700 shadow-lg hover:shadow-xl border border-slate-200/90 flex items-center justify-center hover:bg-slate-50 hover:text-slate-950 transition-all duration-300 hover:scale-110 active:scale-95 cursor-pointer"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 md:backdrop-blur-md text-slate-700 shadow-lg hover:shadow-xl border border-slate-200/90 flex items-center justify-center hover:bg-slate-50 hover:text-slate-950 transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
             title="Scroll to Top"
             aria-label="Scroll to top of page"
           >
@@ -91,10 +91,9 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
         >
           <WhatsAppIcon className="w-6 h-6 sm:w-6.5 sm:h-6.5 text-white fill-white group-hover:scale-105 transition-transform duration-200" />
 
-          {/* Active Online Pulse Indicator */}
+          {/* Active Online Indicator (lightweight without continuous fixed-layer repaint) */}
           <span className="absolute -top-0.5 -right-0.5 flex h-3.5 w-3.5 pointer-events-none">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-400 border-2 border-white shadow-xs"></span>
+            <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-400 border-2 border-white ring-2 ring-emerald-400/35 shadow-xs"></span>
           </span>
         </a>
 

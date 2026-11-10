@@ -45,14 +45,43 @@ const SLIDES: SlideItem[] = [
   },
 ];
 
-export const HeroSlider: React.FC<HeroSliderProps> = ({ onNavigate }) => {
+export const HeroSlider: React.FC<HeroSliderProps> = () => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [direction, setDirection] = useState<'up' | 'down'>('up');
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isVisible, setIsVisible] = useState(true);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const touchStartXRef = useRef<number | null>(null);
 
   const SLIDE_DURATION = 4500; // 4.5 seconds auto slide
 
+  // Pause hero auto-advance when scrolled out of view or tab is hidden to save mobile CPU/GPU
   useEffect(() => {
+    const node = sectionRef.current;
+    if (!node || !('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setIsVisible(entries[0]?.isIntersecting ?? true);
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(node);
+
+    const onVisibility = () => {
+      setIsVisible(!document.hidden && (node.getBoundingClientRect().bottom > 0));
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
     timerRef.current = setInterval(() => {
       setDirection((prev) => (prev === 'up' ? 'down' : 'up'));
       setCurrentIdx((prevIdx) => (prevIdx + 1) % SLIDES.length);
@@ -61,16 +90,46 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ onNavigate }) => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, []);
+  }, [isVisible]);
+
+  // Smooth horizontal touch swipe support for mobile users
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0]?.clientX ?? null;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null) return;
+    const deltaX = (e.changedTouches[0]?.clientX ?? touchStartXRef.current) - touchStartXRef.current;
+    touchStartXRef.current = null;
+
+    if (Math.abs(deltaX) > 45) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      setDirection(deltaX < 0 ? 'up' : 'down');
+      setCurrentIdx((prevIdx) =>
+        deltaX < 0 ? (prevIdx + 1) % SLIDES.length : (prevIdx - 1 + SLIDES.length) % SLIDES.length
+      );
+      if (isVisible) {
+        timerRef.current = setInterval(() => {
+          setDirection((prev) => (prev === 'up' ? 'down' : 'up'));
+          setCurrentIdx((prevIdx) => (prevIdx + 1) % SLIDES.length);
+        }, SLIDE_DURATION);
+      }
+    }
+  };
 
   const currentSlide = SLIDES[currentIdx];
 
   return (
-    <section className="relative w-full overflow-hidden bg-slate-950 text-white min-h-[620px] sm:min-h-[660px] lg:min-h-[720px] flex items-center">
+    <section
+      ref={sectionRef}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="relative w-full overflow-hidden bg-slate-950 text-white min-h-[500px] sm:min-h-[620px] lg:min-h-[700px] flex items-center"
+    >
       
       {/* =========================================================================
           FULL-BLEED BACKGROUND IMAGES (PURA IMAGE AS BACKGROUND)
-          With smooth Ken Burns forward & backward zoom ("aage-piche" motion)
+          With smooth GPU-composited Ken Burns zoom ("aage-piche" motion)
          ========================================================================= */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         {SLIDES.map((slide, idx) => {
@@ -85,8 +144,10 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ onNavigate }) => {
               <img
                 src={slide.image}
                 alt={slide.headline}
-                className={`w-full h-full object-cover object-center sm:object-[center_35%] transition-transform duration-[4500ms] ease-out ${
-                  isActive ? 'scale-108' : 'scale-100'
+                decoding="async"
+                fetchPriority={idx === 0 ? 'high' : 'low'}
+                className={`w-full h-full object-cover object-center sm:object-[center_35%] transition-transform duration-[4500ms] ease-out transform-gpu ${
+                  isActive ? 'scale-[1.07] will-change-transform' : 'scale-100'
                 }`}
               />
             </div>

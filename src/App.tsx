@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback, Suspense, lazy } from 'react';
 import { Navbar, PageId } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { HomePage } from './pages/HomePage';
-import { AboutPage } from './pages/AboutPage';
-import { ServicesPage } from './pages/ServicesPage';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { GalleryPage } from './pages/GalleryPage';
-import { MaterialSupplyPage } from './pages/MaterialSupplyPage';
-import { InfrastructurePage } from './pages/InfrastructurePage';
-import { CertificatesPage } from './pages/CertificatesPage';
-import { ContactPage } from './pages/ContactPage';
-import { EnquiryPage } from './pages/EnquiryPage';
 import { FloatingActions } from './components/FloatingActions';
-import { COMPANY_INFO } from './data/siteData';
+import { PageSkeleton } from './components/PageSkeleton';
 import { useGlobalScrollReveal } from './components/ScrollReveal';
+
+// Code-split secondary pages (especially GSAP-powered Gallery) for fast mobile initial load
+const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
+const ServicesPage = lazy(() => import('./pages/ServicesPage').then((m) => ({ default: m.ServicesPage })));
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then((m) => ({ default: m.ProjectsPage })));
+const GalleryPage = lazy(() => import('./pages/GalleryPage').then((m) => ({ default: m.GalleryPage })));
+const MaterialSupplyPage = lazy(() => import('./pages/MaterialSupplyPage').then((m) => ({ default: m.MaterialSupplyPage })));
+const InfrastructurePage = lazy(() => import('./pages/InfrastructurePage').then((m) => ({ default: m.InfrastructurePage })));
+const CertificatesPage = lazy(() => import('./pages/CertificatesPage').then((m) => ({ default: m.CertificatesPage })));
+const ContactPage = lazy(() => import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })));
+const EnquiryPage = lazy(() => import('./pages/EnquiryPage').then((m) => ({ default: m.EnquiryPage })));
 
 const VALID_PAGES: PageId[] = [
   'home', 'about', 'services', 'projects', 'gallery', 
@@ -95,7 +97,7 @@ export default function App() {
   }, []);
 
   // Instant page switching with distinct URL routing for every page and project
-  const handleNavigate = (page: PageId, itemId?: string) => {
+  const handleNavigate = useCallback((page: PageId, itemId?: string) => {
     setSelectedItemTarget(itemId || null);
     setCurrentPage(page);
 
@@ -114,27 +116,49 @@ export default function App() {
     if (!itemId) {
       window.scrollTo({ top: 0, behavior: 'instant' });
     }
-  };
-
-  const [isAtBottom, setIsAtBottom] = useState(false);
-
-  // Scroll listener for back to top button and footer collision detection
-  useEffect(() => {
-    const checkScroll = () => {
-      setShowScrollTop(window.scrollY > 400);
-
-      // Check if user is near the footer to avoid double-dock overlapping
-      const scrollPosition = window.innerHeight + window.scrollY;
-      const threshold = document.documentElement.scrollHeight - 350;
-      setIsAtBottom(scrollPosition >= threshold);
-    };
-    window.addEventListener('scroll', checkScroll, { passive: true });
-    return () => window.removeEventListener('scroll', checkScroll);
   }, []);
 
-  const scrollToTop = () => {
+  const [isAtBottom, setIsAtBottom] = useState(false);
+  const footerSentinelRef = useRef<HTMLDivElement | null>(null);
+
+  // Off-main-thread IntersectionObserver for footer proximity + rAF-throttled scroll top check
+  useEffect(() => {
+    let rafId: number | null = null;
+    const onScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const shouldShow = window.scrollY > 400;
+        setShowScrollTop((prev) => (prev === shouldShow ? prev : shouldShow));
+      });
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    let footerObserver: IntersectionObserver | null = null;
+    const sentinel = footerSentinelRef.current;
+    if (sentinel && 'IntersectionObserver' in window) {
+      footerObserver = new IntersectionObserver(
+        (entries) => {
+          const nearBottom = entries[0]?.isIntersecting ?? false;
+          setIsAtBottom((prev) => (prev === nearBottom ? prev : nearBottom));
+        },
+        { rootMargin: '0px 0px 220px 0px', threshold: 0 }
+      );
+      footerObserver.observe(sentinel);
+    }
+
+    return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScroll);
+      footerObserver?.disconnect();
+    };
+  }, [currentPage]);
+
+  const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 relative">
@@ -149,23 +173,28 @@ export default function App() {
       {/* Main Page Content - Fast, smooth transition with instant loading */}
       <main className="flex-1">
         <div key={currentPage} className="animate-in fade-in duration-150 ease-out">
-          {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
-          {currentPage === 'about' && <AboutPage onNavigate={handleNavigate} />}
-          {currentPage === 'services' && (
-            <ServicesPage onNavigate={handleNavigate} selectedItemId={selectedItemTarget} />
-          )}
-          {currentPage === 'projects' && (
-            <ProjectsPage onNavigate={handleNavigate} selectedItemId={selectedItemTarget} />
-          )}
-          {currentPage === 'gallery' && <GalleryPage onNavigate={handleNavigate} />}
-          {(currentPage === 'materials' || currentPage === 'infrastructure') && (
-            <MaterialSupplyPage onNavigate={handleNavigate} selectedItemId={selectedItemTarget} />
-          )}
-          {currentPage === 'certificates' && <CertificatesPage onNavigate={handleNavigate} />}
-          {currentPage === 'contact' && <ContactPage onNavigate={handleNavigate} />}
-          {currentPage === 'enquiry' && <EnquiryPage />}
+          <Suspense fallback={<PageSkeleton />}>
+            {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
+            {currentPage === 'about' && <AboutPage onNavigate={handleNavigate} />}
+            {currentPage === 'services' && (
+              <ServicesPage onNavigate={handleNavigate} selectedItemId={selectedItemTarget} />
+            )}
+            {currentPage === 'projects' && (
+              <ProjectsPage onNavigate={handleNavigate} selectedItemId={selectedItemTarget} />
+            )}
+            {currentPage === 'gallery' && <GalleryPage onNavigate={handleNavigate} />}
+            {(currentPage === 'materials' || currentPage === 'infrastructure') && (
+              <MaterialSupplyPage onNavigate={handleNavigate} selectedItemId={selectedItemTarget} />
+            )}
+            {currentPage === 'certificates' && <CertificatesPage onNavigate={handleNavigate} />}
+            {currentPage === 'contact' && <ContactPage onNavigate={handleNavigate} />}
+            {currentPage === 'enquiry' && <EnquiryPage />}
+          </Suspense>
         </div>
       </main>
+
+      {/* Lightweight sentinel to detect footer approach without scrollHeight reflow */}
+      <div ref={footerSentinelRef} className="h-px w-full pointer-events-none" aria-hidden="true" />
 
       {/* Footer with exact copyright attribution */}
       <Footer onNavigate={handleNavigate} />

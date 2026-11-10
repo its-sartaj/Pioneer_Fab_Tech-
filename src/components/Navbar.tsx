@@ -70,15 +70,28 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
     setExpandedMobileMenu(null);
   }, [currentPage]);
 
-  // Prevent body scrolling when mobile drawer is open
+  // Prevent body + html background scrolling when mobile drawer is open, support Esc key
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     }
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setActiveDropdown(null);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      window.removeEventListener('keydown', onKeyDown);
     };
   }, [mobileMenuOpen]);
 
@@ -249,6 +262,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
               <img 
                 src={COMPANY_INFO.logoUrl} 
                 alt="Pioneer Fab Tech - Innovation Precision Excellence" 
+                decoding="async"
                 className="h-11 sm:h-12 lg:h-14 w-auto max-w-[220px] sm:max-w-[250px] lg:max-w-[270px] object-contain transition-transform duration-200 hover:scale-[1.01]"
               />
             </button>
@@ -400,15 +414,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
       {/* Mobile Drawer Backdrop */}
       {mobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 transition-opacity duration-300 lg:hidden"
+          className="fixed inset-0 bg-slate-950/75 z-50 transition-opacity duration-250 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
 
-      {/* Mobile Menu Drawer - Pure White Background & Expandable Details Accordion */}
+      {/* Mobile Menu Drawer - GPU-composited slide & overscroll lock */}
       <div 
-        className={`fixed top-0 left-0 bottom-0 w-[88%] max-w-[360px] bg-white text-slate-800 z-50 shadow-2xl transition-transform duration-300 ease-out lg:hidden flex flex-col border-r border-slate-200 ${
-          mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+        className={`fixed top-0 left-0 bottom-0 w-[88%] max-w-[360px] bg-white text-slate-800 z-50 shadow-2xl transform-gpu transition-transform duration-250 ease-out lg:hidden flex flex-col border-r border-slate-200 ${
+          mobileMenuOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'
         }`}
       >
         {/* Drawer Header with Clean White Surface */}
@@ -417,6 +431,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
             <img 
               src={COMPANY_INFO.logoUrl} 
               alt="Pioneer Fab Tech" 
+              decoding="async"
               className="h-9 sm:h-10 w-auto object-contain"
             />
           </div>
@@ -431,7 +446,10 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
         </div>
 
         {/* Drawer Nav Links with Clickable Arrow Details */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
+        <div
+          className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-2"
+          style={{ WebkitOverflowScrolling: 'touch' }}
+        >
           {navLinks.map((link) => {
             const isActive = currentPage === link.id;
             const subItems = link.hasDropdown ? getSubItemsForLink(link.id) : [];

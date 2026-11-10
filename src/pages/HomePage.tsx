@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   ArrowRight 
 } from 'lucide-react';
@@ -15,6 +15,8 @@ interface HomePageProps {
 }
 
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
+  const [activeWhyCard, setActiveWhyCard] = useState<string | null>(null);
+
   return (
     <div className="bg-slate-50 min-h-screen">
       
@@ -73,8 +75,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 <img 
                   src="/assets/images/homepage_architectural_staircase_1794246211574.jpg" 
                   alt="Pioneer Fab Tech Architectural Stainless Steel Spiral & Helical Staircase Engineering" 
-                  className="w-full h-[460px] sm:h-[520px] lg:h-[560px] object-cover group-hover:scale-103 transition-transform duration-500"
+                  className="w-full h-[340px] sm:h-[480px] lg:h-[560px] object-cover group-hover:scale-103 transition-transform duration-500"
                   loading="eager"
+                  decoding="async"
                 />
               </div>
             </div>
@@ -112,6 +115,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
                       draggable={false}
                       loading="lazy"
+                      decoding="async"
                     />
                   </div>
 
@@ -196,31 +200,41 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   </svg>
                 ),
               },
-            ].map((card) => (
+            ].map((card) => {
+              const isTouchActive = activeWhyCard === card.num;
+              return (
               <div key={card.num} className={`reveal-on-scroll ${card.delayClass} flex`}>
-                <div className="group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between cursor-pointer w-full">
+                <div
+                  onClick={() => setActiveWhyCard((prev) => (prev === card.num ? null : card.num))}
+                  className={`group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between cursor-pointer w-full ${
+                    isTouchActive
+                      ? 'is-touch-active border-[#ea6800] shadow-[0_16px_42px_rgba(184,68,0,0.32)] -translate-y-1'
+                      : 'border-slate-100/90'
+                  }`}
+                >
                   {/* Animated Dark Orange Liquid Fill Layer with Rising Wave */}
                   <DarkOrangeLiquidFill />
 
                   <div className="relative z-10">
                     <div className="flex items-start justify-between">
-                      <div className="text-[#d95800] group-hover:text-white transition-all duration-300 group-hover:scale-110 origin-left">
+                      <div className={`transition-all duration-300 group-hover:scale-110 origin-left ${isTouchActive ? 'text-white scale-110' : 'text-[#d95800] group-hover:text-white'}`}>
                         {card.icon}
                       </div>
-                      <span className="text-6xl sm:text-7xl font-bold text-slate-100/90 group-hover:text-white/25 transition-colors duration-300 select-none leading-none tracking-tighter">
+                      <span className={`text-6xl sm:text-7xl font-bold transition-colors duration-300 select-none leading-none tracking-tighter ${isTouchActive ? 'text-white/25' : 'text-slate-100/90 group-hover:text-white/25'}`}>
                         {card.num}
                       </span>
                     </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-[#c95100] group-hover:text-white transition-colors duration-300 mt-7 mb-3.5 tracking-tight">
+                    <h3 className={`text-lg sm:text-xl font-bold transition-colors duration-300 mt-7 mb-3.5 tracking-tight ${isTouchActive ? 'text-white' : 'text-[#c95100] group-hover:text-white'}`}>
                       {card.title}
                     </h3>
-                    <p className="text-sm text-slate-600 group-hover:text-orange-50 transition-colors duration-300 leading-relaxed font-normal">
+                    <p className={`text-sm transition-colors duration-300 leading-relaxed font-normal ${isTouchActive ? 'text-orange-50' : 'text-slate-600 group-hover:text-orange-50'}`}>
                       {card.description}
                     </p>
                   </div>
                 </div>
               </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>
@@ -314,6 +328,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
                       draggable={false}
                       loading="lazy"
+                      decoding="async"
                     />
                   </div>
 

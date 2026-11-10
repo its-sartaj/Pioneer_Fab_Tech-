@@ -45,81 +45,86 @@ export const GALLERY_ITEMS: GalleryItem[] = [
 export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const lightboxTouchStartXRef = useRef<number | null>(null);
 
-  // GSAP ScrollTrigger Scroll Reveal + Subtle Parallax
+  // GSAP ScrollTrigger: crisp reveal everywhere, parallax only on fine-pointer desktop
   useEffect(() => {
     if (!containerRef.current || GALLERY_ITEMS.length === 0) return;
 
-    const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray<HTMLElement>('.gallery-grid-card');
-      if (cards.length === 0) return;
+    const mm = gsap.matchMedia();
 
-      cards.forEach((card, index) => {
-        const direction = card.getAttribute('data-direction');
-        let initialX = 0;
-        let initialY = 12;
+    mm.add(
+      {
+        isDesktop: '(min-width: 768px) and (hover: hover)',
+        isMobileOrTouch: '(max-width: 767px), (hover: none)',
+      },
+      (context) => {
+        const { isDesktop } = context.conditions as { isDesktop: boolean; isMobileOrTouch: boolean };
+        const cards = gsap.utils.toArray<HTMLElement>('.gallery-grid-card');
+        if (cards.length === 0) return;
 
-        if (direction === 'left') {
-          initialX = -10;
-          initialY = 6;
-        } else if (direction === 'right') {
-          initialX = 10;
-          initialY = 6;
-        }
+        cards.forEach((card, index) => {
+          const direction = card.getAttribute('data-direction');
+          const initialX = isDesktop ? (direction === 'left' ? -10 : direction === 'right' ? 10 : 0) : 0;
+          const initialY = isDesktop ? (initialX === 0 ? 12 : 6) : 14;
 
-        // Fast, snappy reveal animation
-        gsap.fromTo(
-          card,
-          {
-            opacity: 0,
-            scale: 0.985,
-            x: initialX,
-            y: initialY,
-          },
-          {
-            opacity: 1,
-            scale: 1,
-            x: 0,
-            y: 0,
-            duration: 0.3,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 96%',
-              toggleActions: 'play none none none',
-            },
-            delay: (index % 3) * 0.03, // 30ms light stagger
-          }
-        );
-
-        // Very subtle scroll-based image parallax
-        const parallaxImg = card.querySelector<HTMLElement>('.gallery-parallax-img');
-        if (parallaxImg) {
           gsap.fromTo(
-            parallaxImg,
-            { yPercent: -3 },
+            card,
             {
-              yPercent: 3,
-              ease: 'none',
+              opacity: 0,
+              scale: isDesktop ? 0.985 : 0.99,
+              x: initialX,
+              y: initialY,
+            },
+            {
+              opacity: 1,
+              scale: 1,
+              x: 0,
+              y: 0,
+              duration: isDesktop ? 0.3 : 0.28,
+              ease: 'power2.out',
+              clearProps: 'transform,willChange',
               scrollTrigger: {
                 trigger: card,
-                start: 'top bottom',
-                end: 'bottom top',
-                scrub: 0.4,
+                start: 'top 96%',
+                toggleActions: 'play none none none',
               },
+              delay: isDesktop ? (index % 3) * 0.03 : (index % 2) * 0.02,
             }
           );
-        }
-      });
-    }, containerRef);
+
+          // Skip continuous per-card scroll scrub on phones/touch devices for 60/120fps scrolling
+          if (isDesktop) {
+            const parallaxImg = card.querySelector<HTMLElement>('.gallery-parallax-img');
+            if (parallaxImg) {
+              gsap.fromTo(
+                parallaxImg,
+                { yPercent: -3 },
+                {
+                  yPercent: 3,
+                  ease: 'none',
+                  scrollTrigger: {
+                    trigger: card,
+                    start: 'top bottom',
+                    end: 'bottom top',
+                    scrub: 0.4,
+                  },
+                }
+              );
+            }
+          }
+        });
+      },
+      containerRef
+    );
 
     const timer = setTimeout(() => {
       ScrollTrigger.refresh();
-    }, 400);
+    }, 300);
 
     return () => {
       clearTimeout(timer);
-      ctx.revert();
+      mm.revert();
     };
   }, []);
 
@@ -160,6 +165,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
         <img
           src="/assets/achievements_bg.jpg"
           alt="Gallery Banner"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
         {/* Blue/black gradient overlay matching reference */}
@@ -208,30 +214,30 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
               <div
                 key={item.id}
                 data-direction={item.direction}
-                className="gallery-grid-card will-change-[transform,opacity]"
+                className="gallery-grid-card"
               >
                 {/* Every box has the exact same aspect-[4/3] uniform dimension */}
                 <div
                   onClick={() => setSelectedPhotoIndex(idx)}
-                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm hover:shadow-xl transition-shadow duration-400 cursor-pointer group"
+                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer group"
                 >
-                  {/* Parallax inner image wrapper: headroom for 10-15px parallax movement */}
+                  {/* Parallax inner image wrapper (full-height on mobile, parallax headroom on desktop) */}
                   <div className="absolute inset-0 overflow-hidden">
                     <img
                       src={item.src}
-                      alt="Fabrication Work"
-                      onLoad={() => ScrollTrigger.refresh()}
-                      className="gallery-parallax-img w-full h-[114%] -top-[7%] relative object-cover transition-transform duration-400 ease-out group-hover:scale-104 select-none"
-                      loading="lazy"
+                      alt={`Fabrication Work ${idx + 1}`}
+                      className="gallery-parallax-img w-full h-full top-0 md:h-[114%] md:-top-[7%] relative object-cover transition-transform duration-300 ease-out group-hover:scale-104 select-none"
+                      loading={idx < 4 ? 'eager' : 'lazy'}
+                      decoding="async"
                     />
                   </div>
 
                   {/* Subtle dark overlay on hover */}
-                  <div className="absolute inset-0 bg-slate-950/20 group-hover:bg-slate-950/35 transition-colors duration-400" />
+                  <div className="absolute inset-0 bg-slate-950/15 group-hover:bg-slate-950/35 transition-colors duration-300" />
 
-                  {/* Subtle "View ↗" reveal badge on hover */}
-                  <div className="absolute bottom-4 right-4 z-10 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-400 ease-out">
-                    <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/95 backdrop-blur-md text-slate-900 text-xs font-bold shadow-lg tracking-tight hover:bg-white">
+                  {/* Subtle "View ↗" pill: visible softly on mobile touch, animated on desktop hover */}
+                  <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 sm:translate-y-2 opacity-90 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-all duration-300 ease-out">
+                    <span className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white/95 md:backdrop-blur-md text-slate-900 text-[11px] sm:text-xs font-bold shadow-lg tracking-tight hover:bg-white">
                       <span>View</span>
                       <ArrowUpRight className="w-3.5 h-3.5 text-amber-600" />
                     </span>
@@ -243,21 +249,32 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
         )}
       </div>
 
-      {/* 4. Fullscreen Lightbox Gallery with smooth scale & fade transition */}
+      {/* 4. Fullscreen Lightbox Gallery with mobile swipe left/right & smooth scale transition */}
       {selectedPhotoIndex !== null && GALLERY_ITEMS[selectedPhotoIndex] && (
         <div
-          className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn"
+          className="fixed inset-0 z-50 bg-black/95 md:backdrop-blur-md flex items-center justify-center p-3 sm:p-6 animate-fadeIn touch-pan-y"
           onClick={() => setSelectedPhotoIndex(null)}
+          onTouchStart={(e) => {
+            lightboxTouchStartXRef.current = e.touches[0]?.clientX ?? null;
+          }}
+          onTouchEnd={(e) => {
+            if (lightboxTouchStartXRef.current === null) return;
+            const deltaX = (e.changedTouches[0]?.clientX ?? lightboxTouchStartXRef.current) - lightboxTouchStartXRef.current;
+            lightboxTouchStartXRef.current = null;
+            if (deltaX < -45) handleNext();
+            else if (deltaX > 45) handlePrev();
+          }}
         >
           {/* Top Bar with Counter and Close Button */}
           <div className="absolute top-4 left-4 right-4 z-30 flex items-center justify-between text-white pointer-events-none">
-            <span className="text-xs sm:text-sm font-semibold text-slate-300 px-3.5 py-1.5 rounded-full bg-slate-800/80 backdrop-blur-xs shadow-md pointer-events-auto">
+            <span className="text-xs sm:text-sm font-semibold text-slate-300 px-3.5 py-1.5 rounded-full bg-slate-800/85 shadow-md pointer-events-auto">
               {String(selectedPhotoIndex + 1).padStart(2, '0')} / {String(GALLERY_ITEMS.length).padStart(2, '0')}
             </span>
             <button
               onClick={() => setSelectedPhotoIndex(null)}
-              className="p-2.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-white transition-colors cursor-pointer shadow-lg pointer-events-auto"
+              className="p-2.5 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-colors cursor-pointer shadow-lg pointer-events-auto"
               title="Close (Esc)"
+              aria-label="Close gallery lightbox"
             >
               <X className="w-6 h-6" />
             </button>
@@ -266,10 +283,11 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
           {/* Navigation Prev Button */}
           <button
             onClick={handlePrev}
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-slate-800/80 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
+            className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
             title="Previous (Arrow Left)"
+            aria-label="Previous photo"
           >
-            <ChevronLeft className="w-6 h-6" />
+            <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
 
           {/* Centered Image Viewport with smooth scale-in */}
@@ -281,17 +299,19 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
               src={GALLERY_ITEMS[selectedPhotoIndex].src}
               alt="Enlarged Gallery View"
               key={selectedPhotoIndex}
-              className="max-h-[85vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl select-none animate-scaleIn transition-all duration-300"
+              decoding="async"
+              className="max-h-[82vh] sm:max-h-[85vh] max-w-full w-auto h-auto object-contain rounded-xl shadow-2xl select-none animate-scaleIn"
             />
           </div>
 
           {/* Navigation Next Button */}
           <button
             onClick={handleNext}
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-slate-800/80 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
+            className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-30 p-2.5 sm:p-3 rounded-full bg-slate-800/85 hover:bg-slate-700 text-white transition-all cursor-pointer shadow-xl hover:scale-105 active:scale-95"
             title="Next (Arrow Right)"
+            aria-label="Next photo"
           >
-            <ChevronRight className="w-6 h-6" />
+            <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
       )}

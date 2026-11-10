@@ -25,6 +25,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
 
   const [submitted, setSubmitted] = useState(false);
   const [captchaError, setCaptchaError] = useState(false);
+  const [mapInteractive, setMapInteractive] = useState(false);
 
   // Security Question: 4 + 2 = 6
   const num1 = 4;
@@ -174,14 +175,25 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
             </div>
           </div>
 
-          {/* Right: Interactive Google Map with reference styling */}
-          <div className="w-full min-h-[480px] lg:min-h-full border border-slate-300 overflow-hidden relative shadow-xs bg-slate-100 flex flex-col reveal-from-right delay-150">
+          {/* Right: Interactive Google Map with mobile scroll-trap protection */}
+          <div
+            onClick={() => setMapInteractive(true)}
+            onMouseLeave={() => setMapInteractive(false)}
+            className="w-full min-h-[340px] sm:min-h-[420px] lg:min-h-full border border-slate-300 overflow-hidden relative shadow-xs bg-slate-100 flex flex-col reveal-from-right delay-150"
+          >
             <iframe
               title="Pioneer Fab Tech Location Map"
               src="https://maps.google.com/maps?q=Vasai+Virar+Palghar+Maharashtra+401208&t=&z=11&ie=UTF8&iwloc=&output=embed"
-              className="w-full h-full min-h-[480px] border-0"
+              className={`w-full h-full min-h-[340px] sm:min-h-[420px] lg:min-h-full border-0 ${
+                mapInteractive ? 'pointer-events-auto' : 'pointer-events-none lg:pointer-events-auto'
+              }`}
               loading="lazy"
             />
+            {!mapInteractive && (
+              <div className="lg:hidden absolute bottom-3 right-3 px-3 py-1.5 rounded-full bg-slate-900/85 text-white text-[11px] font-semibold tracking-wide shadow-md pointer-events-none">
+                Tap map to explore
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -148,16 +148,17 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                   <img 
                     src={currentProject.image} 
                     alt={currentProject.title}
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/30 to-transparent" />
                   
                   {/* Top Badges */}
                   <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                    <span className="bg-slate-900/90 backdrop-blur-md text-amber-400 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider">
+                    <span className="bg-slate-900/95 md:backdrop-blur-md text-amber-400 px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider">
                       {currentProject.categoryLabel}
                     </span>
-                    <span className="bg-emerald-600/95 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold shadow-xs">
+                    <span className="bg-emerald-600/95 md:backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-bold shadow-xs">
                       Completed: {currentProject.completionYear}
                     </span>
                   </div>
@@ -350,11 +351,12 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                           alt={project.title} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           loading="lazy"
+                          decoding="async"
                         />
-                        <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-md">
+                        <div className="absolute top-3 left-3 bg-slate-950/90 md:backdrop-blur-xs text-white text-[11px] font-semibold px-2.5 py-0.5 rounded-md">
                           {project.categoryLabel}
                         </div>
-                        <div className="absolute bottom-3 right-3 bg-white/90 backdrop-blur-xs text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-sm shadow-xs">
+                        <div className="absolute bottom-3 right-3 bg-white/95 md:backdrop-blur-xs text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-sm shadow-xs">
                           {project.completionYear}
                         </div>
                       </div>

@@ -12,25 +12,44 @@ export const AutoSliderRow: React.FC<AutoSliderRowProps> = ({
   className = "",
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const isDraggingRef = useRef(false);
+  const isTouchingRef = useRef(false);
+  const touchCooldownRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
   const movedRef = useRef(false);
 
-  // Auto-slide effect: slowly advances card-by-card periodically with no arrows
+  // Only auto-advance while slider is visible on screen
   useEffect(() => {
-    if (isHovered) return;
+    const el = containerRef.current;
+    if (!el || !('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        setIsVisible(entries[0]?.isIntersecting ?? true);
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
+  // Auto-slide effect: advances smoothly when idle, never fights touch/drag or offscreen scroll
+  useEffect(() => {
+    if (isPaused || !isVisible) return;
 
     const timer = setInterval(() => {
       const el = containerRef.current;
-      if (!el || isDraggingRef.current) return;
+      if (!el || isDraggingRef.current || isTouchingRef.current || document.hidden) return;
 
-      const scrollStep = Math.min(300, el.clientWidth * 0.75);
+      const scrollStep = Math.min(300, el.clientWidth * 0.78);
       const maxScroll = el.scrollWidth - el.clientWidth;
+      if (maxScroll <= 4) return;
 
       if (el.scrollLeft >= maxScroll - 15) {
-        // Smoothly loop back to start
         el.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
         el.scrollBy({ left: scrollStep, behavior: 'smooth' });
@@ -38,7 +57,28 @@ export const AutoSliderRow: React.FC<AutoSliderRowProps> = ({
     }, intervalMs);
 
     return () => clearInterval(timer);
-  }, [isHovered, intervalMs]);
+  }, [isPaused, isVisible, intervalMs]);
+
+  useEffect(() => {
+    return () => {
+      if (touchCooldownRef.current) clearTimeout(touchCooldownRef.current);
+    };
+  }, []);
+
+  // Touch handlers: yield control immediately to phone finger momentum
+  const handleTouchStart = () => {
+    isTouchingRef.current = true;
+    setIsPaused(true);
+    if (touchCooldownRef.current) clearTimeout(touchCooldownRef.current);
+  };
+
+  const handleTouchEnd = () => {
+    isTouchingRef.current = false;
+    if (touchCooldownRef.current) clearTimeout(touchCooldownRef.current);
+    touchCooldownRef.current = setTimeout(() => {
+      setIsPaused(false);
+    }, 3200);
+  };
 
   // Mouse Drag to Scroll handlers
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -79,17 +119,20 @@ export const AutoSliderRow: React.FC<AutoSliderRowProps> = ({
   return (
     <div
       ref={containerRef}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => {
-        setIsHovered(false);
+        setIsPaused(false);
         handleMouseUpOrLeave();
       }}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchEnd}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUpOrLeave}
       onClickCapture={handleClickCapture}
-      className={`flex items-center gap-4 sm:gap-5 overflow-x-auto scroll-smooth py-3 px-1 cursor-grab active:cursor-grabbing select-none snap-x snap-mandatory ${className}`}
-      style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      className={`flex items-center gap-4 sm:gap-5 overflow-x-auto overscroll-x-contain touch-pan-x py-3 px-1 cursor-grab active:cursor-grabbing select-none snap-x snap-proximity no-scrollbar ${className}`}
+      style={{ WebkitOverflowScrolling: 'touch' }}
     >
       {children}
     </div>

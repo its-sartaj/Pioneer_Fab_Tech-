@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Download, ExternalLink, X, Maximize2 } from 'lucide-react';
 import { PageId } from '../components/Navbar';
+import { loadPdfJs } from '../utils/loadPdfJs';
+import { OriginalPdfFirstPage } from '../components/OriginalPdfFirstPage';
 
 interface CertificateItem {
   id: string;
@@ -34,12 +36,6 @@ const CERTIFICATES: CertificateItem[] = [
   },
 ];
 
-declare global {
-  interface Window {
-    pdfjsLib?: any;
-  }
-}
-
 // Single Certificate Canvas Renderer Component
 const CertificateCanvas: React.FC<{ pdfUrl: string; previewImage: string; title: string }> = ({
   pdfUrl,
@@ -53,13 +49,11 @@ const CertificateCanvas: React.FC<{ pdfUrl: string; previewImage: string; title:
     let isCancelled = false;
 
     const renderPage = async () => {
-      if (!window.pdfjsLib) return;
-
       try {
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
-          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const pdfjsLib = await loadPdfJs();
+        if (isCancelled || !pdfjsLib) return;
 
-        const pdf = await window.pdfjsLib.getDocument(pdfUrl).promise;
+        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
         if (isCancelled) return;
 
         const page = await pdf.getPage(1);
@@ -71,10 +65,10 @@ const CertificateCanvas: React.FC<{ pdfUrl: string; previewImage: string; title:
         const context = canvas.getContext('2d');
         if (!context) return;
 
-        // Render at crisp 2x resolution for retina displays
+        // Render at up to 2x Retina DPR without exhausting mobile canvas memory
         const unscaledViewport = page.getViewport({ scale: 1 });
-        const scale = 420 / unscaledViewport.width;
-        const dpr = Math.max(window.devicePixelRatio || 1, 2);
+        const scale = 380 / unscaledViewport.width;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
         const viewport = page.getViewport({ scale: scale * dpr });
 
         canvas.width = viewport.width;
@@ -116,6 +110,7 @@ const CertificateCanvas: React.FC<{ pdfUrl: string; previewImage: string; title:
           alt={title}
           className="w-full h-full object-cover"
           loading="lazy"
+          decoding="async"
         />
       )}
     </div>
@@ -139,6 +134,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
           src="/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM_2f9ff5e2.jpeg"
           alt="Certificate Header"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
+          decoding="async"
         />
         {/* Blue/black gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a1829]/80 via-[#0a1829]/75 to-[#0a1829]/90" />
@@ -213,7 +209,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
       {/* 4. Fullscreen Modal Viewer when clicking any certificate */}
       {selectedCert && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/85 backdrop-blur-xs animate-in fade-in duration-200"
+          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-slate-950/90 md:backdrop-blur-xs animate-in fade-in duration-200"
           onClick={() => setSelectedCert(null)}
         >
           <div
@@ -221,15 +217,15 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header Bar */}
-            <div className="bg-[#d95800] text-white px-5 py-3 flex items-center justify-between shrink-0">
-              <span className="font-bold text-sm tracking-wide">
+            <div className="bg-[#d95800] text-white px-4 sm:px-5 py-3 flex items-center justify-between shrink-0 gap-2">
+              <span className="font-bold text-xs sm:text-sm tracking-wide truncate">
                 {selectedCert.badgeLabel}
               </span>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 shrink-0">
                 <a
                   href={selectedCert.pdfUrl}
                   download
-                  className="inline-flex items-center gap-1.5 py-1 px-3 bg-white text-[#c95100] font-bold text-xs rounded transition-colors hover:bg-slate-100"
+                  className="inline-flex items-center gap-1.5 py-1 px-2.5 sm:px-3 bg-white text-[#c95100] font-bold text-xs rounded transition-colors hover:bg-slate-100"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Download</span>
@@ -238,7 +234,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
                   href={selectedCert.pdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 py-1 px-3 bg-black/20 hover:bg-black/30 text-white font-semibold text-xs rounded transition-colors"
+                  className="inline-flex items-center gap-1.5 py-1 px-2.5 sm:px-3 bg-black/20 hover:bg-black/30 text-white font-semibold text-xs rounded transition-colors"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span className="hidden sm:inline">Open PDF</span>
@@ -247,18 +243,19 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
                   type="button"
                   onClick={() => setSelectedCert(null)}
                   className="w-7 h-7 rounded bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-colors cursor-pointer ml-1"
+                  aria-label="Close certificate preview"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
             </div>
 
-            {/* Embedded Native PDF Viewer */}
-            <div className="flex-1 bg-slate-100 p-2 sm:p-4 overflow-auto flex justify-center">
-              <iframe
-                src={`${selectedCert.pdfUrl}#page=1&view=FitH&toolbar=0&navpanes=0`}
+            {/* Universal Mobile + Desktop PDF Canvas Viewer */}
+            <div className="flex-1 bg-slate-100 p-2 sm:p-4 overflow-y-auto overscroll-contain">
+              <OriginalPdfFirstPage
+                pdfUrl={selectedCert.pdfUrl}
                 title={selectedCert.title}
-                className="w-full h-[75vh] border-0 bg-white shadow-md"
+                fallbackImage={selectedCert.previewImage}
               />
             </div>
           </div>

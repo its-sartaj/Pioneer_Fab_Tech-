@@ -152,6 +152,8 @@ export const InfrastructurePage: React.FC<InfrastructurePageProps> = ({ onNaviga
                 <img 
                   src="/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM_2f9ff5e2.jpeg" 
                   alt="Industrial Workshop Fabrication" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -159,6 +161,8 @@ export const InfrastructurePage: React.FC<InfrastructurePageProps> = ({ onNaviga
                 <img 
                   src="/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.02_PM__1__b8d93cd1.jpeg" 
                   alt="Fitting Portal On Site" 
+                  loading="lazy"
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>

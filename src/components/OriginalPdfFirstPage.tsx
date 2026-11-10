@@ -1,49 +1,40 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Download, ExternalLink, ZoomIn, ZoomOut, RotateCcw, Loader2, FileText } from 'lucide-react';
+import { loadPdfJs } from '../utils/loadPdfJs';
 
 interface OriginalPdfFirstPageProps {
   pdfUrl: string;
   title: string;
+  fallbackImage?: string;
 }
 
-declare global {
-  interface Window {
-    pdfjsLib?: any;
-  }
-}
-
-export const OriginalPdfFirstPage: React.FC<OriginalPdfFirstPageProps> = ({ pdfUrl, title }) => {
+export const OriginalPdfFirstPage: React.FC<OriginalPdfFirstPageProps> = ({ pdfUrl, title, fallbackImage }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [scale, setScale] = useState<number>(1.0);
   const [useIframeFallback, setUseIframeFallback] = useState<boolean>(false);
 
   useEffect(() => {
     let isCancelled = false;
     setLoading(true);
-    setError(null);
     setUseIframeFallback(false);
 
     const renderPdfFirstPage = async () => {
-      // Check if pdfjsLib is loaded
-      if (!window.pdfjsLib) {
-        // Fallback to iframe if pdfjsLib is not available
-        setUseIframeFallback(true);
-        setLoading(false);
-        return;
-      }
-
       try {
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc = 
-          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        const pdfjsLib = await loadPdfJs();
+        if (isCancelled || !pdfjsLib) {
+          if (!isCancelled) {
+            setUseIframeFallback(true);
+            setLoading(false);
+          }
+          return;
+        }
 
-        const loadingTask = window.pdfjsLib.getDocument(pdfUrl);
+        const loadingTask = pdfjsLib.getDocument(pdfUrl);
         const pdf = await loadingTask.promise;
         if (isCancelled) return;
 
-        // Fetch page 1 (the first page requested by the user)
         const page = await pdf.getPage(1);
         if (isCancelled) return;
 
@@ -53,14 +44,12 @@ export const OriginalPdfFirstPage: React.FC<OriginalPdfFirstPageProps> = ({ pdfU
         const context = canvas.getContext('2d');
         if (!context) return;
 
-        // Determine container width for responsive fit
         const containerWidth = containerRef.current?.clientWidth || 800;
         const unscaledViewport = page.getViewport({ scale: 1 });
-        
-        // Target display scale
-        const targetScale = ((containerWidth - 32) / unscaledViewport.width) * scale;
-        const pixelRatio = Math.max(window.devicePixelRatio || 1, 2); // 2x for sharp retina rendering
-        
+
+        const targetScale = (Math.max(containerWidth - 24, 240) / unscaledViewport.width) * scale;
+        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
         const viewport = page.getViewport({ scale: targetScale * pixelRatio });
 
         canvas.width = viewport.width;
@@ -68,17 +57,15 @@ export const OriginalPdfFirstPage: React.FC<OriginalPdfFirstPageProps> = ({ pdfU
         canvas.style.width = `${viewport.width / pixelRatio}px`;
         canvas.style.height = `${viewport.height / pixelRatio}px`;
 
-        const renderContext = {
+        await page.render({
           canvasContext: context,
           viewport: viewport,
-        };
-
-        await page.render(renderContext).promise;
+        }).promise;
         if (!isCancelled) {
           setLoading(false);
         }
       } catch (err: any) {
-        console.warn('PDF.js render failed, falling back to iframe', err);
+        console.warn('PDF.js render failed, falling back cleanly', err);
         if (!isCancelled) {
           setUseIframeFallback(true);
           setLoading(false);
@@ -161,24 +148,35 @@ export const OriginalPdfFirstPage: React.FC<OriginalPdfFirstPageProps> = ({ pdfU
       </div>
 
       {/* Document View Area */}
-      <div className="bg-slate-100 p-3 sm:p-8 flex justify-center items-center min-h-[600px] overflow-auto">
+      <div className="bg-slate-100 p-2 sm:p-6 flex justify-center items-center min-h-[320px] sm:min-h-[520px] overflow-auto">
         {loading && (
-          <div className="flex flex-col items-center gap-3 text-slate-500 py-16">
+          <div className="flex flex-col items-center gap-3 text-slate-500 py-12">
             <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
             <p className="text-xs font-medium">Loading original certificate page 1...</p>
           </div>
         )}
 
         {useIframeFallback ? (
-          <div className="w-full h-[850px] sm:h-[950px] bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
-            <iframe
-              src={`${pdfUrl}#page=1&view=FitH&toolbar=0&navpanes=0`}
-              title={title}
-              className="w-full h-full border-0"
-            />
-          </div>
+          fallbackImage ? (
+            <div className="w-full max-w-2xl bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
+              <img
+                src={fallbackImage}
+                alt={title}
+                className="w-full h-auto object-contain block"
+                decoding="async"
+              />
+            </div>
+          ) : (
+            <div className="w-full h-[65vh] sm:h-[850px] bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
+              <iframe
+                src={`${pdfUrl}#page=1&view=FitH&toolbar=0&navpanes=0`}
+                title={title}
+                className="w-full h-full border-0"
+              />
+            </div>
+          )
         ) : (
-          <div className="bg-white rounded-xl shadow-lg border border-slate-300/80 overflow-hidden transition-transform duration-200">
+          <div className={`bg-white rounded-xl shadow-lg border border-slate-300/80 overflow-hidden transition-transform duration-200 ${loading ? 'hidden' : 'block'}`}>
             <canvas ref={canvasRef} className="block max-w-full h-auto mx-auto" />
           </div>
         )}

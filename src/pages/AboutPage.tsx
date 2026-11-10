@@ -16,6 +16,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         <img
           src="/assets/achievements_bg.jpg"
           alt="About Us Header"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
         {/* Blue/black gradient overlay matching reference */}
@@ -96,8 +97,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
                 <img 
                   src="/assets/images/about_ss_pipe_fittings_1794245348614.jpg" 
                   alt="Pioneer Fab Tech Precision Industrial Stainless Steel Pipe Fittings & Fabrication" 
-                  className="w-full h-[460px] sm:h-[520px] lg:h-[560px] object-cover group-hover:scale-103 transition-transform duration-500"
+                  className="w-full h-[340px] sm:h-[480px] lg:h-[560px] object-cover group-hover:scale-103 transition-transform duration-500"
                   loading="eager"
+                  decoding="async"
                 />
               </div>
             </div>
