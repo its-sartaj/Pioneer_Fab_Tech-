@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Download, ExternalLink, X, Maximize2 } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { Download, ExternalLink, X, Maximize2, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { PageId } from '../components/Navbar';
 import { loadPdfJs } from '../utils/loadPdfJs';
 import { OriginalPdfFirstPage } from '../components/OriginalPdfFirstPage';
@@ -101,14 +102,14 @@ const CertificateCanvas: React.FC<{ pdfUrl: string; previewImage: string; title:
       {/* If canvas rendered, display crisp vector canvas */}
       <canvas
         ref={canvasRef}
-        className={`w-full h-auto object-cover ${rendered ? 'block' : 'hidden'}`}
+        className={`w-full h-full object-contain ${rendered ? 'block' : 'hidden'}`}
       />
       {/* Fallback image while canvas renders */}
       {!rendered && (
         <img
           src={previewImage}
           alt={title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
           loading="lazy"
           decoding="async"
         />
@@ -123,6 +124,144 @@ export interface CertificatesPageProps {
 
 export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }) => {
   const [selectedCert, setSelectedCert] = useState<CertificateItem | null>(null);
+  const [zoom, setZoom] = useState<number>(1);
+  const [pageNumber, setPageNumber] = useState<number>(1);
+
+  // Reset zoom & page when opening a different certificate
+  const openCertificate = (cert: CertificateItem) => {
+    setZoom(1);
+    setPageNumber(1);
+    setSelectedCert(cert);
+  };
+
+  // Close modal on Escape key
+  useEffect(() => {
+    if (!selectedCert) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedCert(null);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [selectedCert]);
+
+  // Lock background scroll & compensate desktop scrollbar width cleanly while modal is open
+  useEffect(() => {
+    if (!selectedCert) return;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevBodyPaddingRight = document.body.style.paddingRight;
+
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarWidth > 0) {
+      const computedPaddingRight = parseFloat(getComputedStyle(document.body).paddingRight) || 0;
+      document.body.style.paddingRight = `${computedPaddingRight + scrollbarWidth}px`;
+    }
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.overflow = prevBodyOverflow;
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.body.style.paddingRight = prevBodyPaddingRight;
+    };
+  }, [selectedCert]);
+
+  const certModal = selectedCert ? (
+    <div
+      className="fixed inset-0 w-screen h-[100dvh] z-[9999] flex flex-col bg-slate-950/92 md:backdrop-blur-md animate-fadeIn"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${selectedCert.badgeLabel} full view`}
+    >
+      {/* Unified Compact Header Bar with Zoom, Download, Open PDF & Close */}
+      <div className="bg-[#d95800] text-white px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2 shrink-0 shadow-lg z-10">
+        <span className="font-bold text-xs sm:text-sm tracking-wide truncate">
+          {selectedCert.badgeLabel}
+        </span>
+
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Compact Zoom Controls */}
+          <div className="inline-flex items-center gap-0.5 bg-black/20 rounded-md p-0.5 border border-white/15">
+            <button
+              type="button"
+              onClick={() => setZoom((z) => Math.max(0.75, +(z - 0.25).toFixed(2)))}
+              className="p-1.5 hover:bg-white/15 rounded text-white transition-colors cursor-pointer"
+              title="Zoom Out"
+              aria-label="Zoom out certificate"
+            >
+              <ZoomOut className="w-3.5 h-3.5" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setZoom(1)}
+              className="px-1.5 py-0.5 text-[11px] font-mono hover:bg-white/15 rounded text-white transition-colors cursor-pointer"
+              title="Fit Full Certificate"
+            >
+              {zoom === 1 ? 'Full' : `${Math.round(zoom * 100)}%`}
+            </button>
+            <button
+              type="button"
+              onClick={() => setZoom((z) => Math.min(2.25, +(z + 0.25).toFixed(2)))}
+              className="p-1.5 hover:bg-white/15 rounded text-white transition-colors cursor-pointer"
+              title="Zoom In"
+              aria-label="Zoom in certificate"
+            >
+              <ZoomIn className="w-3.5 h-3.5" />
+            </button>
+            {zoom !== 1 && (
+              <button
+                type="button"
+                onClick={() => setZoom(1)}
+                className="p-1.5 hover:bg-white/15 rounded text-white transition-colors cursor-pointer"
+                title="Reset Fit"
+                aria-label="Reset certificate fit"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          <a
+            href={selectedCert.pdfUrl}
+            download
+            className="inline-flex items-center gap-1.5 py-1.5 px-2.5 sm:px-3 bg-white text-[#c95100] font-bold text-xs rounded transition-colors hover:bg-slate-100"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span className="hidden xs:inline sm:inline">Download</span>
+          </a>
+          <a
+            href={selectedCert.pdfUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 py-1.5 px-2.5 sm:px-3 bg-black/25 hover:bg-black/35 text-white font-semibold text-xs rounded transition-colors"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Open PDF</span>
+          </a>
+          <button
+            type="button"
+            onClick={() => setSelectedCert(null)}
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/25 hover:bg-black/45 border border-white/25 text-white flex items-center justify-center transition-colors cursor-pointer ml-0.5"
+            title="Close (Esc)"
+            aria-label="Close certificate preview"
+          >
+            <X className="w-4 h-4 sm:w-5 sm:h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Full-View Certificate Canvas Stage (Fits entire certificate from top to bottom) */}
+      <OriginalPdfFirstPage
+        pdfUrl={selectedCert.pdfUrl}
+        title={selectedCert.title}
+        fallbackImage={selectedCert.previewImage}
+        zoom={zoom}
+        pageNumber={pageNumber}
+        onPageChange={setPageNumber}
+        onBackdropClick={() => setSelectedCert(null)}
+      />
+    </div>
+  ) : null;
 
   return (
     <div className="bg-white min-h-screen">
@@ -174,7 +313,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
             return (
               <div
                 key={cert.id}
-                onClick={() => setSelectedCert(cert)}
+                onClick={() => openCertificate(cert)}
                 className={`flex flex-col items-center w-full max-w-[340px] group cursor-pointer reveal-on-scroll ${delayClasses[idx] || ''}`}
               >
               {/* Rectangular Black Frame */}
@@ -206,61 +345,10 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
 
       </section>
 
-      {/* 4. Fullscreen Modal Viewer when clicking any certificate */}
-      {selectedCert && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 bg-slate-950/90 md:backdrop-blur-xs animate-in fade-in duration-200"
-          onClick={() => setSelectedCert(null)}
-        >
-          <div
-            className="bg-white max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden border border-slate-300"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Modal Header Bar */}
-            <div className="bg-[#d95800] text-white px-4 sm:px-5 py-3 flex items-center justify-between shrink-0 gap-2">
-              <span className="font-bold text-xs sm:text-sm tracking-wide truncate">
-                {selectedCert.badgeLabel}
-              </span>
-              <div className="flex items-center gap-2 shrink-0">
-                <a
-                  href={selectedCert.pdfUrl}
-                  download
-                  className="inline-flex items-center gap-1.5 py-1 px-2.5 sm:px-3 bg-white text-[#c95100] font-bold text-xs rounded transition-colors hover:bg-slate-100"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                  <span>Download</span>
-                </a>
-                <a
-                  href={selectedCert.pdfUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 py-1 px-2.5 sm:px-3 bg-black/20 hover:bg-black/30 text-white font-semibold text-xs rounded transition-colors"
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Open PDF</span>
-                </a>
-                <button
-                  type="button"
-                  onClick={() => setSelectedCert(null)}
-                  className="w-7 h-7 rounded bg-black/20 hover:bg-black/40 text-white flex items-center justify-center transition-colors cursor-pointer ml-1"
-                  aria-label="Close certificate preview"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Universal Mobile + Desktop PDF Canvas Viewer */}
-            <div className="flex-1 bg-slate-100 p-2 sm:p-4 overflow-y-auto overscroll-contain">
-              <OriginalPdfFirstPage
-                pdfUrl={selectedCert.pdfUrl}
-                title={selectedCert.title}
-                fallbackImage={selectedCert.previewImage}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {/* 4. Fullscreen Modal Viewer portaled directly to document.body */}
+      {typeof document !== 'undefined' && certModal
+        ? createPortal(certModal, document.body)
+        : certModal}
 
     </div>
   );

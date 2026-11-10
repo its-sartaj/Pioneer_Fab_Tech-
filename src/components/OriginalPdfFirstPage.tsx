@@ -1,199 +1,263 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Download, ExternalLink, ZoomIn, ZoomOut, RotateCcw, Loader2, FileText } from 'lucide-react';
+import { Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { loadPdfJs } from '../utils/loadPdfJs';
 
 interface OriginalPdfFirstPageProps {
   pdfUrl: string;
   title: string;
   fallbackImage?: string;
+  zoom?: number;
+  onNumPagesLoaded?: (numPages: number) => void;
+  pageNumber?: number;
+  onPageChange?: (page: number) => void;
+  onBackdropClick?: () => void;
 }
 
-export const OriginalPdfFirstPage: React.FC<OriginalPdfFirstPageProps> = ({ pdfUrl, title, fallbackImage }) => {
+/**
+ * Renders a PDF certificate page fitted completely inside the available viewport
+ * ("Full View") by default, with optional zoom & multi-page navigation.
+ */
+export const OriginalPdfFirstPage: React.FC<OriginalPdfFirstPageProps> = ({
+  pdfUrl,
+  title,
+  fallbackImage,
+  zoom = 1,
+  onNumPagesLoaded,
+  pageNumber = 1,
+  onPageChange,
+  onBackdropClick,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const stageRef = useRef<HTMLDivElement | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [scale, setScale] = useState<number>(1.0);
-  const [useIframeFallback, setUseIframeFallback] = useState<boolean>(false);
+  const [useFallbackImage, setUseFallbackImage] = useState<boolean>(false);
+  const [numPages, setNumPages] = useState<number>(1);
+  const [stageSize, setStageSize] = useState<{ width: number; height: number }>({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1024,
+    height: typeof window !== 'undefined' ? window.innerHeight - 64 : 700,
+  });
+  const [pageAspect, setPageAspect] = useState<{ width: number; height: number } | null>(null);
 
+  // Measure actual stage dimensions cleanly so fitted certificate never clips
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el) return;
+
+    const updateSize = () => {
+      setStageSize({ width: el.clientWidth, height: el.clientHeight });
+    };
+    updateSize();
+
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(updateSize);
+      ro.observe(el);
+      return () => ro.disconnect();
+    }
+
+    (window as Window).addEventListener('resize', updateSize);
+    return () => (window as Window).removeEventListener('resize', updateSize);
+  }, []);
+
+  // Load PDF & render the requested page at sharp retina resolution
   useEffect(() => {
     let isCancelled = false;
     setLoading(true);
-    setUseIframeFallback(false);
+    setUseFallbackImage(false);
 
-    const renderPdfFirstPage = async () => {
+    const renderPage = async () => {
       try {
         const pdfjsLib = await loadPdfJs();
         if (isCancelled || !pdfjsLib) {
           if (!isCancelled) {
-            setUseIframeFallback(true);
+            setUseFallbackImage(true);
             setLoading(false);
           }
           return;
         }
 
-        const loadingTask = pdfjsLib.getDocument(pdfUrl);
-        const pdf = await loadingTask.promise;
+        const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
         if (isCancelled) return;
 
-        const page = await pdf.getPage(1);
+        const total = pdf.numPages || 1;
+        setNumPages(total);
+        onNumPagesLoaded?.(total);
+
+        const safePage = Math.min(Math.max(1, pageNumber), total);
+        const page = await pdf.getPage(safePage);
         if (isCancelled) return;
 
         const canvas = canvasRef.current;
         if (!canvas) return;
-
         const context = canvas.getContext('2d');
         if (!context) return;
 
-        const containerWidth = containerRef.current?.clientWidth || 800;
         const unscaledViewport = page.getViewport({ scale: 1 });
+        setPageAspect({ width: unscaledViewport.width, height: unscaledViewport.height });
 
-        const targetScale = (Math.max(containerWidth - 24, 240) / unscaledViewport.width) * scale;
-        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-
-        const viewport = page.getViewport({ scale: targetScale * pixelRatio });
+        // Render high-res backing buffer (crisp when fitting OR zooming up to 2.2x)
+        const desiredPxWidth = Math.min(Math.max(1100, unscaledViewport.width * 2), 2000);
+        const renderScale = desiredPxWidth / unscaledViewport.width;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const viewport = page.getViewport({ scale: renderScale * dpr });
 
         canvas.width = viewport.width;
         canvas.height = viewport.height;
-        canvas.style.width = `${viewport.width / pixelRatio}px`;
-        canvas.style.height = `${viewport.height / pixelRatio}px`;
 
         await page.render({
           canvasContext: context,
-          viewport: viewport,
+          viewport,
         }).promise;
+
         if (!isCancelled) {
           setLoading(false);
         }
-      } catch (err: any) {
-        console.warn('PDF.js render failed, falling back cleanly', err);
+      } catch (err) {
+        console.warn('PDF.js full-view render failed, using fallback preview', err);
         if (!isCancelled) {
-          setUseIframeFallback(true);
+          setUseFallbackImage(true);
           setLoading(false);
         }
       }
     };
 
-    renderPdfFirstPage();
+    renderPage();
 
     return () => {
       isCancelled = true;
     };
-  }, [pdfUrl, scale]);
+  }, [pdfUrl, pageNumber, onNumPagesLoaded]);
+
+  // Compute CSS display dimensions so full page fits 100% inside stage at zoom === 1
+  const padX = stageSize.width < 640 ? 16 : 40;
+  const topPad = stageSize.height < 640 ? 16 : 24;
+  const bottomPad = numPages > 1 ? 56 : topPad;
+  const availW = Math.max(stageSize.width - padX, 200);
+  const availH = Math.max(stageSize.height - topPad - bottomPad, 200);
+
+  let displayWidth: number | undefined;
+  let displayHeight: number | undefined;
+
+  if (pageAspect) {
+    const fitRatio = Math.min(availW / pageAspect.width, availH / pageAspect.height);
+    displayWidth = Math.floor(pageAspect.width * fitRatio * zoom);
+    displayHeight = Math.floor(pageAspect.height * fitRatio * zoom);
+  }
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden" ref={containerRef}>
-      
-      {/* Top Action Bar */}
-      <div className="bg-slate-900 text-white px-5 sm:px-8 py-3.5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <FileText className="w-4 h-4 text-amber-400" />
-          <span className="text-xs sm:text-sm font-bold text-white tracking-wide">
-            {title} (Original Document - Page 1)
-          </span>
+    <div
+      ref={stageRef}
+      onClick={onBackdropClick}
+      className={`relative flex-1 min-h-0 w-full h-full flex overflow-auto overscroll-contain px-2 sm:px-4 pt-2 sm:pt-3 ${
+        numPages > 1 ? 'pb-14' : 'pb-2 sm:pb-4'
+      }`}
+    >
+      {loading && !fallbackImage && (
+        <div className="m-auto flex flex-col items-center gap-3 text-slate-300 py-10">
+          <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+          <p className="text-xs font-medium">Loading full certificate view...</p>
         </div>
+      )}
 
-        {/* Zoom & Action Controls */}
-        <div className="flex items-center gap-2">
-          {!useIframeFallback && (
-            <div className="hidden sm:flex items-center gap-1 bg-slate-800 rounded-lg p-1 border border-slate-700 text-slate-300 mr-2">
+      {useFallbackImage ? (
+        fallbackImage ? (
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="m-auto bg-white rounded-lg shadow-2xl border border-white/15 overflow-hidden flex items-center justify-center"
+            style={{
+              maxWidth: zoom > 1 ? 'none' : `${availW}px`,
+              maxHeight: zoom > 1 ? 'none' : `${availH}px`,
+            }}
+          >
+            <img
+              src={fallbackImage}
+              alt={title}
+              decoding="async"
+              style={{
+                maxWidth: zoom > 1 ? 'none' : `${availW}px`,
+                maxHeight: zoom > 1 ? 'none' : `${availH}px`,
+                width: zoom > 1 ? `${Math.floor(availW * zoom)}px` : 'auto',
+                height: 'auto',
+              }}
+              className="object-contain block select-none"
+            />
+          </div>
+        ) : (
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="m-auto w-full max-w-4xl h-full bg-white rounded-lg shadow-2xl overflow-hidden"
+          >
+            <iframe
+              src={`${pdfUrl}#page=${pageNumber}&view=Fit`}
+              title={title}
+              className="w-full h-full border-0"
+            />
+          </div>
+        )
+      ) : (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="m-auto relative bg-white rounded-lg shadow-[0_20px_60px_rgba(0,0,0,0.6)] border border-white/20 overflow-hidden shrink-0"
+        >
+          {/* Instant preview placeholder while PDF canvas renders */}
+          {loading && fallbackImage && (
+            <img
+              src={fallbackImage}
+              alt={title}
+              decoding="async"
+              style={{
+                maxWidth: `${availW}px`,
+                maxHeight: `${availH}px`,
+                width: 'auto',
+                height: 'auto',
+              }}
+              className="block object-contain select-none"
+            />
+          )}
+
+          <canvas
+            ref={canvasRef}
+            style={
+              displayWidth && displayHeight
+                ? { width: `${displayWidth}px`, height: `${displayHeight}px` }
+                : { maxWidth: `${availW}px`, maxHeight: `${availH}px`, width: 'auto', height: 'auto' }
+            }
+            className={`block select-none ${loading ? 'hidden' : 'block'}`}
+          />
+
+          {/* Compact Floating Multi-Page Switcher when PDF has 2+ pages */}
+          {numPages > 1 && onPageChange && !loading && (
+            <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[10000] inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900/90 text-white text-xs font-semibold border border-white/20 shadow-xl">
               <button
                 type="button"
-                onClick={() => setScale((s) => Math.max(0.7, s - 0.15))}
-                className="p-1 hover:text-white hover:bg-slate-700 rounded transition-colors cursor-pointer"
-                title="Zoom Out"
+                disabled={pageNumber <= 1}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPageChange(Math.max(1, pageNumber - 1));
+                }}
+                className="p-1 rounded-full hover:bg-white/15 disabled:opacity-35 cursor-pointer disabled:cursor-not-allowed"
+                aria-label="Previous certificate page"
               >
-                <ZoomOut className="w-3.5 h-3.5" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
-              <span className="text-[11px] font-mono px-1.5 text-slate-400">
-                {Math.round(scale * 100)}%
+              <span className="px-1 font-mono">
+                Page {pageNumber} / {numPages}
               </span>
               <button
                 type="button"
-                onClick={() => setScale((s) => Math.min(2.0, s + 0.15))}
-                className="p-1 hover:text-white hover:bg-slate-700 rounded transition-colors cursor-pointer"
-                title="Zoom In"
+                disabled={pageNumber >= numPages}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPageChange(Math.min(numPages, pageNumber + 1));
+                }}
+                className="p-1 rounded-full hover:bg-white/15 disabled:opacity-35 cursor-pointer disabled:cursor-not-allowed"
+                aria-label="Next certificate page"
               >
-                <ZoomIn className="w-3.5 h-3.5" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setScale(1.0)}
-                className="p-1 hover:text-white hover:bg-slate-700 rounded transition-colors cursor-pointer"
-                title="Reset Zoom"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           )}
-
-          <a
-            href={pdfUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-          >
-            <span>Open in Full Tab</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-
-          <a
-            href={pdfUrl}
-            download
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs"
-          >
-            <Download className="w-3.5 h-3.5" />
-            <span>Download Original PDF</span>
-          </a>
         </div>
-      </div>
-
-      {/* Document View Area */}
-      <div className="bg-slate-100 p-2 sm:p-6 flex justify-center items-center min-h-[320px] sm:min-h-[520px] overflow-auto">
-        {loading && (
-          <div className="flex flex-col items-center gap-3 text-slate-500 py-12">
-            <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
-            <p className="text-xs font-medium">Loading original certificate page 1...</p>
-          </div>
-        )}
-
-        {useIframeFallback ? (
-          fallbackImage ? (
-            <div className="w-full max-w-2xl bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
-              <img
-                src={fallbackImage}
-                alt={title}
-                className="w-full h-auto object-contain block"
-                decoding="async"
-              />
-            </div>
-          ) : (
-            <div className="w-full h-[65vh] sm:h-[850px] bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
-              <iframe
-                src={`${pdfUrl}#page=1&view=FitH&toolbar=0&navpanes=0`}
-                title={title}
-                className="w-full h-full border-0"
-              />
-            </div>
-          )
-        ) : (
-          <div className={`bg-white rounded-xl shadow-lg border border-slate-300/80 overflow-hidden transition-transform duration-200 ${loading ? 'hidden' : 'block'}`}>
-            <canvas ref={canvasRef} className="block max-w-full h-auto mx-auto" />
-          </div>
-        )}
-      </div>
-
-      {/* Clean Bottom Bar */}
-      <div className="bg-white px-6 py-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
-        <span>Government of India & Maharashtra State Official Certificate</span>
-        <a
-          href={pdfUrl}
-          download
-          className="text-amber-600 hover:text-amber-700 font-bold inline-flex items-center gap-1"
-        >
-          Download Certified PDF <Download className="w-3 h-3" />
-        </a>
-      </div>
-
+      )}
     </div>
   );
 };
