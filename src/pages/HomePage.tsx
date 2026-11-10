@@ -82,12 +82,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       </section>
 
       {/* 3. Our Core Fabrication Services Section (Exact match to Our Material design) */}
-      <section className="py-12 sm:py-16 bg-[#c2410c] text-white relative overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-7 sm:space-y-9">
+      <section className="py-12 sm:py-16 bg-gradient-to-b from-[#ea6800] via-[#db5d00] to-[#c95100] text-white relative overflow-hidden border-y border-[#b84600]/40">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,185,95,0.22),transparent_65%)]" />
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-7 sm:space-y-9 relative z-10">
           
           {/* Centered Heading */}
           <div className="text-center reveal-word">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_4px_rgba(120,40,0,0.25)]">
               Our Core Fabrication Services
             </h2>
           </div>
@@ -99,7 +100,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 <div
                   key={service.id}
                   onClick={() => onNavigate('services', service.id)}
-                  className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer select-none snap-start flex flex-col justify-between"
+                  className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-[0_8px_24px_rgba(120,40,0,0.2)] hover:shadow-[0_14px_32px_rgba(100,35,0,0.32)] transition-all duration-300 hover:-translate-y-1 cursor-pointer select-none snap-start flex flex-col justify-between"
                 >
                   {/* Clean Rectangular Image Container with White Framing */}
                   <div className="w-full aspect-[4/3] overflow-hidden bg-slate-100">
@@ -112,9 +113,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                     />
                   </div>
 
-                  {/* Centered Bold Title in Burnt Orange */}
+                  {/* Centered Bold Title in Dark Orange */}
                   <div className="pt-3.5 pb-1 text-center">
-                    <h3 className="text-base sm:text-lg font-bold text-[#c2410c] group-hover:text-[#9a3412] transition-colors leading-tight line-clamp-1">
+                    <h3 className="text-base sm:text-lg font-bold text-[#c94e00] group-hover:text-[#ea6800] transition-colors leading-tight line-clamp-1">
                       {service.title}
                     </h3>
                   </div>
@@ -232,12 +233,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
       <OurAchievementsSection />
 
       {/* 6. Our Material Section (Exact match to reference design image_8a251916.png) */}
-      <section className="py-12 sm:py-16 bg-[#c2410c] text-white relative overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-7 sm:space-y-9">
+      <section className="py-12 sm:py-16 bg-gradient-to-b from-[#ea6800] via-[#db5d00] to-[#c95100] text-white relative overflow-hidden border-y border-[#b84600]/40">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(255,185,95,0.22),transparent_65%)]" />
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-7 sm:space-y-9 relative z-10">
           
           {/* Exact Heading - keep name only "Our Material" */}
           <div className="text-center reveal-word">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight drop-shadow-[0_2px_4px_rgba(120,40,0,0.25)]">
               Our Material
             </h2>
           </div>
@@ -305,7 +307,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 <div
                   key={item.id}
                   onClick={() => onNavigate('materials', item.id)}
-                  className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 cursor-pointer select-none snap-start flex flex-col"
+                  className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-[0_8px_24px_rgba(120,40,0,0.2)] hover:shadow-[0_14px_32px_rgba(100,35,0,0.32)] transition-all duration-300 hover:-translate-y-1 cursor-pointer select-none snap-start flex flex-col"
                 >
                   {/* Clean Rectangular Image Container with White Framing */}
                   <div className="w-full aspect-[4/3] overflow-hidden bg-slate-100">
@@ -318,9 +320,9 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                     />
                   </div>
 
-                  {/* Centered Bold Title in Burnt Orange */}
+                  {/* Centered Bold Title in Dark Orange */}
                   <div className="pt-3.5 pb-1 text-center">
-                    <h3 className="text-base sm:text-lg font-bold text-[#c2410c] group-hover:text-[#9a3412] transition-colors leading-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-[#c94e00] group-hover:text-[#ea6800] transition-colors leading-tight">
                       {item.title}
                     </h3>
                   </div>
