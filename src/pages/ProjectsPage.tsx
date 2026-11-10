@@ -286,7 +286,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
             <div className="space-y-6">
               
               {/* Filter Controls (Segmented Buttons + Location Filter) */}
-              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4">
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs space-y-4 reveal-on-scroll">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                   
                   {/* Category Segmented Control */}
@@ -337,11 +337,11 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
 
               {/* Project Cards Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProjects.map((project) => (
-                  <div
-                    key={project.id}
-                    className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group hover:border-[#d95c18]/40"
-                  >
+                {filteredProjects.map((project, idx) => {
+                  const delayClasses = ['', 'delay-75', 'delay-150'];
+                  return (
+                    <div key={project.id} className={`reveal-on-scroll ${delayClasses[idx % 3]} flex`}>
+                      <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group hover:border-[#d95c18]/40 w-full">
                     <div>
                       {/* Real Photo */}
                       <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
@@ -405,8 +405,10 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                       </button>
                     </div>
 
-                  </div>
-                ))}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
 
               {filteredProjects.length === 0 && (

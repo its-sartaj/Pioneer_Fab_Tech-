@@ -208,7 +208,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
               <div
                 key={item.id}
                 data-direction={item.direction}
-                className="gallery-grid-card will-change-transform will-change-opacity"
+                className="gallery-grid-card will-change-[transform,opacity]"
               >
                 {/* Every box has the exact same aspect-[4/3] uniform dimension */}
                 <div

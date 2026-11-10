@@ -141,10 +141,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           </div>
 
           {/* 3 Clean Elevated White Cards with Dark Orange Liquid Fill Animation */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 reveal-on-scroll delay-150">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
             {[
               {
                 num: '01',
+                delayClass: 'delay-75',
                 title: 'Timely Delivery',
                 description:
                   'Count on Pioneer Fab Tech for punctual delivery, ensuring your projects stay on schedule.',
@@ -162,6 +163,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               },
               {
                 num: '02',
+                delayClass: 'delay-150',
                 title: 'Wide Range of Products',
                 description:
                   'Explore a diverse spectrum of stainless steel solutions at Pioneer Fab Tech, catering to all your needs.',
@@ -180,6 +182,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               },
               {
                 num: '03',
+                delayClass: 'delay-200',
                 title: 'Quality Assurance',
                 description:
                   'Trust in the quality benchmarks set by Pioneer Fab Tech, ensuring precision and excellence in every product.',
@@ -194,28 +197,27 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 ),
               },
             ].map((card) => (
-              <div
-                key={card.num}
-                className="group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between cursor-pointer"
-              >
-                {/* Animated Dark Orange Liquid Fill Layer with Rising Wave */}
-                <DarkOrangeLiquidFill />
+              <div key={card.num} className={`reveal-on-scroll ${card.delayClass} flex`}>
+                <div className="group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border border-slate-100/90 hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between cursor-pointer w-full">
+                  {/* Animated Dark Orange Liquid Fill Layer with Rising Wave */}
+                  <DarkOrangeLiquidFill />
 
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between">
-                    <div className="text-[#D87633] group-hover:text-white transition-all duration-300 group-hover:scale-110 origin-left">
-                      {card.icon}
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between">
+                      <div className="text-[#D87633] group-hover:text-white transition-all duration-300 group-hover:scale-110 origin-left">
+                        {card.icon}
+                      </div>
+                      <span className="text-6xl sm:text-7xl font-bold text-slate-100/90 group-hover:text-white/25 transition-colors duration-300 select-none leading-none tracking-tighter">
+                        {card.num}
+                      </span>
                     </div>
-                    <span className="text-6xl sm:text-7xl font-bold text-slate-100/90 group-hover:text-white/25 transition-colors duration-300 select-none leading-none tracking-tighter">
-                      {card.num}
-                    </span>
+                    <h3 className="text-lg sm:text-xl font-bold text-[#9e3f14] group-hover:text-white transition-colors duration-300 mt-7 mb-3.5 tracking-tight">
+                      {card.title}
+                    </h3>
+                    <p className="text-sm text-slate-600 group-hover:text-orange-50 transition-colors duration-300 leading-relaxed font-normal">
+                      {card.description}
+                    </p>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-[#9e3f14] group-hover:text-white transition-colors duration-300 mt-7 mb-3.5 tracking-tight">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm text-slate-600 group-hover:text-orange-50 transition-colors duration-300 leading-relaxed font-normal">
-                    {card.description}
-                  </p>
                 </div>
               </div>
             ))}
@@ -331,7 +333,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
       {/* 7. Reach Out Now! Section (Get A Quote Form + Workshop Map) */}
       <section className="py-14 sm:py-20 bg-white">
-        <ReachOutSection containerClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 reveal-on-scroll" />
+        <ReachOutSection containerClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8" />
       </section>
 
     </div>

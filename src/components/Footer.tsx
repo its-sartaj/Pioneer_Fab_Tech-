@@ -138,7 +138,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* =====================================================================
               COLUMN 1: BRAND LOGO BADGE & COMPANY PROFILE (Cols 1-3.5)
              ===================================================================== */}
-          <div className="lg:col-span-3 xl:col-span-3 space-y-4">
+          <div className="lg:col-span-3 xl:col-span-3 space-y-4 reveal-on-scroll">
             
             {/* Clean White Logo Card - Crisp & Shadow-Free */}
             <div className="inline-block bg-white rounded-xl p-3 border border-slate-200">
@@ -162,7 +162,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* =====================================================================
               COLUMN 2: QUICK PAGES (Cols 4-6)
              ===================================================================== */}
-          <div className="lg:col-span-3 xl:col-span-3 space-y-3.5">
+          <div className="lg:col-span-3 xl:col-span-3 space-y-3.5 reveal-on-scroll delay-75">
             
             {/* Header: >> QUICK PAGES with Orange Double Chevron & Clean Accent */}
             <div>
@@ -209,7 +209,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* =====================================================================
               COLUMN 3: SPECIALIZED SERVICES (Cols 7-9)
              ===================================================================== */}
-          <div className="lg:col-span-3 xl:col-span-3 space-y-3.5">
+          <div className="lg:col-span-3 xl:col-span-3 space-y-3.5 reveal-on-scroll delay-150">
             
             {/* Header: >> SPECIALIZED SERVICES with Clean Accent */}
             <div>
@@ -231,7 +231,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   icon: StairsIcon,
                 },
                 {
-                  title: 'CNC Laser Cut Jail & Decorative...',
+                  title: 'CNC Laser Cut Jali & Decorative...',
                   fullTitle: 'CNC Laser Cut Jali & Decorative Partitions',
                   icon: LaserCutIcon,
                 },
@@ -284,7 +284,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           {/* =====================================================================
               COLUMN 4: WORKSHOP & OFFICE (Cols 10-12)
              ===================================================================== */}
-          <div className="lg:col-span-3 xl:col-span-3 space-y-3.5">
+          <div className="lg:col-span-3 xl:col-span-3 space-y-3.5 reveal-on-scroll delay-200">
             
             {/* Header: >> WORKSHOP & OFFICE with Clean Accent */}
             <div>
@@ -375,7 +375,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               href={`tel:${COMPANY_INFO.phoneRaw}`}
               className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-full bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition-colors shadow-xs"
               title="Call Pioneer Fab Tech"
-              aria-label={`Call ${COMPANY_INFO.phoneDisplay}`}
+              aria-label={`Call ${COMPANY_INFO.phone}`}
             >
               <Phone className="w-3.5 h-3.5 text-white" />
             </a>

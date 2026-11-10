@@ -13,7 +13,6 @@ import { ContactPage } from './pages/ContactPage';
 import { EnquiryPage } from './pages/EnquiryPage';
 import { FloatingActions } from './components/FloatingActions';
 import { COMPANY_INFO } from './data/siteData';
-import { PageSkeleton } from './components/PageSkeleton';
 import { useGlobalScrollReveal } from './components/ScrollReveal';
 
 const VALID_PAGES: PageId[] = [
@@ -33,9 +32,14 @@ const parseUrlRoute = (): { page: PageId; itemId: string | null } => {
     }
   }
 
-  // Check pathname: /about or /projects/proj-mall-01
+  // Check pathname: /about or /Pioneer_Fab_Tech-/about or /projects/proj-mall-01
   if (typeof window !== 'undefined') {
-    const rawPath = window.location.pathname.replace(/^\/?/, '').trim();
+    const basePath = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '');
+    let pathname = window.location.pathname;
+    if (basePath && basePath !== '/' && pathname.startsWith(basePath)) {
+      pathname = pathname.slice(basePath.length);
+    }
+    const rawPath = pathname.replace(/^\/?/, '').trim();
     if (rawPath) {
       const parts = rawPath.split('/');
       const pageCandidate = parts[0].toLowerCase() as PageId;
@@ -69,10 +73,10 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // Initialize smooth scroll reveal animations across all pages
-  useGlobalScrollReveal(currentPage);
-
   const [selectedItemTarget, setSelectedItemTarget] = useState<string | null>(initialRoute.itemId);
+
+  // Initialize smooth scroll reveal animations across all pages
+  useGlobalScrollReveal(`${currentPage}:${selectedItemTarget || ''}`);
 
   // Sync URL on browser back/forward or direct link entry
   useEffect(() => {

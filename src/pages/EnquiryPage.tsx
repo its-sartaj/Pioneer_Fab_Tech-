@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Send, 
   Upload, 
@@ -60,6 +60,15 @@ export const EnquiryPage: React.FC = () => {
   const [uploadedPreview, setUploadedPreview] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
+
+  // Clean up object URL when replaced or component unmounts
+  useEffect(() => {
+    return () => {
+      if (uploadedPreview) {
+        URL.revokeObjectURL(uploadedPreview);
+      }
+    };
+  }, [uploadedPreview]);
 
   const toggleRequirement = (req: string) => {
     setSelectedRequirements((prev) => 
@@ -128,7 +137,7 @@ Website: vasai-virar, Maharashtra`;
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Header Breadcrumb & Title */}
-        <div className="max-w-3xl mb-10">
+        <div className="max-w-3xl mb-10 reveal-word">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-700 text-xs font-semibold mb-3">
             <Sparkles className="w-3.5 h-3.5 text-amber-600" />
             <span>Fast Turnaround • Free Initial CAD Guidance</span>
@@ -145,7 +154,7 @@ Website: vasai-virar, Maharashtra`;
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Main Form Column (7 Cols) */}
-          <div className="lg:col-span-7 bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200">
+          <div className="lg:col-span-7 bg-white rounded-2xl p-6 sm:p-8 shadow-sm border border-slate-200 reveal-from-left">
             
             <form onSubmit={handleSubmit} className="space-y-7">
               
@@ -439,7 +448,7 @@ Website: vasai-virar, Maharashtra`;
           <div className="lg:col-span-5 space-y-6">
             
             {/* Live Enquiry Preview Card */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 sticky top-28">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 sticky top-28 reveal-from-right delay-150">
               <div className="flex items-center justify-between pb-4 border-b border-slate-200">
                 <div>
                   <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600">

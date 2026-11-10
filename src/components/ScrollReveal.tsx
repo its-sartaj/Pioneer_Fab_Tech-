@@ -85,18 +85,39 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   );
 };
 
+const REVEAL_SELECTOR =
+  '.reveal-on-scroll, .reveal-word, .reveal-image, .reveal-from-left, .reveal-from-right';
+const UNREVEALED_SELECTOR =
+  '.reveal-on-scroll:not(.is-revealed), .reveal-word:not(.is-revealed), .reveal-image:not(.is-revealed), .reveal-from-left:not(.is-revealed), .reveal-from-right:not(.is-revealed)';
+
 /**
  * Global Scroll Reveal Initializer Hook
  * Automatically watches any element with classes:
  * .reveal-on-scroll, .reveal-word, .reveal-image, .reveal-from-left, .reveal-from-right
  */
-export const useGlobalScrollReveal = (triggerKey?: any) => {
+export const useGlobalScrollReveal = (triggerKey?: unknown) => {
   useEffect(() => {
     if (!('IntersectionObserver' in window)) {
-      document.querySelectorAll('.reveal-on-scroll, .reveal-word, .reveal-image, .reveal-from-left, .reveal-from-right')
-        .forEach((el) => el.classList.add('is-revealed'));
+      document.querySelectorAll(REVEAL_SELECTOR).forEach((el) => el.classList.add('is-revealed'));
       return;
     }
+
+    const revealIfVisible = (el: Element, observer: IntersectionObserver) => {
+      const rect = el.getBoundingClientRect();
+      // Trigger once element enters viewport or if already scrolled above viewport
+      if (rect.top <= window.innerHeight * 0.96 && rect.bottom >= 0) {
+        el.classList.add('is-revealed');
+        observer.unobserve(el);
+        return true;
+      }
+      if (rect.bottom < 0) {
+        // Already scrolled past on initial load / back-navigation: reveal immediately
+        el.classList.add('is-revealed');
+        observer.unobserve(el);
+        return true;
+      }
+      return false;
+    };
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -108,26 +129,48 @@ export const useGlobalScrollReveal = (triggerKey?: any) => {
         });
       },
       {
-        threshold: 0.05,
-        rootMargin: '0px 0px 80px 0px',
+        threshold: 0.04,
+        rootMargin: '0px 0px -24px 0px',
       }
     );
 
     const observeAll = () => {
-      const targets = document.querySelectorAll(
-        '.reveal-on-scroll:not(.is-revealed), .reveal-word:not(.is-revealed), .reveal-image:not(.is-revealed), .reveal-from-left:not(.is-revealed), .reveal-from-right:not(.is-revealed)'
-      );
-      targets.forEach((target) => observer.observe(target));
+      const targets = document.querySelectorAll(UNREVEALED_SELECTOR);
+      targets.forEach((target) => {
+        if (!revealIfVisible(target, observer)) {
+          observer.observe(target);
+        }
+      });
     };
 
     // Initial observation
     observeAll();
+    const timer = setTimeout(observeAll, 120);
 
-    // Small delay to catch any late rendered elements
-    const timer = setTimeout(observeAll, 150);
+    // Watch dynamic DOM changes (filter tabs, single-item views, async content)
+    const mutationObserver = new MutationObserver(() => {
+      observeAll();
+    });
+    mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+    // Scroll failsafe for very tall sections or fast programmatic jumps
+    let rafId: number | null = null;
+    const onScrollCheck = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        document.querySelectorAll(UNREVEALED_SELECTOR).forEach((el) => {
+          revealIfVisible(el, observer);
+        });
+      });
+    };
+    window.addEventListener('scroll', onScrollCheck, { passive: true });
 
     return () => {
       clearTimeout(timer);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+      window.removeEventListener('scroll', onScrollCheck);
+      mutationObserver.disconnect();
       observer.disconnect();
     };
   }, [triggerKey]);

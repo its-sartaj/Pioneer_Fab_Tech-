@@ -45,7 +45,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
     <div className={className}>
       <div className={containerClassName}>
         {/* Horizontal Divider with "Reach Out Now!" */}
-        <div className="flex items-center justify-center mb-10 sm:mb-12">
+        <div className="flex items-center justify-center mb-10 sm:mb-12 reveal-word">
           <div className="flex-1 h-px bg-slate-200" />
           <span className="px-5 sm:px-8 text-xl sm:text-2xl lg:text-3xl font-bold text-[#d95c18] tracking-wide whitespace-nowrap">
             Reach Out Now!
@@ -56,7 +56,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
         {/* Split 2-Column Section: GET A QUOTE Form (Left) + Google Maps (Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Left: GET A QUOTE Card */}
-          <div className="border-2 border-[#8c360a] bg-white p-6 sm:p-8 shadow-xs flex flex-col justify-between">
+          <div className="border-2 border-[#8c360a] bg-white p-6 sm:p-8 shadow-xs flex flex-col justify-between reveal-from-left">
             <div>
               <h2 className="text-xl sm:text-2xl font-extrabold text-[#d95c18] tracking-wide mb-6 uppercase">
                 GET A QUOTE
@@ -175,7 +175,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
           </div>
 
           {/* Right: Interactive Google Map with reference styling */}
-          <div className="w-full min-h-[480px] lg:min-h-full border border-slate-300 overflow-hidden relative shadow-xs bg-slate-100 flex flex-col">
+          <div className="w-full min-h-[480px] lg:min-h-full border border-slate-300 overflow-hidden relative shadow-xs bg-slate-100 flex flex-col reveal-from-right delay-150">
             <iframe
               title="Pioneer Fab Tech Location Map"
               src="https://maps.google.com/maps?q=Vasai+Virar+Palghar+Maharashtra+401208&t=&z=11&ie=UTF8&iwloc=&output=embed"

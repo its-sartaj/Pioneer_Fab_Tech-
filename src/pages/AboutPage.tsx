@@ -45,7 +45,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             
             {/* Left Column: Official Profile Text & About Us */}
-            <div className="lg:col-span-7 space-y-5">
+            <div className="lg:col-span-7 space-y-5 reveal-from-left">
               <div>
                 <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
                   PIONEER FAB TECH
@@ -91,7 +91,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             </div>
 
             {/* Right Column: Industrial Fabrication Photo with Technical Frame */}
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-5 reveal-from-right delay-150">
               <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-slate-200 group bg-slate-100">
                 <img 
                   src="/assets/images/about_ss_pipe_fittings_1794245348614.jpg" 
@@ -107,7 +107,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       </section>
 
       {/* 3. Our Client Section - Pura Box Smoothly Slides Horizontally on timer, No Dots, No Arrows */}
-      <OurClientsSlider />
+      <div className="reveal-on-scroll">
+        <OurClientsSlider />
+      </div>
 
 
 

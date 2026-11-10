@@ -64,7 +64,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
           href={`tel:${COMPANY_INFO.phoneRaw}`}
           className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#1E40AF] via-[#2563EB] to-[#3B82F6] text-white shadow-[0_8px_20px_-4px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_28px_-4px_rgba(37,99,235,0.65)] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 border border-white/20"
           title="Direct Call"
-          aria-label={`Call Pioneer Fab Tech at ${COMPANY_INFO.phoneDisplay}`}
+          aria-label={`Call Pioneer Fab Tech at ${COMPANY_INFO.phone}`}
         >
           <Phone className="w-5 h-5 sm:w-5.5 sm:h-5.5 text-white group-hover:rotate-12 transition-transform duration-200" />
         </a>

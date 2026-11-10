@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Download, ExternalLink, X, Maximize2, ZoomIn, ZoomOut } from 'lucide-react';
+import { Download, ExternalLink, X, Maximize2 } from 'lucide-react';
 import { PageId } from '../components/Navbar';
 
 interface CertificateItem {
@@ -165,7 +165,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
       <section className="py-12 sm:py-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Centered Heading in orange matching reference */}
-        <div className="text-center mb-10 sm:mb-12">
+        <div className="text-center mb-10 sm:mb-12 reveal-word">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#e26922] tracking-wide inline-block">
             Our Certificate
           </h2>
@@ -173,12 +173,14 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
 
         {/* 3. Certificate Grid matching the exact reference design */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 lg:gap-12 justify-items-center">
-          {CERTIFICATES.map((cert) => (
-            <div
-              key={cert.id}
-              onClick={() => setSelectedCert(cert)}
-              className="flex flex-col items-center w-full max-w-[340px] group cursor-pointer"
-            >
+          {CERTIFICATES.map((cert, idx) => {
+            const delayClasses = ['', 'delay-75', 'delay-150'];
+            return (
+              <div
+                key={cert.id}
+                onClick={() => setSelectedCert(cert)}
+                className={`flex flex-col items-center w-full max-w-[340px] group cursor-pointer reveal-on-scroll ${delayClasses[idx] || ''}`}
+              >
               {/* Rectangular Black Frame */}
               <div className="w-full bg-white border-2 border-black p-2 sm:p-2.5 shadow-md hover:shadow-2xl transition-all duration-300 group-hover:-translate-y-1 relative">
                 <CertificateCanvas
@@ -201,8 +203,9 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
                   {cert.badgeLabel}
                 </div>
               </div>
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
 
       </section>

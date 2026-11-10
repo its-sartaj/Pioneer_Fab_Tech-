@@ -13,7 +13,7 @@ import { MATERIAL_SUPPLY_ITEMS, MaterialSupplyItem, COMPANY_INFO } from '../data
 import { PageId } from '../components/Navbar';
 
 interface MaterialSupplyPageProps {
-  onNavigate: (page: PageId) => void;
+  onNavigate: (page: PageId, itemId?: string) => void;
   selectedItemId?: string | null;
 }
 
@@ -37,8 +37,22 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
         }
       }, 100);
       return () => clearTimeout(timer);
+    } else if (!selectedItemId) {
+      setSelectedProductId('all');
     }
   }, [selectedItemId]);
+
+  const handleSelectProduct = (productId: string) => {
+    setSelectedProductId(productId);
+    onNavigate('materials', productId);
+    const el = document.getElementById('material-view-container');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleShowAllProducts = () => {
+    setSelectedProductId('all');
+    onNavigate('materials');
+  };
 
   const categories = [
     { id: 'all', label: 'All Materials', count: MATERIAL_SUPPLY_ITEMS.length },
@@ -79,7 +93,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
         {/* Subtle orange accent glow line */}
         <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#ff7a00] to-transparent shadow-[0_0_12px_#ff7a00]" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4 reveal-word">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase">
             Material Supply
           </h1>
@@ -94,7 +108,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
             </button>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
             <button 
-              onClick={() => setSelectedProductId('all')}
+              onClick={handleShowAllProducts}
               className="text-white font-bold select-none hover:text-amber-400 transition-colors cursor-pointer"
             >
               Material Supply
@@ -289,11 +303,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                     <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
                       {prevProduct ? (
                         <button
-                          onClick={() => {
-                            setSelectedProductId(prevProduct.id);
-                            const el = document.getElementById('material-view-container');
-                            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          }}
+                          onClick={() => handleSelectProduct(prevProduct.id)}
                           className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95c18] transition-colors cursor-pointer"
                         >
                           <ChevronLeft className="w-4 h-4" />
@@ -304,11 +314,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
 
                       {nextProduct ? (
                         <button
-                          onClick={() => {
-                            setSelectedProductId(nextProduct.id);
-                            const el = document.getElementById('material-view-container');
-                            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                          }}
+                          onClick={() => handleSelectProduct(nextProduct.id)}
                           className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95c18] transition-colors cursor-pointer"
                         >
                           <span className="hidden sm:inline">Next:</span>
@@ -351,11 +357,9 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
 
                   {/* Cards Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {filteredGridItems.map((item: MaterialSupplyItem) => (
-                      <div
-                        key={item.id}
-                        className="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden group hover:border-[#ff7a00]/40"
-                      >
+                    {filteredGridItems.map((item: MaterialSupplyItem, idx: number) => (
+                      <div key={item.id} className={`reveal-on-scroll ${idx % 2 === 1 ? 'delay-75' : ''} flex`}>
+                        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden group hover:border-[#ff7a00]/40 w-full">
                         <div>
                           {/* Image */}
                           <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
@@ -404,11 +408,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                         {/* Actions */}
                         <div className="p-5 pt-0 space-y-2">
                           <button
-                            onClick={() => {
-                              setSelectedProductId(item.id);
-                              const el = document.getElementById('material-view-container');
-                              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }}
+                            onClick={() => handleSelectProduct(item.id)}
                             className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-[#ff7a00] text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-xs cursor-pointer group/btn"
                           >
                             <Eye className="w-3.5 h-3.5 text-amber-400 group-hover/btn:text-white" />
@@ -417,6 +417,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                           </button>
                         </div>
 
+                        </div>
                       </div>
                     ))}
                   </div>

@@ -42,59 +42,56 @@ const ACHIEVEMENTS: AchievementMetric[] = [
 
 export const OurAchievementsSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const hasAnimatedRef = useRef(false);
   const [counts, setCounts] = useState<Record<string, number>>({
     clients: 0,
     experience: 0,
     delivery: 0,
     team: 0,
   });
-  const [isRevealed, setIsRevealed] = useState(false);
-  const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
+    let rafId: number | null = null;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) {
-          setIsRevealed(true);
+        if (entries[0].isIntersecting && !hasAnimatedRef.current) {
+          hasAnimatedRef.current = true;
+          observer.disconnect();
 
-          if (!hasAnimated) {
-            setHasAnimated(true);
+          // Animate counting numbers smoothly & quickly
+          const duration = 700;
+          const startTime = performance.now();
 
-            // Animate counting numbers smoothly & quickly
-            const duration = 700;
-            const startTime = performance.now();
+          const step = (currentTime: number) => {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
 
-            const step = (currentTime: number) => {
-              const elapsed = currentTime - startTime;
-              const progress = Math.min(elapsed / duration, 1);
+            // Ease-out quart curve
+            const ease = 1 - Math.pow(1 - progress, 4);
 
-              // Ease-out quart curve
-              const ease = 1 - Math.pow(1 - progress, 4);
+            setCounts({
+              clients: Math.floor(500 * ease),
+              experience: Math.floor(10 * ease),
+              delivery: Math.floor(1000 * ease),
+              team: Math.floor(50 * ease),
+            });
 
+            if (progress < 1) {
+              rafId = requestAnimationFrame(step);
+            } else {
               setCounts({
-                clients: Math.floor(500 * ease),
-                experience: Math.floor(10 * ease),
-                delivery: Math.floor(1000 * ease),
-                team: Math.floor(50 * ease),
+                clients: 500,
+                experience: 10,
+                delivery: 1000,
+                team: 50,
               });
+            }
+          };
 
-              if (progress < 1) {
-                requestAnimationFrame(step);
-              } else {
-                setCounts({
-                  clients: 500,
-                  experience: 10,
-                  delivery: 1000,
-                  team: 50,
-                });
-              }
-            };
-
-            requestAnimationFrame(step);
-          }
+          rafId = requestAnimationFrame(step);
         }
       },
       {
@@ -106,9 +103,10 @@ export const OurAchievementsSection: React.FC = () => {
     observer.observe(node);
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId);
       observer.disconnect();
     };
-  }, [hasAnimated]);
+  }, []);
 
   // Render authentic white line icons matching image_c7f3798f.png
   const renderIcon = (type: AchievementMetric['icon']) => {
@@ -228,12 +226,8 @@ export const OurAchievementsSection: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Centered Heading matching image_c7f3798f.png */}
-        <div className="text-center mb-12 sm:mb-16">
-          <h2
-            className={`text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-wide transition-all duration-300 ${
-              isRevealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3'
-            }`}
-          >
+        <div className="text-center mb-12 sm:mb-16 reveal-word">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-wide">
             Our Achievements
           </h2>
         </div>
@@ -242,52 +236,44 @@ export const OurAchievementsSection: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-8">
           {ACHIEVEMENTS.map((item, idx) => {
             const currentNumber = counts[item.id] || 0;
-            // Snappy stagger delay for the cards
-            const delayStyle = {
-              transitionDelay: `${(idx + 1) * 30}ms`,
-            };
+            const delayClasses = ['', 'delay-75', 'delay-150', 'delay-200'];
+            const staggerClass = delayClasses[idx] || '';
 
             return (
-              <div
-                key={item.id}
-                style={delayStyle}
-                className={`relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border border-white/35 bg-white/[0.04] backdrop-blur-xs p-8 sm:p-9 text-center flex flex-col items-center justify-between min-h-[300px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-all duration-300 ease-out group hover:-translate-y-2 cursor-pointer ${
-                  isRevealed
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-3 pointer-events-none'
-                }`}
-              >
-                {/* Animated Dark Orange Liquid Fill with Rising Wave */}
-                <DarkOrangeLiquidFill />
-                
-                {/* Subtle soft sheen highlight */}
-                <div 
-                  className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent transition-opacity duration-500 opacity-0 group-hover:opacity-100 pointer-events-none z-0" 
-                />
+              <div key={item.id} className={`reveal-on-scroll ${staggerClass}`}>
+                <div className="relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border border-white/35 bg-white/[0.04] backdrop-blur-xs p-8 sm:p-9 text-center flex flex-col items-center justify-between min-h-[300px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-all duration-300 ease-out group hover:-translate-y-2 cursor-pointer">
+                  {/* Animated Dark Orange Liquid Fill with Rising Wave */}
+                  <DarkOrangeLiquidFill />
+                  
+                  {/* Subtle soft sheen highlight */}
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent transition-opacity duration-500 opacity-0 group-hover:opacity-100 pointer-events-none z-0" 
+                  />
 
-                {/* 1. White Line Icon */}
-                <div className="relative z-10 pt-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                  {renderIcon(item.icon)}
-                </div>
+                  {/* 1. White Line Icon */}
+                  <div className="relative z-10 pt-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                    {renderIcon(item.icon)}
+                  </div>
 
-                {/* 2. Dark Orange Accent Divider Line */}
-                <div className="relative z-10 w-12 sm:w-14 h-0.5 bg-[#e26922] mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-white" />
+                  {/* 2. Dark Orange Accent Divider Line */}
+                  <div className="relative z-10 w-12 sm:w-14 h-0.5 bg-[#e26922] mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-white" />
 
-                {/* 3. Big Countable Number with + suffix */}
-                <div className="relative z-10 flex items-baseline justify-center">
-                  <span className="text-5xl sm:text-6xl font-black text-white tracking-tight font-sans select-none tabular-nums">
-                    {currentNumber}
-                  </span>
-                  <span className="text-4xl sm:text-5xl font-black text-white select-none ml-0.5">
-                    {item.suffix || '+'}
-                  </span>
-                </div>
+                  {/* 3. Big Countable Number with + suffix */}
+                  <div className="relative z-10 flex items-baseline justify-center">
+                    <span className="text-5xl sm:text-6xl font-black text-white tracking-tight font-sans select-none tabular-nums">
+                      {currentNumber}
+                    </span>
+                    <span className="text-4xl sm:text-5xl font-black text-white select-none ml-0.5">
+                      {item.suffix || '+'}
+                    </span>
+                  </div>
 
-                {/* 4. Subtitle Label in Uppercase */}
-                <div className="relative z-10 pb-1 mt-3">
-                  <h3 className="text-xs sm:text-sm font-bold tracking-widest uppercase text-white/95 select-none">
-                    {item.label}
-                  </h3>
+                  {/* 4. Subtitle Label in Uppercase */}
+                  <div className="relative z-10 pb-1 mt-3">
+                    <h3 className="text-xs sm:text-sm font-bold tracking-widest uppercase text-white/95 select-none">
+                      {item.label}
+                    </h3>
+                  </div>
                 </div>
               </div>
             );

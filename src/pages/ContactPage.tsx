@@ -28,7 +28,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a1829]/80 via-[#0a1829]/75 to-[#0a1829]/90" />
 
         {/* Content */}
-        <div className="relative z-10 space-y-1">
+        <div className="relative z-10 space-y-1 reveal-word">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-wide">
             Contact
           </h1>
@@ -51,7 +51,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
         <div className="grid grid-cols-1 md:grid-cols-3 max-w-5xl mx-auto gap-6 sm:gap-8 mb-14">
 
           {/* Card 1: Address */}
-          <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow">
+          <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow reveal-on-scroll">
             <div className="mb-3 text-[#d95c18]">
               <MapPin className="w-10 h-10 stroke-[1.7]" />
             </div>
@@ -66,7 +66,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
           </div>
 
           {/* Card 2: Email */}
-          <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow">
+          <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow reveal-on-scroll delay-75">
             <div className="mb-3 text-[#d95c18]">
               <Mail className="w-10 h-10 stroke-[1.7]" />
             </div>
@@ -86,7 +86,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
           </div>
 
           {/* Card 3: Phone No */}
-          <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow">
+          <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow reveal-on-scroll delay-150">
             <div className="mb-3 text-[#d95c18]">
               <Smartphone className="w-10 h-10 stroke-[1.7]" />
             </div>

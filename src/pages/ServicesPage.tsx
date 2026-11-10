@@ -56,7 +56,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate, selected
         </div>
 
         {/* Services Navigation Tabs */}
-        <div className="flex flex-wrap gap-2 pb-2 border-b border-slate-200 reveal-on-scroll delay-100">
+        <div className="flex flex-wrap gap-2 pb-2 border-b border-slate-200 reveal-on-scroll delay-75">
           {SERVICES.map((serv) => {
             const isActive = serv.id === selectedService;
             return (
