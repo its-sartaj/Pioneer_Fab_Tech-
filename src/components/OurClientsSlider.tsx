@@ -230,7 +230,7 @@ export const OurClientsSlider: React.FC = () => {
         
         {/* Section Heading matching reference image */}
         <div className="text-center mb-10 sm:mb-12">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#e26922] tracking-wide inline-block">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#d95800] tracking-wide inline-block">
             Our Client
           </h2>
         </div>

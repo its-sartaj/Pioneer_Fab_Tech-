@@ -52,11 +52,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
           {/* Card 1: Address */}
           <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow reveal-on-scroll">
-            <div className="mb-3 text-[#d95c18]">
+            <div className="mb-3 text-[#d95800]">
               <MapPin className="w-10 h-10 stroke-[1.7]" />
             </div>
 
-            <h3 className="text-base sm:text-lg font-bold text-[#d95c18] mb-2 tracking-wide">
+            <h3 className="text-base sm:text-lg font-bold text-[#d95800] mb-2 tracking-wide">
               Address
             </h3>
 
@@ -67,11 +67,11 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
           {/* Card 2: Email */}
           <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow reveal-on-scroll delay-75">
-            <div className="mb-3 text-[#d95c18]">
+            <div className="mb-3 text-[#d95800]">
               <Mail className="w-10 h-10 stroke-[1.7]" />
             </div>
 
-            <h3 className="text-base sm:text-lg font-bold text-[#d95c18] mb-2 tracking-wide">
+            <h3 className="text-base sm:text-lg font-bold text-[#d95800] mb-2 tracking-wide">
               Email
             </h3>
 
@@ -80,7 +80,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
                 <a
                   key={emailAddr}
                   href={`mailto:${emailAddr}`}
-                  className="block text-xs font-medium text-[#d95c18] hover:underline break-all"
+                  className="block text-xs font-medium text-[#c95100] hover:text-[#ea6800] hover:underline break-all transition-colors"
                 >
                   {emailAddr}
                 </a>
@@ -90,31 +90,31 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
 
           {/* Card 3: Phone No */}
           <div className="bg-white border border-slate-200/90 rounded-none p-6 sm:p-8 text-center flex flex-col items-center justify-start shadow-xs hover:shadow-md transition-shadow reveal-on-scroll delay-150">
-            <div className="mb-3 text-[#d95c18]">
+            <div className="mb-3 text-[#d95800]">
               <Smartphone className="w-10 h-10 stroke-[1.7]" />
             </div>
 
-            <h3 className="text-base sm:text-lg font-bold text-[#d95c18] mb-2 tracking-wide">
+            <h3 className="text-base sm:text-lg font-bold text-[#d95800] mb-2 tracking-wide">
               Phone No
             </h3>
 
             <div className="space-y-1 pt-1 text-xs">
               <a
                 href={`tel:${COMPANY_INFO.phoneRaw}`}
-                className="block font-medium text-[#d95c18] hover:underline"
+                className="block font-medium text-[#c95100] hover:text-[#ea6800] hover:underline transition-colors"
               >
                 {COMPANY_INFO.phone}
               </a>
             </div>
 
-            <h4 className="text-xs font-bold text-[#d95c18] mt-4 mb-1">
+            <h4 className="text-xs font-bold text-[#d95800] mt-4 mb-1">
               WhatsApp & Mobile
             </h4>
             <a
               href={COMPANY_INFO.whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs font-medium text-[#d95c18] hover:underline"
+              className="text-xs font-medium text-[#c95100] hover:text-[#ea6800] hover:underline transition-colors"
             >
               +91 90295 55233
             </a>

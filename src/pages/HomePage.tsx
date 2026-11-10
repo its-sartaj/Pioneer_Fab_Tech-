@@ -117,7 +117,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
                   {/* Centered Bold Title in Dark Orange */}
                   <div className="pt-3.5 pb-1 text-center">
-                    <h3 className="text-base sm:text-lg font-bold text-[#c94e00] group-hover:text-[#ea6800] transition-colors leading-tight line-clamp-1">
+                    <h3 className="text-base sm:text-lg font-bold text-[#d95800] group-hover:text-[#ea6800] transition-colors leading-tight line-clamp-1">
                       {service.title}
                     </h3>
                   </div>
@@ -135,7 +135,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           
           {/* Header - ONLY "Why Choose Us" */}
           <div className="text-center reveal-word">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#D87633] tracking-normal">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#d95800] tracking-normal">
               Why Choose Us
             </h2>
           </div>
@@ -204,14 +204,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
                   <div className="relative z-10">
                     <div className="flex items-start justify-between">
-                      <div className="text-[#D87633] group-hover:text-white transition-all duration-300 group-hover:scale-110 origin-left">
+                      <div className="text-[#d95800] group-hover:text-white transition-all duration-300 group-hover:scale-110 origin-left">
                         {card.icon}
                       </div>
                       <span className="text-6xl sm:text-7xl font-bold text-slate-100/90 group-hover:text-white/25 transition-colors duration-300 select-none leading-none tracking-tighter">
                         {card.num}
                       </span>
                     </div>
-                    <h3 className="text-lg sm:text-xl font-bold text-[#9e3f14] group-hover:text-white transition-colors duration-300 mt-7 mb-3.5 tracking-tight">
+                    <h3 className="text-lg sm:text-xl font-bold text-[#c95100] group-hover:text-white transition-colors duration-300 mt-7 mb-3.5 tracking-tight">
                       {card.title}
                     </h3>
                     <p className="text-sm text-slate-600 group-hover:text-orange-50 transition-colors duration-300 leading-relaxed font-normal">
@@ -319,7 +319,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
                   {/* Centered Bold Title in Dark Orange */}
                   <div className="pt-3.5 pb-1 text-center">
-                    <h3 className="text-base sm:text-lg font-bold text-[#c94e00] group-hover:text-[#ea6800] transition-colors leading-tight">
+                    <h3 className="text-base sm:text-lg font-bold text-[#d95800] group-hover:text-[#ea6800] transition-colors leading-tight">
                       {item.title}
                     </h3>
                   </div>

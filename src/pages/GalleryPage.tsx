@@ -187,7 +187,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-8 sm:pb-10">
         <div className="flex items-center justify-center">
           <div className="grow border-t border-slate-300" />
-          <h2 className="px-5 sm:px-8 text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#e26922] tracking-wide whitespace-nowrap">
+          <h2 className="px-5 sm:px-8 text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#d95800] tracking-wide whitespace-nowrap">
             Explore Our Gallery
           </h2>
           <div className="grow border-t border-slate-300" />

@@ -208,9 +208,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
           <div className="flex items-center gap-6">
             <a 
               href={`tel:${COMPANY_INFO.phoneRaw}`} 
-              className="flex items-center gap-2 text-slate-800 hover:text-[#d95c18] transition-colors group cursor-pointer"
+              className="flex items-center gap-2 text-slate-800 hover:text-[#d95800] transition-colors group cursor-pointer"
             >
-              <Phone className="w-3.5 h-3.5 text-[#d95c18] group-hover:scale-110 transition-transform" />
+              <Phone className="w-3.5 h-3.5 text-[#d95800] group-hover:scale-110 transition-transform" />
               <span className="font-semibold text-slate-900">{COMPANY_INFO.phone}</span>
             </a>
             
@@ -223,9 +223,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                   {idx > 0 && <div className="h-3.5 w-px bg-slate-300" />}
                   <a 
                     href={`mailto:${emailAddr}`} 
-                    className="flex items-center gap-2 text-slate-700 hover:text-[#d95c18] transition-colors group cursor-pointer"
+                    className="flex items-center gap-2 text-slate-700 hover:text-[#d95800] transition-colors group cursor-pointer"
                   >
-                    <Mail className="w-3.5 h-3.5 text-[#d95c18] group-hover:scale-110 transition-transform" />
+                    <Mail className="w-3.5 h-3.5 text-[#d95800] group-hover:scale-110 transition-transform" />
                     <span className="text-slate-700 font-medium">{emailAddr}</span>
                   </a>
                 </React.Fragment>
@@ -308,17 +308,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                       }}
                       className={`h-full flex items-center gap-1 lg:gap-1.5 px-3 lg:px-3.5 xl:px-5 text-[13.5px] lg:text-[14px] xl:text-[15px] font-bold transition-colors cursor-pointer select-none whitespace-nowrap ${
                         isActive 
-                          ? 'text-[#8B2E1D] bg-amber-50/70 font-extrabold' 
+                          ? 'text-[#c95100] bg-orange-50/75 font-extrabold' 
                           : isDropdownOpen
-                          ? 'text-[#8B2E1D] bg-slate-50'
-                          : 'text-[#0a192f] hover:text-[#8B2E1D] hover:bg-slate-50/70'
+                          ? 'text-[#d95800] bg-slate-50'
+                          : 'text-[#0a192f] hover:text-[#d95800] hover:bg-slate-50/70'
                       }`}
                     >
                       <span className="pb-0.5">{link.label}</span>
                       {link.hasDropdown && (
                         <ChevronDown 
                           className={`w-3.5 h-3.5 stroke-[2.8] transition-transform duration-200 ${
-                            isDropdownOpen ? 'rotate-180 text-[#8B2E1D]' : 'text-slate-600 group-hover:text-[#8B2E1D]'
+                            isDropdownOpen ? 'rotate-180 text-[#d95800]' : 'text-slate-600 group-hover:text-[#d95800]'
                           }`} 
                         />
                       )}
@@ -353,14 +353,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                                 onClick={() => handleLinkClick(item.targetPage, item.id)}
                                 className={`px-4 py-2.5 border-b border-slate-100 last:border-b-0 flex items-center gap-2.5 cursor-pointer transition-colors text-left animate-dropdown-item ${
                                   isItemHovered
-                                    ? 'bg-amber-50/90 text-[#D87633] font-bold'
-                                    : 'text-slate-700 hover:text-[#D87633] font-medium hover:bg-slate-50'
+                                    ? 'bg-orange-50/90 text-[#d95800] font-bold'
+                                    : 'text-slate-700 hover:text-[#d95800] font-medium hover:bg-slate-50'
                                 }`}
                               >
                                 {/* Orange arrow on hover, small dot normally */}
                                 <div className="w-4 flex items-center justify-center shrink-0">
                                   {isItemHovered ? (
-                                    <ArrowRight className="w-3.5 h-3.5 text-[#D87633]" />
+                                    <ArrowRight className="w-3.5 h-3.5 text-[#d95800]" />
                                   ) : (
                                     <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
                                   )}
@@ -512,12 +512,12 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                           className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-amber-50/80 border border-slate-200/80 hover:border-amber-300 transition-all cursor-pointer flex items-center gap-2.5 group shadow-2xs animate-dropdown-item"
                         >
                           <div className="w-3.5 flex items-center justify-center shrink-0">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-[#D87633] transition-colors" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-[#d95800] transition-colors" />
                           </div>
-                          <span className="text-xs font-bold text-slate-800 group-hover:text-[#D87633] truncate flex-1">
+                          <span className="text-xs font-bold text-slate-800 group-hover:text-[#d95800] truncate flex-1">
                             {item.title}
                           </span>
-                          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#D87633] group-hover:translate-x-0.5 transition-all shrink-0" />
+                          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#d95800] group-hover:translate-x-0.5 transition-all shrink-0" />
                         </div>
                       ))}
                     </div>

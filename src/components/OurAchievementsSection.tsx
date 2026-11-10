@@ -256,7 +256,7 @@ export const OurAchievementsSection: React.FC = () => {
                   </div>
 
                   {/* 2. Dark Orange Accent Divider Line */}
-                  <div className="relative z-10 w-12 sm:w-14 h-0.5 bg-[#e26922] mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-white" />
+                  <div className="relative z-10 w-12 sm:w-14 h-0.5 bg-[#ea6800] mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-white" />
 
                   {/* 3. Big Countable Number with + suffix */}
                   <div className="relative z-10 flex items-baseline justify-center">

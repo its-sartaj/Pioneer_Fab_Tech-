@@ -101,15 +101,15 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
           <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-500 pt-2">
             <button 
               onClick={() => onNavigate('home')} 
-              className="hover:text-[#d95c18] transition-colors cursor-pointer"
+              className="hover:text-[#d95800] transition-colors cursor-pointer"
             >
               Home
             </button>
             <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
             <button 
               onClick={handleShowAll}
-              className={`hover:text-[#d95c18] transition-colors cursor-pointer ${
-                selectedProjectId === 'all' ? 'text-[#d95c18] font-bold' : 'text-slate-600'
+              className={`hover:text-[#d95800] transition-colors cursor-pointer ${
+                selectedProjectId === 'all' ? 'text-[#c95100] font-bold' : 'text-slate-600'
               }`}
             >
               Projects
@@ -117,7 +117,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
             {currentProject && (
               <>
                 <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-[#d95c18] font-bold truncate max-w-[280px] sm:max-w-md">
+                <span className="text-[#c95100] font-bold truncate max-w-[280px] sm:max-w-md">
                   {currentProject.title}
                 </span>
               </>
@@ -222,12 +222,12 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                   </div>
 
                   {/* Fabrication & Quality Assurance Box */}
-                  <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex flex-wrap items-center justify-between gap-3 text-xs">
-                    <div className="flex items-center gap-2 text-[#8c360a] font-bold">
-                      <ShieldCheck className="w-5 h-5 text-[#d95c18] shrink-0" />
+                  <div className="p-4 rounded-2xl bg-orange-500/10 border border-orange-500/25 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2 text-[#c95100] font-bold">
+                      <ShieldCheck className="w-5 h-5 text-[#db5d00] shrink-0" />
                       <span>Fabricated at Vasai-Virar Workshop with Full On-Site Turnkey Erection</span>
                     </div>
-                    <span className="text-[11px] text-[#8c360a] font-bold bg-white px-2.5 py-1 rounded-md border border-amber-300">
+                    <span className="text-[11px] text-[#c95100] font-bold bg-white px-2.5 py-1 rounded-md border border-orange-300">
                       100% Quality Inspected
                     </span>
                   </div>
@@ -258,7 +258,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                   {prevProject ? (
                     <button
                       onClick={() => handleSelectProject(prevProject.id)}
-                      className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95c18] transition-colors cursor-pointer max-w-[45%]"
+                      className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95800] transition-colors cursor-pointer max-w-[45%]"
                     >
                       <ChevronLeft className="w-4 h-4 shrink-0" />
                       <span className="truncate">Previous: {prevProject.title.split('-')[0].trim()}</span>
@@ -268,7 +268,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                   {nextProject ? (
                     <button
                       onClick={() => handleSelectProject(nextProject.id)}
-                      className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95c18] transition-colors cursor-pointer max-w-[45%] text-right"
+                      className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95800] transition-colors cursor-pointer max-w-[45%] text-right"
                     >
                       <span className="truncate">Next: {nextProject.title.split('-')[0].trim()}</span>
                       <ChevronRight className="w-4 h-4 shrink-0" />
@@ -327,7 +327,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                   {searchLocation && (
                     <button 
                       onClick={() => setSearchLocation('')}
-                      className="text-[#d95c18] font-semibold hover:underline cursor-pointer"
+                      className="text-[#c95100] font-semibold hover:underline cursor-pointer"
                     >
                       Clear search
                     </button>
@@ -341,7 +341,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                   const delayClasses = ['', 'delay-75', 'delay-150'];
                   return (
                     <div key={project.id} className={`reveal-on-scroll ${delayClasses[idx % 3]} flex`}>
-                      <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group hover:border-[#d95c18]/40 w-full">
+                      <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group hover:border-[#d95800]/40 w-full">
                     <div>
                       {/* Real Photo */}
                       <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
@@ -361,14 +361,14 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
 
                       {/* Content */}
                       <div className="p-5 space-y-2">
-                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#d95c18]">
+                        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#d95800]">
                           <MapPin className="w-3.5 h-3.5 shrink-0" />
                           <span>{project.location}</span>
                           <span className="text-slate-300">·</span>
                           <span className="text-slate-500 truncate">{project.clientType}</span>
                         </div>
 
-                        <h3 className="text-base font-bold text-slate-900 group-hover:text-[#d95c18] transition-colors line-clamp-2">
+                        <h3 className="text-base font-bold text-slate-900 group-hover:text-[#d95800] transition-colors line-clamp-2">
                           {project.title}
                         </h3>
 
@@ -397,7 +397,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                     <div className="p-5 pt-0">
                       <button
                         onClick={() => handleSelectProject(project.id)}
-                        className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-[#d95c18] text-white text-xs font-bold transition-all cursor-pointer group/btn shadow-xs"
+                        className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-[#d95800] text-white text-xs font-bold transition-all cursor-pointer group/btn shadow-xs"
                       >
                         <Eye className="w-3.5 h-3.5 text-amber-400 group-hover/btn:text-white" />
                         <span>View Only This Project</span>

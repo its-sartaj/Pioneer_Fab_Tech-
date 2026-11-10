@@ -164,9 +164,9 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
       {/* 2. Main Section */}
       <section className="py-12 sm:py-16 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Centered Heading in orange matching reference */}
+        {/* Centered Heading in Dark Orange */}
         <div className="text-center mb-10 sm:mb-12 reveal-word">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#e26922] tracking-wide inline-block">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#d95800] tracking-wide inline-block">
             Our Certificate
           </h2>
         </div>
@@ -192,14 +192,14 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
                 {/* Subtle Hover Overlay with Inspect Icon */}
                 <div className="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <div className="p-2.5 rounded-full bg-white/95 text-slate-900 shadow-lg">
-                    <Maximize2 className="w-5 h-5 text-[#8b3507]" />
+                    <Maximize2 className="w-5 h-5 text-[#d95800]" />
                   </div>
                 </div>
               </div>
 
-              {/* Rust-Brown / Red-Orange Badge Button underneath frame */}
+              {/* Dark Orange Badge Button underneath frame */}
               <div className="mt-3.5 w-full flex justify-center">
-                <div className="bg-[#8b3507] group-hover:bg-[#a23d08] text-white text-xs sm:text-sm font-bold py-1.5 px-6 rounded-none tracking-wider text-center transition-colors shadow-xs">
+                <div className="bg-[#d95800] group-hover:bg-[#ea6800] text-white text-xs sm:text-sm font-bold py-1.5 px-6 rounded-none tracking-wider text-center transition-colors shadow-xs">
                   {cert.badgeLabel}
                 </div>
               </div>
@@ -221,7 +221,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
             onClick={(e) => e.stopPropagation()}
           >
             {/* Modal Header Bar */}
-            <div className="bg-[#8b3507] text-white px-5 py-3 flex items-center justify-between shrink-0">
+            <div className="bg-[#d95800] text-white px-5 py-3 flex items-center justify-between shrink-0">
               <span className="font-bold text-sm tracking-wide">
                 {selectedCert.badgeLabel}
               </span>
@@ -229,7 +229,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
                 <a
                   href={selectedCert.pdfUrl}
                   download
-                  className="inline-flex items-center gap-1.5 py-1 px-3 bg-white text-[#8b3507] font-bold text-xs rounded transition-colors hover:bg-slate-100"
+                  className="inline-flex items-center gap-1.5 py-1 px-3 bg-white text-[#c95100] font-bold text-xs rounded transition-colors hover:bg-slate-100"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Download</span>

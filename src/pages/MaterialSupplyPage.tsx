@@ -132,7 +132,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
           <div className="relative flex items-center justify-center my-4">
             <div className="border-t border-slate-200 w-full" />
             <div className="absolute bg-slate-50 px-6 flex items-center gap-2">
-              <span className="text-base sm:text-lg font-bold text-[#d95c18] uppercase tracking-wider">
+              <span className="text-base sm:text-lg font-bold text-[#d95800] uppercase tracking-wider">
                 {currentProduct ? currentProduct.name : 'Explore Our Material Supply'}
               </span>
             </div>
@@ -232,7 +232,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                             {currentProduct.standards.map((std, idx) => (
                               <span 
                                 key={idx}
-                                className="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-xs font-bold text-[#d95c18]"
+                                className="px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200 text-xs font-bold text-[#c95100]"
                               >
                                 {std}
                               </span>
@@ -304,7 +304,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                       {prevProduct ? (
                         <button
                           onClick={() => handleSelectProduct(prevProduct.id)}
-                          className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95c18] transition-colors cursor-pointer"
+                          className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95800] transition-colors cursor-pointer"
                         >
                           <ChevronLeft className="w-4 h-4" />
                           <span className="hidden sm:inline">Previous:</span>
@@ -315,7 +315,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                       {nextProduct ? (
                         <button
                           onClick={() => handleSelectProduct(nextProduct.id)}
-                          className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95c18] transition-colors cursor-pointer"
+                          className="flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-[#d95800] transition-colors cursor-pointer"
                         >
                           <span className="hidden sm:inline">Next:</span>
                           <span>{nextProduct.name}</span>
@@ -380,10 +380,10 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                           {/* Body */}
                           <div className="p-5 space-y-3">
                             <div>
-                              <h3 className="text-base font-black text-slate-900 tracking-tight group-hover:text-[#d95c18] transition-colors">
+                              <h3 className="text-base font-black text-slate-900 tracking-tight group-hover:text-[#d95800] transition-colors">
                                 {item.name}
                               </h3>
-                              <p className="text-xs font-semibold text-[#d95c18] mt-0.5">
+                              <p className="text-xs font-semibold text-[#c95100] mt-0.5">
                                 {item.subtitle}
                               </p>
                             </div>

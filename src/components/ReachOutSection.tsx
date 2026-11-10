@@ -47,7 +47,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
         {/* Horizontal Divider with "Reach Out Now!" */}
         <div className="flex items-center justify-center mb-10 sm:mb-12 reveal-word">
           <div className="flex-1 h-px bg-slate-200" />
-          <span className="px-5 sm:px-8 text-xl sm:text-2xl lg:text-3xl font-bold text-[#d95c18] tracking-wide whitespace-nowrap">
+          <span className="px-5 sm:px-8 text-xl sm:text-2xl lg:text-3xl font-bold text-[#d95800] tracking-wide whitespace-nowrap">
             Reach Out Now!
           </span>
           <div className="flex-1 h-px bg-slate-200" />
@@ -56,9 +56,9 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
         {/* Split 2-Column Section: GET A QUOTE Form (Left) + Google Maps (Right) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           {/* Left: GET A QUOTE Card */}
-          <div className="border-2 border-[#8c360a] bg-white p-6 sm:p-8 shadow-xs flex flex-col justify-between reveal-from-left">
+          <div className="border-2 border-[#db5d00] bg-white p-6 sm:p-8 shadow-xs flex flex-col justify-between reveal-from-left">
             <div>
-              <h2 className="text-xl sm:text-2xl font-extrabold text-[#d95c18] tracking-wide mb-6 uppercase">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-[#d95800] tracking-wide mb-6 uppercase">
                 GET A QUOTE
               </h2>
 
@@ -78,7 +78,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                       setSubmitted(false);
                       setFormData({ name: '', email: '', phone: '', message: '', captcha: '' });
                     }}
-                    className="text-xs font-bold text-[#8c360a] hover:underline pt-2 cursor-pointer"
+                    className="text-xs font-bold text-[#c95100] hover:text-[#ea6800] hover:underline pt-2 cursor-pointer transition-colors"
                   >
                     Send another inquiry
                   </button>
@@ -93,7 +93,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                       placeholder="Your Name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#d95c18] text-slate-800 placeholder-slate-400"
+                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#db5d00] text-slate-800 placeholder-slate-400"
                     />
                   </div>
 
@@ -105,7 +105,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                       placeholder="Your Email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#d95c18] text-slate-800 placeholder-slate-400"
+                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#db5d00] text-slate-800 placeholder-slate-400"
                     />
                   </div>
 
@@ -117,7 +117,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                       placeholder="Your Number"
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#d95c18] text-slate-800 placeholder-slate-400"
+                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#db5d00] text-slate-800 placeholder-slate-400"
                     />
                   </div>
 
@@ -129,7 +129,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                       placeholder="Your Message..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#d95c18] text-slate-800 placeholder-slate-400 resize-y"
+                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#db5d00] text-slate-800 placeholder-slate-400 resize-y"
                     />
                   </div>
 
@@ -150,7 +150,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                         setFormData({ ...formData, captcha: e.target.value });
                         setCaptchaError(false);
                       }}
-                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#d95c18] text-slate-800 placeholder-slate-400"
+                      className="w-full px-3.5 py-2.5 text-xs sm:text-sm bg-white border border-slate-300 rounded-none focus:outline-hidden focus:border-[#db5d00] text-slate-800 placeholder-slate-400"
                     />
                     {captchaError && (
                       <p className="text-[11px] text-red-600 font-semibold mt-1">
@@ -163,7 +163,7 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full sm:w-auto px-8 py-3 bg-[#8c360a] hover:bg-[#a23d08] text-white font-bold text-xs uppercase tracking-wider rounded-none transition-colors cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
+                      className="w-full sm:w-auto px-8 py-3 bg-[#d95800] hover:bg-[#ea6800] text-white font-bold text-xs uppercase tracking-wider rounded-none transition-colors cursor-pointer shadow-xs inline-flex items-center justify-center gap-2"
                     >
                       <Send className="w-3.5 h-3.5" />
                       <span>Send Message</span>
