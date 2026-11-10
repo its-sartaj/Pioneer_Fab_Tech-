@@ -214,16 +214,23 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
               <span className="font-semibold text-slate-900">{COMPANY_INFO.phone}</span>
             </a>
             
-            {/* Bich ka divider line between phone and email */}
+            {/* Bich ka divider line between phone and emails */}
             <div className="h-3.5 w-px bg-slate-300" />
 
-            <a 
-              href={`mailto:${COMPANY_INFO.email}`} 
-              className="flex items-center gap-2 text-slate-700 hover:text-[#d95c18] transition-colors group cursor-pointer"
-            >
-              <Mail className="w-3.5 h-3.5 text-[#d95c18] group-hover:scale-110 transition-transform" />
-              <span className="text-slate-700 font-medium">{COMPANY_INFO.email}</span>
-            </a>
+            <div className="flex items-center gap-4">
+              {COMPANY_INFO.emails.map((emailAddr, idx) => (
+                <React.Fragment key={emailAddr}>
+                  {idx > 0 && <div className="h-3.5 w-px bg-slate-300" />}
+                  <a 
+                    href={`mailto:${emailAddr}`} 
+                    className="flex items-center gap-2 text-slate-700 hover:text-[#d95c18] transition-colors group cursor-pointer"
+                  >
+                    <Mail className="w-3.5 h-3.5 text-[#d95c18] group-hover:scale-110 transition-transform" />
+                    <span className="text-slate-700 font-medium">{emailAddr}</span>
+                  </a>
+                </React.Fragment>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -526,7 +533,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
           <div className="space-y-0.5 text-xs text-slate-600">
             <p className="font-extrabold text-slate-900 text-[13px]">Pioneer Fab Tech</p>
             <p className="font-semibold text-slate-700">{COMPANY_INFO.phone}</p>
-            <p className="text-slate-500 text-[11px] truncate">{COMPANY_INFO.email}</p>
+            {COMPANY_INFO.emails.map((emailAddr) => (
+              <p key={emailAddr} className="text-slate-500 text-[11px] truncate">
+                {emailAddr}
+              </p>
+            ))}
           </div>
 
           <div className="flex gap-2">

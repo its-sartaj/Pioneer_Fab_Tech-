@@ -326,18 +326,23 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 </a>
               </div>
 
-              {/* Email with Solid Orange Mail Icon */}
-              <div className="flex items-center gap-3 pt-1">
-                <div className="w-6 h-6 flex items-center justify-center shrink-0">
+              {/* Emails with Solid Orange Mail Icon */}
+              <div className="flex items-start gap-3 pt-1">
+                <div className="w-6 h-6 flex items-center justify-center shrink-0 mt-0.5">
                   <Mail className="w-5 h-5 text-[#ff7a00] fill-[#ff7a00]/30" />
                 </div>
-                <a 
-                  href={`mailto:${COMPANY_INFO.email}`}
-                  className="group relative inline-block text-[13px] text-slate-200 hover:text-[#ff9500] transition-colors break-all font-medium"
-                >
-                  <span className="pb-0.5 block">{COMPANY_INFO.email}</span>
-                  <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none scale-x-0 group-hover:scale-x-100" />
-                </a>
+                <div className="space-y-1.5 flex flex-col items-start">
+                  {COMPANY_INFO.emails.map((emailAddr) => (
+                    <a
+                      key={emailAddr}
+                      href={`mailto:${emailAddr}`}
+                      className="group relative inline-block text-[13px] text-slate-200 hover:text-[#ff9500] transition-colors break-all font-medium"
+                    >
+                      <span className="pb-0.5 block">{emailAddr}</span>
+                      <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none scale-x-0 group-hover:scale-x-100" />
+                    </a>
+                  ))}
+                </div>
               </div>
 
             </div>

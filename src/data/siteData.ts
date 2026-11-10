@@ -58,6 +58,8 @@ export const COMPANY_INFO = {
   ptec: '99755077995P',
   tagline: 'Innovation • Precision • Excellence',
   email: 'info@pioneerfabtech.com',
+  secondaryEmail: 'PioneerFabtech19@gmail.com',
+  emails: ['info@pioneerfabtech.com', 'PioneerFabtech19@gmail.com'],
   phone: '+91 90295 55233',
   phoneRaw: '+919029555233',
   whatsappUrl: 'https://wa.me/919029555233',

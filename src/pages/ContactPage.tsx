@@ -76,12 +76,15 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
             </h3>
 
             <div className="space-y-1.5 pt-1">
-              <a
-                href={`mailto:${COMPANY_INFO.email}`}
-                className="block text-xs font-medium text-[#d95c18] hover:underline break-all"
-              >
-                {COMPANY_INFO.email}
-              </a>
+              {COMPANY_INFO.emails.map((emailAddr) => (
+                <a
+                  key={emailAddr}
+                  href={`mailto:${emailAddr}`}
+                  className="block text-xs font-medium text-[#d95c18] hover:underline break-all"
+                >
+                  {emailAddr}
+                </a>
+              ))}
             </div>
           </div>
 
