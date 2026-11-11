@@ -82,32 +82,31 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
     <div className="bg-slate-50 min-h-screen">
       
       {/* =====================================================================
-          1. Hero Header Banner matching Site Theme
+          1. Hero Header Banner matching Gallery & Site Theme
          ===================================================================== */}
-      <section className="relative bg-slate-950 text-white py-14 sm:py-20 overflow-hidden border-b border-slate-800">
-        <div 
-          className="absolute inset-0 bg-cover bg-center opacity-25 mix-blend-luminosity"
-          style={{ backgroundImage: "url('/assets/images/achievements_bg_1793880633351.jpg')" }}
+      <section className="relative py-14 sm:py-18 bg-slate-900 text-white overflow-hidden text-center">
+        <img
+          src="/assets/achievements_bg.jpg"
+          alt="Material Supply Banner"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-900/90 to-slate-950" />
-        
-        {/* Subtle orange accent glow line */}
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#ff7a00] to-transparent shadow-[0_0_12px_#ff7a00]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1829]/80 via-[#0a1829]/75 to-[#0a1829]/90" />
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4 reveal-word">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white uppercase">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-1">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-wide text-white">
             Material Supply
           </h1>
           
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-200 font-medium pt-1">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-slate-200 font-medium pt-1">
             <button 
               onClick={() => onNavigate('home')} 
               className="hover:text-amber-400 transition-colors cursor-pointer"
             >
               Home
             </button>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-slate-400 select-none">&gt;</span>
             <button 
               onClick={handleShowAllProducts}
               className="text-white font-bold select-none hover:text-amber-400 transition-colors cursor-pointer"
@@ -116,8 +115,8 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
             </button>
             {currentProduct && (
               <>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-white font-bold select-none">{currentProduct.name}</span>
+                <span className="text-slate-400 select-none">&gt;</span>
+                <span className="text-amber-400 font-bold select-none">{currentProduct.name}</span>
               </>
             )}
           </div>

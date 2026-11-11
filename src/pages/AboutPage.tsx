@@ -230,9 +230,9 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
         </div>
       </section>
 
-      {/* 5. Our Approach & Brand Promise */}
+      {/* 5. Our Approach */}
       <section className="py-14 sm:py-20 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="bg-white rounded-2xl sm:rounded-3xl p-7 sm:p-11 border border-slate-200/90 shadow-sm reveal-on-scroll">
             <div className="flex flex-col md:flex-row md:items-start gap-5 sm:gap-7">
@@ -247,18 +247,6 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
                   At Pioneer Fab Tech, we believe that strong business relationships are built through trust, transparency and consistent performance. We work towards understanding our customers&apos; expectations and providing solutions aligned with their material and project requirements.
                 </p>
               </div>
-            </div>
-          </div>
-
-          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-[#061224] via-[#0a1d37] to-[#061224] text-white px-6 py-10 sm:px-12 sm:py-12 text-center border border-slate-800 shadow-lg reveal-on-scroll delay-75">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(234,104,0,0.16),transparent_65%)]" />
-            <div className="relative z-10 space-y-2.5">
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-black tracking-wider uppercase text-white">
-                PIONEER FAB TECH
-              </h3>
-              <p className="text-sm sm:text-base lg:text-lg font-bold text-amber-400 tracking-wide">
-                Engineering Materials. Architectural Excellence. Industrial Solutions.
-              </p>
             </div>
           </div>
 
