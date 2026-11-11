@@ -41,7 +41,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
         <div className="relative group">
           <button
             onClick={onScrollToTop}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 md:backdrop-blur-md text-slate-700 shadow-lg hover:shadow-xl border border-slate-200/90 flex items-center justify-center hover:bg-slate-50 hover:text-slate-950 transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 md:backdrop-blur-md text-slate-700 shadow-lg hover:shadow-xl border border-slate-200/90 flex items-center justify-center hover:bg-slate-50 hover:text-slate-950 transition-[transform,background-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 cursor-pointer"
             title="Scroll to Top"
             aria-label="Scroll to top of page"
           >
@@ -49,7 +49,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
           </button>
 
           {/* Desktop Tooltip */}
-          <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:-translate-y-1 z-50">
+          <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none group-hover:-translate-y-1 z-50">
             <span className="px-2.5 py-1 rounded-md bg-slate-900/95 backdrop-blur-md text-white text-[11px] font-medium whitespace-nowrap shadow-lg border border-white/10">
               Back to Top
             </span>
@@ -62,7 +62,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
       <div className="relative group">
         <a
           href={`tel:${COMPANY_INFO.phoneRaw}`}
-          className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#1E40AF] via-[#2563EB] to-[#3B82F6] text-white shadow-[0_8px_20px_-4px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_28px_-4px_rgba(37,99,235,0.65)] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 border border-white/20"
+          className="w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#1E40AF] via-[#2563EB] to-[#3B82F6] text-white shadow-[0_8px_20px_-4px_rgba(37,99,235,0.45)] hover:shadow-[0_12px_28px_-4px_rgba(37,99,235,0.65)] flex items-center justify-center transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 border border-white/20"
           title="Direct Call"
           aria-label={`Call Pioneer Fab Tech at ${COMPANY_INFO.phone}`}
         >
@@ -70,7 +70,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
         </a>
 
         {/* Desktop Tooltip */}
-        <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:-translate-y-1 z-50">
+        <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none group-hover:-translate-y-1 z-50">
           <div className="px-3 py-1.5 rounded-lg bg-slate-900/95 backdrop-blur-md text-white text-xs font-semibold whitespace-nowrap shadow-xl border border-white/10 flex items-center gap-1.5">
             <Phone className="w-3 h-3 text-blue-400" />
             <span>Call +91 90295 55233</span>
@@ -85,7 +85,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
           href={COMPANY_INFO.whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="relative w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#128C7E] via-[#25D366] to-[#2BE271] text-white shadow-[0_8px_20px_-4px_rgba(37,211,102,0.5)] hover:shadow-[0_12px_28px_-4px_rgba(37,211,102,0.7)] flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 border border-white/25"
+          className="relative w-12 h-12 sm:w-13 sm:h-13 rounded-full bg-gradient-to-tr from-[#128C7E] via-[#25D366] to-[#2BE271] text-white shadow-[0_8px_20px_-4px_rgba(37,211,102,0.5)] hover:shadow-[0_12px_28px_-4px_rgba(37,211,102,0.7)] flex items-center justify-center transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 border border-white/25"
           title="Chat on WhatsApp"
           aria-label="Chat with Pioneer Fab Tech on WhatsApp"
         >
@@ -98,7 +98,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
         </a>
 
         {/* Desktop Tooltip */}
-        <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:-translate-y-1 z-50">
+        <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none group-hover:-translate-y-1 z-50">
           <div className="px-3 py-1.5 rounded-lg bg-slate-900/95 backdrop-blur-md text-white text-xs font-semibold whitespace-nowrap shadow-xl border border-white/10 flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#25D366] animate-pulse"></span>
             <span>Chat on WhatsApp</span>

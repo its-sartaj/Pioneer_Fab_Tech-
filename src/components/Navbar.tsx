@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { COMPANY_INFO, SERVICES, PROJECTS, INFRASTRUCTURE_SPECS, OFFICIAL_CERTIFICATES, MATERIAL_SUPPLY_ITEMS } from '../data/siteData';
 import { WhatsAppIcon } from './FloatingActions';
+import { prefetchPageChunk } from '../utils/prefetchPages';
 
 export type PageId = 
   | 'home' 
@@ -309,7 +310,11 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                   <div 
                     key={link.id}
                     className="relative h-full flex items-center border-r last:border-r-0 border-slate-200 group"
-                    onMouseEnter={() => handleMouseEnter(link.id, link.hasDropdown)}
+                    onMouseEnter={() => {
+                      prefetchPageChunk(link.id);
+                      handleMouseEnter(link.id, link.hasDropdown);
+                    }}
+                    onFocus={() => prefetchPageChunk(link.id)}
                   >
                     {/* Clean cell link with exact bold typography from reference screenshot */}
                     <a
@@ -331,7 +336,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                       <span className="pb-0.5">{link.label}</span>
                       {link.hasDropdown && (
                         <ChevronDown 
-                          className={`w-3.5 h-3.5 stroke-[2.8] transition-transform duration-200 ${
+                          className={`w-3.5 h-3.5 stroke-[2.8] transition-transform duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                             isDropdownOpen ? 'rotate-180 text-[#d95800]' : 'text-slate-600 group-hover:text-[#d95800]'
                           }`} 
                         />
@@ -341,7 +346,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                     {/* Full-Width Bottom Border Hover Animation:
                         Only active when hovering with mouse, never stays stuck on active tab, smoothly retracts as soon as mouse leaves */}
                     <span 
-                      className="absolute bottom-0 left-0 right-0 h-[3.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none z-10 scale-x-0 group-hover:scale-x-100" 
+                      className="absolute bottom-0 left-0 right-0 h-[3.5px] bg-[#8B2E1D] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] origin-left pointer-events-none z-10 scale-x-0 group-hover:scale-x-100" 
                     />
 
                     {/* Interactive Dropdown - Single Column Name List Only (No Image, with Bottom Animation) */}
@@ -356,16 +361,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                         }}
                         onMouseLeave={handleMouseLeave}
                       >
-                        <div className="bg-white rounded-xl shadow-2xl border border-slate-200/90 overflow-hidden w-[290px] sm:w-[320px] max-h-[460px] overflow-y-auto py-1">
+                        <div className="bg-white rounded-xl shadow-2xl border border-slate-200/90 overflow-hidden w-[290px] sm:w-[320px] max-h-[460px] overflow-y-auto py-1 animate-dropdown-panel">
                           {subItems.map((item, idx) => {
                             const isItemHovered = currentHoverIdx === idx;
                             return (
                               <div
                                 key={item.id}
-                                style={{ animationDelay: `${idx * 25}ms` }}
+                                style={{ animationDelay: `${idx * 20}ms` }}
                                 onMouseEnter={() => setHoverIdx(idx)}
                                 onClick={() => handleLinkClick(item.targetPage, item.id)}
-                                className={`px-4 py-2.5 border-b border-slate-100 last:border-b-0 flex items-center gap-2.5 cursor-pointer transition-colors text-left animate-dropdown-item ${
+                                className={`px-4 py-2.5 border-b border-slate-100 last:border-b-0 flex items-center gap-2.5 cursor-pointer transition-colors duration-150 text-left animate-dropdown-item ${
                                   isItemHovered
                                     ? 'bg-orange-50/90 text-[#d95800] font-bold'
                                     : 'text-slate-700 hover:text-[#d95800] font-medium hover:bg-slate-50'
@@ -399,7 +404,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
-                className="relative group p-2 rounded-xl bg-slate-900 text-white shadow-md border border-slate-700 hover:border-amber-400 hover:bg-slate-800 transition-all active:scale-95 cursor-pointer flex items-center justify-center w-10 h-10"
+                className="relative group p-2 rounded-xl bg-slate-900 text-white shadow-md border border-slate-700 hover:border-amber-400 hover:bg-slate-800 transition-[background-color,border-color,transform] duration-200 active:scale-95 cursor-pointer flex items-center justify-center w-10 h-10"
                 aria-label="Open navigation menu"
                 title="Open menu"
               >
@@ -411,17 +416,18 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
         </div>
       </div>
 
-      {/* Mobile Drawer Backdrop */}
-      {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 bg-slate-950/75 z-50 transition-opacity duration-250 lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
-        />
-      )}
+      {/* Mobile Drawer Backdrop - Always mounted for smooth fade-in & fade-out */}
+      <div 
+        aria-hidden={!mobileMenuOpen}
+        className={`fixed inset-0 bg-slate-950/75 z-50 transition-opacity duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden ${
+          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        onClick={() => setMobileMenuOpen(false)}
+      />
 
       {/* Mobile Menu Drawer - GPU-composited slide & overscroll lock */}
       <div 
-        className={`fixed top-0 left-0 bottom-0 w-[88%] max-w-[360px] bg-white text-slate-800 z-50 shadow-2xl transform-gpu transition-transform duration-250 ease-out lg:hidden flex flex-col border-r border-slate-200 ${
+        className={`fixed top-0 left-0 bottom-0 w-[88%] max-w-[360px] bg-white text-slate-800 z-50 shadow-2xl transform-gpu transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] lg:hidden flex flex-col border-r border-slate-200 ${
           mobileMenuOpen ? 'translate-x-0 pointer-events-auto' : '-translate-x-full pointer-events-none'
         }`}
       >
@@ -460,7 +466,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
               <div key={link.id} className="space-y-1">
                 {/* Main Link Row */}
                 <div
-                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all ${
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-colors duration-200 ${
                     isActive 
                       ? 'bg-amber-500 text-slate-950 font-extrabold shadow-xs' 
                       : isExpanded
@@ -491,7 +497,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                         e.stopPropagation();
                         setExpandedMobileMenu(isExpanded ? null : link.id);
                       }}
-                      className={`p-1.5 -mr-1 rounded-lg transition-all duration-200 cursor-pointer ${
+                      className={`p-1.5 -mr-1 rounded-lg transition-colors duration-200 cursor-pointer ${
                         isActive
                           ? 'text-slate-950 hover:bg-amber-600/30'
                           : isExpanded
@@ -501,7 +507,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                       aria-label={`Toggle details for ${link.label}`}
                     >
                       <ChevronRight 
-                        className={`w-4 h-4 transition-transform duration-200 ${
+                        className={`w-4 h-4 transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                           isExpanded ? 'rotate-90 text-amber-600' : ''
                         }`} 
                       />
@@ -518,26 +524,33 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                   )}
                 </div>
 
-                {/* Sub-Items Details Accordion (Appears after clicking arrow or item) */}
-                {hasSubItems && isExpanded && (
-                  <div className="bg-slate-50/95 border border-slate-200/90 rounded-2xl p-2 mt-1 shadow-2xs animate-in fade-in slide-in-from-top-2 duration-150">
-                    <div className="space-y-1 max-h-[340px] overflow-y-auto pr-1">
-                      {subItems.map((item, idx) => (
-                        <div
-                          key={item.id}
-                          style={{ animationDelay: `${idx * 25}ms` }}
-                          onClick={() => handleLinkClick(item.targetPage, item.id)}
-                          className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-amber-50/80 border border-slate-200/80 hover:border-amber-300 transition-all cursor-pointer flex items-center gap-2.5 group shadow-2xs animate-dropdown-item"
-                        >
-                          <div className="w-3.5 flex items-center justify-center shrink-0">
-                            <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-[#d95800] transition-colors" />
-                          </div>
-                          <span className="text-xs font-bold text-slate-800 group-hover:text-[#d95800] truncate flex-1">
-                            {item.title}
-                          </span>
-                          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#d95800] group-hover:translate-x-0.5 transition-all shrink-0" />
+                {/* Sub-Items Details Accordion - Smooth CSS Grid Height Expand/Collapse */}
+                {hasSubItems && (
+                  <div
+                    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isExpanded ? 'grid-rows-[1fr] opacity-100 mt-1' : 'grid-rows-[0fr] opacity-0 pointer-events-none'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="bg-slate-50/95 border border-slate-200/90 rounded-2xl p-2 shadow-2xs">
+                        <div className="space-y-1 max-h-[340px] overflow-y-auto pr-1">
+                          {subItems.map((item) => (
+                            <div
+                              key={item.id}
+                              onClick={() => handleLinkClick(item.targetPage, item.id)}
+                              className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-amber-50/80 border border-slate-200/80 hover:border-amber-300 transition-colors duration-150 cursor-pointer flex items-center gap-2.5 group shadow-2xs"
+                            >
+                              <div className="w-3.5 flex items-center justify-center shrink-0">
+                                <span className="w-1.5 h-1.5 rounded-full bg-slate-400 group-hover:bg-[#d95800] transition-colors" />
+                              </div>
+                              <span className="text-xs font-bold text-slate-800 group-hover:text-[#d95800] truncate flex-1">
+                                {item.title}
+                              </span>
+                              <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#d95800] group-hover:translate-x-0.5 transition-transform duration-200 shrink-0" />
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      </div>
                     </div>
                   </div>
                 )}

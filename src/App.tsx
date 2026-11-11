@@ -5,17 +5,18 @@ import { HomePage } from './pages/HomePage';
 import { FloatingActions } from './components/FloatingActions';
 import { PageSkeleton } from './components/PageSkeleton';
 import { useGlobalScrollReveal } from './components/ScrollReveal';
+import { initSmoothScroll, smoothScrollTo } from './utils/smoothScroll';
+import { pageLoaders, prefetchIdlePages } from './utils/prefetchPages';
 
 // Code-split secondary pages (especially GSAP-powered Gallery) for fast mobile initial load
-const AboutPage = lazy(() => import('./pages/AboutPage').then((m) => ({ default: m.AboutPage })));
-const ServicesPage = lazy(() => import('./pages/ServicesPage').then((m) => ({ default: m.ServicesPage })));
-const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then((m) => ({ default: m.ProjectsPage })));
-const GalleryPage = lazy(() => import('./pages/GalleryPage').then((m) => ({ default: m.GalleryPage })));
-const MaterialSupplyPage = lazy(() => import('./pages/MaterialSupplyPage').then((m) => ({ default: m.MaterialSupplyPage })));
-const InfrastructurePage = lazy(() => import('./pages/InfrastructurePage').then((m) => ({ default: m.InfrastructurePage })));
-const CertificatesPage = lazy(() => import('./pages/CertificatesPage').then((m) => ({ default: m.CertificatesPage })));
-const ContactPage = lazy(() => import('./pages/ContactPage').then((m) => ({ default: m.ContactPage })));
-const EnquiryPage = lazy(() => import('./pages/EnquiryPage').then((m) => ({ default: m.EnquiryPage })));
+const AboutPage = lazy(() => pageLoaders.about().then((m) => ({ default: m.AboutPage })));
+const ServicesPage = lazy(() => pageLoaders.services().then((m) => ({ default: m.ServicesPage })));
+const ProjectsPage = lazy(() => pageLoaders.projects().then((m) => ({ default: m.ProjectsPage })));
+const GalleryPage = lazy(() => pageLoaders.gallery().then((m) => ({ default: m.GalleryPage })));
+const MaterialSupplyPage = lazy(() => pageLoaders.materials().then((m) => ({ default: m.MaterialSupplyPage })));
+const CertificatesPage = lazy(() => pageLoaders.certificates().then((m) => ({ default: m.CertificatesPage })));
+const ContactPage = lazy(() => pageLoaders.contact().then((m) => ({ default: m.ContactPage })));
+const EnquiryPage = lazy(() => pageLoaders.enquiry().then((m) => ({ default: m.EnquiryPage })));
 
 const VALID_PAGES: PageId[] = [
   'home', 'about', 'services', 'projects', 'gallery', 
@@ -80,6 +81,16 @@ export default function App() {
   // Initialize smooth scroll reveal animations across all pages
   useGlobalScrollReveal(`${currentPage}:${selectedItemTarget || ''}`);
 
+  // Initialize silky desktop wheel inertia & idle chunk prefetching
+  useEffect(() => {
+    const cleanupScroll = initSmoothScroll();
+    const cleanupPrefetch = prefetchIdlePages();
+    return () => {
+      cleanupScroll();
+      cleanupPrefetch();
+    };
+  }, []);
+
   // Sync URL on browser back/forward or direct link entry
   useEffect(() => {
     const onHashOrPop = () => {
@@ -114,7 +125,7 @@ export default function App() {
     }
 
     if (!itemId) {
-      window.scrollTo({ top: 0, behavior: 'instant' });
+      smoothScrollTo(0, { immediate: true });
     }
   }, []);
 
@@ -157,7 +168,7 @@ export default function App() {
   }, [currentPage]);
 
   const scrollToTop = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollTo(0);
   }, []);
 
   return (
@@ -172,7 +183,7 @@ export default function App() {
 
       {/* Main Page Content - Fast, smooth transition with instant loading */}
       <main className="flex-1">
-        <div key={currentPage} className="animate-in fade-in duration-150 ease-out">
+        <div key={currentPage} className="animate-in fade-in">
           <Suspense fallback={<PageSkeleton />}>
             {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
             {currentPage === 'about' && <AboutPage onNavigate={handleNavigate} />}

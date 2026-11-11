@@ -43,18 +43,29 @@ const ACHIEVEMENTS: AchievementMetric[] = [
 export const OurAchievementsSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement | null>(null);
   const hasAnimatedRef = useRef(false);
+  const numberRefs = useRef<Record<string, HTMLSpanElement | null>>({});
   const [activeCardId, setActiveCardId] = useState<string | null>(null);
-  const [counts, setCounts] = useState<Record<string, number>>({
-    clients: 0,
-    experience: 0,
-    delivery: 0,
-    team: 0,
-  });
 
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
     let rafId: number | null = null;
+
+    const setFinalNumbers = () => {
+      ACHIEVEMENTS.forEach((item) => {
+        const el = numberRefs.current[item.id];
+        if (el) el.textContent = String(item.targetCount);
+      });
+    };
+
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduced || !('IntersectionObserver' in window)) {
+      setFinalNumbers();
+      return;
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -62,33 +73,24 @@ export const OurAchievementsSection: React.FC = () => {
           hasAnimatedRef.current = true;
           observer.disconnect();
 
-          // Animate counting numbers smoothly & quickly
+          // Direct DOM text updates in rAF avoid 120fps React tree re-renders during scroll
           const duration = 700;
           const startTime = performance.now();
 
           const step = (currentTime: number) => {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-
-            // Ease-out quart curve
             const ease = 1 - Math.pow(1 - progress, 4);
 
-            setCounts({
-              clients: Math.floor(500 * ease),
-              experience: Math.floor(10 * ease),
-              delivery: Math.floor(1000 * ease),
-              team: Math.floor(50 * ease),
+            ACHIEVEMENTS.forEach((item) => {
+              const el = numberRefs.current[item.id];
+              if (el) {
+                el.textContent = String(progress < 1 ? Math.floor(item.targetCount * ease) : item.targetCount);
+              }
             });
 
             if (progress < 1) {
               rafId = requestAnimationFrame(step);
-            } else {
-              setCounts({
-                clients: 500,
-                experience: 10,
-                delivery: 1000,
-                team: 50,
-              });
             }
           };
 
@@ -238,7 +240,6 @@ export const OurAchievementsSection: React.FC = () => {
         {/* 4 Glassmorphic / Outlined Countable Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 lg:gap-8">
           {ACHIEVEMENTS.map((item, idx) => {
-            const currentNumber = counts[item.id] || 0;
             const delayClasses = ['', 'delay-75', 'delay-150', 'delay-200'];
             const staggerClass = delayClasses[idx] || '';
             const isTouchFilled = activeCardId === item.id;
@@ -247,7 +248,7 @@ export const OurAchievementsSection: React.FC = () => {
               <div key={item.id} className={`reveal-on-scroll ${staggerClass}`}>
                 <div
                   onClick={() => setActiveCardId((prev) => (prev === item.id ? null : item.id))}
-                  className={`relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border bg-[#0a1d37]/75 md:bg-white/[0.04] md:backdrop-blur-xs p-7 sm:p-9 text-center flex flex-col items-center justify-between min-h-[260px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-all duration-300 ease-out group hover:-translate-y-2 cursor-pointer ${
+                  className={`relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border bg-[#0a1d37]/80 md:bg-[#091b34]/75 p-7 sm:p-9 text-center flex flex-col items-center justify-between min-h-[260px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group hover:-translate-y-2 cursor-pointer ${
                     isTouchFilled
                       ? 'is-touch-active border-[#ea6800]/90 shadow-[0_14px_38px_rgba(219,93,0,0.45)] -translate-y-1'
                       : 'border-white/35'
@@ -264,17 +265,22 @@ export const OurAchievementsSection: React.FC = () => {
                   />
 
                   {/* 1. White Line Icon */}
-                  <div className={`relative z-10 pt-2 flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${isTouchFilled ? 'scale-110' : ''}`}>
+                  <div className={`relative z-10 pt-2 flex items-center justify-center transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 ${isTouchFilled ? 'scale-110' : ''}`}>
                     {renderIcon(item.icon)}
                   </div>
 
-                  {/* 2. Dark Orange Accent Divider Line */}
-                  <div className={`relative z-10 h-0.5 mx-auto my-4 transition-all duration-300 group-hover:w-18 group-hover:bg-white ${isTouchFilled ? 'w-18 bg-white' : 'w-12 sm:w-14 bg-[#ea6800]'}`} />
+                  {/* 2. Dark Orange Accent Divider Line (GPU scaleX, zero layout reflow) */}
+                  <div className={`relative z-10 w-12 sm:w-14 h-0.5 mx-auto my-4 transition-[transform,background-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-125 group-hover:bg-white ${isTouchFilled ? 'scale-x-125 bg-white' : 'bg-[#ea6800]'}`} />
 
                   {/* 3. Big Countable Number with + suffix */}
                   <div className="relative z-10 flex items-baseline justify-center">
-                    <span className="text-5xl sm:text-6xl font-black text-white tracking-tight font-sans select-none tabular-nums">
-                      {currentNumber}
+                    <span
+                      ref={(el) => {
+                        numberRefs.current[item.id] = el;
+                      }}
+                      className="text-5xl sm:text-6xl font-black text-white tracking-tight font-sans select-none tabular-nums"
+                    >
+                      0
                     </span>
                     <span className="text-4xl sm:text-5xl font-black text-white select-none ml-0.5">
                       {item.suffix || '+'}

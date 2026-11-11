@@ -19,7 +19,7 @@ export interface GalleryItem {
   direction: 'bottom' | 'left' | 'right';
 }
 
-// 21 Architectural & Industrial Fabrication Gallery Photos
+// 61 Architectural & Industrial Fabrication Gallery Photos
 export const GALLERY_ITEMS: GalleryItem[] = [
   { id: 'gal-1', src: '/assets/gallery/work_01.jpeg', direction: 'bottom' },
   { id: 'gal-2', src: '/assets/gallery/work_02.jpeg', direction: 'right' },
@@ -42,6 +42,46 @@ export const GALLERY_ITEMS: GalleryItem[] = [
   { id: 'gal-19', src: '/assets/gallery/work_19.jpeg', direction: 'bottom' },
   { id: 'gal-20', src: '/assets/gallery/work_20.jpeg', direction: 'right' },
   { id: 'gal-21', src: '/assets/gallery/work_21.jpeg', direction: 'left' },
+  { id: 'gal-22', src: '/assets/gallery/work_22.jpeg', direction: 'left' },
+  { id: 'gal-23', src: '/assets/gallery/work_23.jpeg', direction: 'bottom' },
+  { id: 'gal-24', src: '/assets/gallery/work_24.jpeg', direction: 'right' },
+  { id: 'gal-25', src: '/assets/gallery/work_25.jpeg', direction: 'left' },
+  { id: 'gal-26', src: '/assets/gallery/work_26.jpeg', direction: 'bottom' },
+  { id: 'gal-27', src: '/assets/gallery/work_27.jpeg', direction: 'right' },
+  { id: 'gal-28', src: '/assets/gallery/work_28.jpeg', direction: 'left' },
+  { id: 'gal-29', src: '/assets/gallery/work_29.jpeg', direction: 'bottom' },
+  { id: 'gal-30', src: '/assets/gallery/work_30.jpeg', direction: 'right' },
+  { id: 'gal-31', src: '/assets/gallery/work_31.jpeg', direction: 'left' },
+  { id: 'gal-32', src: '/assets/gallery/work_32.jpeg', direction: 'bottom' },
+  { id: 'gal-33', src: '/assets/gallery/work_33.jpeg', direction: 'right' },
+  { id: 'gal-34', src: '/assets/gallery/work_34.jpeg', direction: 'left' },
+  { id: 'gal-35', src: '/assets/gallery/work_35.jpeg', direction: 'bottom' },
+  { id: 'gal-36', src: '/assets/gallery/work_36.jpeg', direction: 'right' },
+  { id: 'gal-37', src: '/assets/gallery/work_37.jpeg', direction: 'left' },
+  { id: 'gal-38', src: '/assets/gallery/work_38.jpeg', direction: 'bottom' },
+  { id: 'gal-39', src: '/assets/gallery/work_39.jpeg', direction: 'right' },
+  { id: 'gal-40', src: '/assets/gallery/work_40.jpeg', direction: 'left' },
+  { id: 'gal-41', src: '/assets/gallery/work_41.jpeg', direction: 'bottom' },
+  { id: 'gal-42', src: '/assets/gallery/work_42.jpeg', direction: 'right' },
+  { id: 'gal-43', src: '/assets/gallery/work_43.jpeg', direction: 'left' },
+  { id: 'gal-44', src: '/assets/gallery/work_44.jpeg', direction: 'bottom' },
+  { id: 'gal-45', src: '/assets/gallery/work_45.jpeg', direction: 'right' },
+  { id: 'gal-46', src: '/assets/gallery/work_46.jpeg', direction: 'left' },
+  { id: 'gal-47', src: '/assets/gallery/work_47.jpeg', direction: 'bottom' },
+  { id: 'gal-48', src: '/assets/gallery/work_48.jpeg', direction: 'right' },
+  { id: 'gal-49', src: '/assets/gallery/work_49.jpeg', direction: 'left' },
+  { id: 'gal-50', src: '/assets/gallery/work_50.jpeg', direction: 'bottom' },
+  { id: 'gal-51', src: '/assets/gallery/work_51.jpeg', direction: 'right' },
+  { id: 'gal-52', src: '/assets/gallery/work_52.jpeg', direction: 'left' },
+  { id: 'gal-53', src: '/assets/gallery/work_53.jpeg', direction: 'bottom' },
+  { id: 'gal-54', src: '/assets/gallery/work_54.jpeg', direction: 'right' },
+  { id: 'gal-55', src: '/assets/gallery/work_55.jpeg', direction: 'left' },
+  { id: 'gal-56', src: '/assets/gallery/work_56.jpeg', direction: 'bottom' },
+  { id: 'gal-57', src: '/assets/gallery/work_57.jpeg', direction: 'right' },
+  { id: 'gal-58', src: '/assets/gallery/work_58.jpeg', direction: 'left' },
+  { id: 'gal-59', src: '/assets/gallery/work_59.jpeg', direction: 'bottom' },
+  { id: 'gal-60', src: '/assets/gallery/work_60.jpeg', direction: 'right' },
+  { id: 'gal-61', src: '/assets/gallery/work_61.jpeg', direction: 'left' },
 ];
 
 export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
@@ -53,6 +93,11 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
   // GSAP ScrollTrigger: crisp reveal everywhere, parallax only on fine-pointer desktop
   useEffect(() => {
     if (!containerRef.current || GALLERY_ITEMS.length === 0) return;
+
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
 
     const mm = gsap.matchMedia();
 
@@ -84,7 +129,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
               scale: 1,
               x: 0,
               y: 0,
-              duration: isDesktop ? 0.3 : 0.28,
+              duration: isDesktop ? 0.34 : 0.28,
               ease: 'power2.out',
               clearProps: 'transform,willChange',
               scrollTrigger: {
@@ -96,12 +141,12 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
             }
           );
 
-          // Skip continuous per-card scroll scrub on phones/touch devices for 60/120fps scrolling
+          // Parallax lives on .gallery-parallax-wrap so it never collides with CSS hover scale on <img>
           if (isDesktop) {
-            const parallaxImg = card.querySelector<HTMLElement>('.gallery-parallax-img');
-            if (parallaxImg) {
+            const parallaxWrap = card.querySelector<HTMLElement>('.gallery-parallax-wrap');
+            if (parallaxWrap) {
               gsap.fromTo(
-                parallaxImg,
+                parallaxWrap,
                 { yPercent: -3 },
                 {
                   yPercent: 3,
@@ -130,6 +175,17 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
       mm.revert();
     };
   }, []);
+
+  // Preload adjacent lightbox images for zero-flash Next/Prev swiping
+  useEffect(() => {
+    if (selectedPhotoIndex === null || GALLERY_ITEMS.length < 2) return;
+    const prevIdx = (selectedPhotoIndex - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length;
+    const nextIdx = (selectedPhotoIndex + 1) % GALLERY_ITEMS.length;
+    [prevIdx, nextIdx].forEach((idx) => {
+      const img = new Image();
+      img.src = GALLERY_ITEMS[idx].src;
+    });
+  }, [selectedPhotoIndex]);
 
   const handleNext = useCallback((e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -340,24 +396,26 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
                 {/* Every box has the exact same aspect-[4/3] uniform dimension */}
                 <div
                   onClick={() => setSelectedPhotoIndex(idx)}
-                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm hover:shadow-xl transition-shadow duration-300 cursor-pointer group"
+                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm hover:shadow-xl transition-shadow duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer group"
                 >
-                  {/* Parallax inner image wrapper (full-height on mobile, parallax headroom on desktop) */}
+                  {/* Outer parallax wrapper keeps GSAP scroll translate separate from CSS hover scale */}
                   <div className="absolute inset-0 overflow-hidden">
-                    <img
-                      src={item.src}
-                      alt={`Fabrication Work ${idx + 1}`}
-                      className="gallery-parallax-img w-full h-full top-0 md:h-[114%] md:-top-[7%] relative object-cover transition-transform duration-300 ease-out group-hover:scale-104 select-none"
-                      loading={idx < 4 ? 'eager' : 'lazy'}
-                      decoding="async"
-                    />
+                    <div className="gallery-parallax-wrap w-full h-full top-0 md:h-[114%] md:-top-[7%] relative transform-gpu">
+                      <img
+                        src={item.src}
+                        alt={`Fabrication Work ${idx + 1}`}
+                        className="w-full h-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] select-none transform-gpu"
+                        loading={idx < 6 ? 'eager' : 'lazy'}
+                        decoding="async"
+                      />
+                    </div>
                   </div>
 
                   {/* Subtle dark overlay on hover */}
                   <div className="absolute inset-0 bg-slate-950/15 group-hover:bg-slate-950/35 transition-colors duration-300" />
 
                   {/* Subtle "View ↗" pill: visible softly on mobile touch, animated on desktop hover */}
-                  <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 sm:translate-y-2 opacity-90 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-all duration-300 ease-out">
+                  <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 sm:translate-y-2 opacity-90 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100 transition-[opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]">
                     <span className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white/95 md:backdrop-blur-md text-slate-900 text-[11px] sm:text-xs font-bold shadow-lg tracking-tight hover:bg-white">
                       <span>View</span>
                       <ArrowUpRight className="w-3.5 h-3.5 text-amber-600" />

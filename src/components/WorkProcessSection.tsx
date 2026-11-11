@@ -51,7 +51,7 @@ export const WorkProcessSection: React.FC<WorkProcessSectionProps> = ({ onOpenEn
               <div
                 key={step.id}
                 onClick={onOpenEnquiry}
-                className="group relative w-[230px] sm:w-[260px] h-[190px] sm:h-[210px] shrink-0 rounded-2xl p-5 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/80 transition-all duration-300 flex flex-col justify-between cursor-pointer select-none snap-start shadow-md hover:shadow-xl"
+                className="group relative w-[230px] sm:w-[260px] h-[190px] sm:h-[210px] shrink-0 rounded-2xl p-5 bg-slate-800/80 hover:bg-slate-800 border border-slate-700/80 hover:border-amber-400/80 transition-[background-color,border-color,transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer select-none shadow-md hover:shadow-xl transform-gpu"
               >
                 {/* Step Number & Icon */}
                 <div className="flex items-center justify-between">

@@ -317,7 +317,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
                 className={`flex flex-col items-center w-full max-w-[340px] group cursor-pointer reveal-on-scroll ${delayClasses[idx] || ''}`}
               >
               {/* Rectangular Black Frame */}
-              <div className="w-full bg-white border-2 border-black p-2 sm:p-2.5 shadow-md hover:shadow-2xl transition-all duration-300 group-hover:-translate-y-1 relative">
+              <div className="w-full bg-white border-2 border-black p-2 sm:p-2.5 shadow-md hover:shadow-2xl transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 relative transform-gpu">
                 <CertificateCanvas
                   pdfUrl={cert.pdfUrl}
                   previewImage={cert.previewImage}

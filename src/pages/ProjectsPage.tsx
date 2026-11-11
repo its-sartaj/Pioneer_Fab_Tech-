@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { PROJECTS, ProjectItem, COMPANY_INFO } from '../data/siteData';
 import { PageId } from '../components/Navbar';
+import { smoothScrollIntoView } from '../utils/smoothScroll';
 
 interface ProjectsPageProps {
   onNavigate: (page: PageId, itemId?: string) => void;
@@ -23,7 +24,9 @@ interface ProjectsPageProps {
 }
 
 const CATEGORY_FILTERS = [
-  { id: 'all', label: 'All Projects (4 Malls)' },
+  { id: 'all', label: 'All Projects' },
+  { id: 'hyatt-delhi', label: 'Hyatt Hotels Delhi' },
+  { id: 'hyatt-pune', label: 'Hyatt Hotels Pune' },
   { id: 'nexus-hyderabad', label: 'Nexus Mall Hyderabad' },
   { id: 'westend-pune', label: 'Westend Mall Pune' },
   { id: 'nexus-mumbai', label: 'Nexus Mumbai' },
@@ -46,7 +49,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
       setSelectedProjectId(selectedItemId);
       const timer = setTimeout(() => {
         const el = document.getElementById('project-view-container');
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (el) smoothScrollIntoView(el);
       }, 100);
       return () => clearTimeout(timer);
     } else if (!selectedItemId) {
@@ -63,7 +66,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
     setSelectedProjectId(projectId);
     onNavigate('projects', projectId);
     const el = document.getElementById('project-view-container');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) smoothScrollIntoView(el);
   };
 
   const handleShowAll = () => {
@@ -86,45 +89,55 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
   });
 
   return (
-    <div className="bg-slate-50 min-h-screen py-10 sm:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
-        
-        {/* =====================================================================
-            1. Page Header Banner (Clean without badge)
-           ===================================================================== */}
-        <div className="max-w-3xl reveal-word">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">
-            Our Completed Projects
-          </h1>
+    <div className="bg-slate-50 min-h-screen">
 
-          {/* Breadcrumb Navigation with direct links */}
-          <div className="flex items-center gap-2 text-xs sm:text-sm font-medium text-slate-500 pt-2">
-            <button 
-              onClick={() => onNavigate('home')} 
-              className="hover:text-[#d95800] transition-colors cursor-pointer"
+      {/* 1. Header Banner matching About Us */}
+      <div className="relative py-14 sm:py-18 bg-slate-900 overflow-hidden text-center">
+        <img
+          src="/assets/achievements_bg.jpg"
+          alt="Our Projects Header"
+          decoding="async"
+          className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a1829]/80 via-[#0a1829]/75 to-[#0a1829]/90" />
+
+        <div className="relative z-10 space-y-1 px-4">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-wide">
+            Our Projects
+          </h1>
+          <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-slate-200 font-medium pt-1">
+            <button
+              onClick={() => onNavigate('home')}
+              className="hover:text-amber-400 transition-colors cursor-pointer"
             >
               Home
             </button>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-            <button 
+            <span className="text-slate-400 select-none">•</span>
+            <button
               onClick={handleShowAll}
-              className={`hover:text-[#d95800] transition-colors cursor-pointer ${
-                selectedProjectId === 'all' ? 'text-[#c95100] font-bold' : 'text-slate-600'
+              className={`hover:text-amber-400 transition-colors cursor-pointer ${
+                selectedProjectId === 'all' ? 'text-white font-bold' : 'text-slate-200'
               }`}
             >
-              Projects
+              Our Projects
             </button>
             {currentProject && (
               <>
-                <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
-                <span className="text-[#c95100] font-bold truncate max-w-[280px] sm:max-w-md">
+                <span className="text-slate-400 select-none">•</span>
+                <span className="text-amber-400 font-bold truncate max-w-[260px] sm:max-w-md select-none">
                   {currentProject.title}
                 </span>
               </>
             )}
           </div>
+        </div>
+      </div>
 
-          <p className="mt-3 text-slate-600 text-sm sm:text-base leading-relaxed">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-8">
+
+        {/* Section Intro */}
+        <div className="max-w-3xl reveal-word">
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
             Explore authentic fabrications engineered at our Vasai-Virar facility and installed on site across Mumbai, Thane, Pune, and regional architectural landmarks.
           </p>
         </div>
@@ -132,13 +145,13 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
         {/* =====================================================================
             2. Main Content (Single Project View OR Overview Grid)
            ===================================================================== */}
-        <div id="project-view-container">
+        <div id="project-view-container" className="scroll-mt-24 lg:scroll-mt-32">
           
           {/* ===================================================================
               SCENARIO 1: SINGLE SELECTED PROJECT (BASS WAHI PROJECT KHULEGA)
              =================================================================== */}
           {currentProject ? (
-            <div className="max-w-5xl mx-auto space-y-6 animate-in fade-in duration-200">
+            <div key={currentProject.id} className="max-w-5xl mx-auto space-y-6 animate-in fade-in">
               
               {/* Main Single Project Card */}
               <div className="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden">
@@ -342,14 +355,14 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                   const delayClasses = ['', 'delay-75', 'delay-150'];
                   return (
                     <div key={project.id} className={`reveal-on-scroll ${delayClasses[idx % 3]} flex`}>
-                      <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg transition-all flex flex-col justify-between group hover:border-[#d95800]/40 w-full">
+                      <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-xs hover:shadow-lg transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 flex flex-col justify-between group hover:border-[#d95800]/40 w-full transform-gpu">
                     <div>
                       {/* Real Photo */}
                       <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
                         <img 
                           src={project.image} 
                           alt={project.title} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu"
                           loading="lazy"
                           decoding="async"
                         />

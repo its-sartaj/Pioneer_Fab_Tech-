@@ -47,13 +47,41 @@ const SLIDES: SlideItem[] = [
 
 export const HeroSlider: React.FC<HeroSliderProps> = () => {
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [prevIdx, setPrevIdx] = useState<number | null>(null);
+  const [hasEntered, setHasEntered] = useState(false);
   const [direction, setDirection] = useState<'up' | 'down'>('up');
   const [isVisible, setIsVisible] = useState(true);
   const sectionRef = useRef<HTMLElement | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const exitClearTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const touchStartXRef = useRef<number | null>(null);
 
   const SLIDE_DURATION = 4500; // 4.5 seconds auto slide
+
+  // Trigger smooth Ken Burns scale on slide 0 right after mount
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setHasEntered(true));
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const advanceSlide = (getNext: (curr: number) => number, nextDir: 'up' | 'down') => {
+    setCurrentIdx((curr) => {
+      const next = getNext(curr);
+      if (next !== curr) {
+        setPrevIdx(curr);
+        if (exitClearTimerRef.current) clearTimeout(exitClearTimerRef.current);
+        exitClearTimerRef.current = setTimeout(() => setPrevIdx(null), 1150);
+      }
+      return next;
+    });
+    setDirection(nextDir);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (exitClearTimerRef.current) clearTimeout(exitClearTimerRef.current);
+    };
+  }, []);
 
   // Pause hero auto-advance when scrolled out of view or tab is hidden to save mobile CPU/GPU
   useEffect(() => {
@@ -83,8 +111,11 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
     if (!isVisible) return;
 
     timerRef.current = setInterval(() => {
-      setDirection((prev) => (prev === 'up' ? 'down' : 'up'));
-      setCurrentIdx((prevIdx) => (prevIdx + 1) % SLIDES.length);
+      setDirection((prev) => {
+        const nextDir = prev === 'up' ? 'down' : 'up';
+        advanceSlide((idx) => (idx + 1) % SLIDES.length, nextDir);
+        return nextDir;
+      });
     }, SLIDE_DURATION);
 
     return () => {
@@ -104,14 +135,18 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
 
     if (Math.abs(deltaX) > 45) {
       if (timerRef.current) clearInterval(timerRef.current);
-      setDirection(deltaX < 0 ? 'up' : 'down');
-      setCurrentIdx((prevIdx) =>
-        deltaX < 0 ? (prevIdx + 1) % SLIDES.length : (prevIdx - 1 + SLIDES.length) % SLIDES.length
+      const nextDir = deltaX < 0 ? 'up' : 'down';
+      advanceSlide(
+        (idx) => (deltaX < 0 ? (idx + 1) % SLIDES.length : (idx - 1 + SLIDES.length) % SLIDES.length),
+        nextDir
       );
       if (isVisible) {
         timerRef.current = setInterval(() => {
-          setDirection((prev) => (prev === 'up' ? 'down' : 'up'));
-          setCurrentIdx((prevIdx) => (prevIdx + 1) % SLIDES.length);
+          setDirection((prev) => {
+            const autoDir = prev === 'up' ? 'down' : 'up';
+            advanceSlide((idx) => (idx + 1) % SLIDES.length, autoDir);
+            return autoDir;
+          });
         }, SLIDE_DURATION);
       }
     }
@@ -134,21 +169,26 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         {SLIDES.map((slide, idx) => {
           const isActive = currentIdx === idx;
+          const isExiting = prevIdx === idx && !isActive;
+          const isZoomed = (isActive && hasEntered) || isExiting;
           return (
             <div
               key={slide.id}
-              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+              className={`absolute inset-0 w-full h-full transition-opacity duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
                 isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
               }`}
             >
               <img
                 src={slide.image}
                 alt={slide.headline}
-                decoding="async"
+                loading="eager"
+                decoding={idx === 0 ? 'sync' : 'async'}
                 fetchPriority={idx === 0 ? 'high' : 'low'}
-                className={`w-full h-full object-cover object-center sm:object-[center_35%] transition-transform duration-[4500ms] ease-out transform-gpu ${
-                  isActive ? 'scale-[1.07] will-change-transform' : 'scale-100'
-                }`}
+                className={`w-full h-full object-cover object-center sm:object-[center_35%] transform-gpu ${
+                  isActive || isExiting
+                    ? 'transition-transform duration-[4500ms] ease-out'
+                    : 'transition-none'
+                } ${isZoomed ? 'scale-[1.07] will-change-transform' : 'scale-100'}`}
               />
             </div>
           );

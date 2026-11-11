@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { MATERIAL_SUPPLY_ITEMS, MaterialSupplyItem, COMPANY_INFO } from '../data/siteData';
 import { PageId } from '../components/Navbar';
+import { smoothScrollIntoView } from '../utils/smoothScroll';
 
 interface MaterialSupplyPageProps {
   onNavigate: (page: PageId, itemId?: string) => void;
@@ -33,7 +34,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
       const timer = setTimeout(() => {
         const el = document.getElementById('material-view-container');
         if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          smoothScrollIntoView(el);
         }
       }, 100);
       return () => clearTimeout(timer);
@@ -46,7 +47,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
     setSelectedProductId(productId);
     onNavigate('materials', productId);
     const el = document.getElementById('material-view-container');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) smoothScrollIntoView(el);
   };
 
   const handleShowAllProducts = () => {
@@ -126,7 +127,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
       {/* =====================================================================
           3. Main Material Catalog Section with Interactive Selection
          ===================================================================== */}
-      <section id="material-view-container" className="py-8 sm:py-12">
+      <section id="material-view-container" className="scroll-mt-24 lg:scroll-mt-32 py-8 sm:py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="relative flex items-center justify-center my-4">
@@ -142,7 +143,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
               CONTENT: SINGLE SELECTED PRODUCT VIEW OR ALL MATERIALS GRID
              ================================================================= */}
           {currentProduct ? (
-            <div className="max-w-5xl mx-auto space-y-6 mt-8 animate-in fade-in duration-200">
+            <div key={currentProduct.id} className="max-w-5xl mx-auto space-y-6 mt-8 animate-in fade-in">
               
               {/* Main Single Product Card */}
               <div className="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden">
@@ -360,14 +361,14 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {filteredGridItems.map((item: MaterialSupplyItem, idx: number) => (
                       <div key={item.id} className={`reveal-on-scroll ${idx % 2 === 1 ? 'delay-75' : ''} flex`}>
-                        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden group hover:border-[#ff7a00]/40 w-full">
+                        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs hover:shadow-lg transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 flex flex-col justify-between overflow-hidden group hover:border-[#ff7a00]/40 w-full transform-gpu">
                         <div>
                           {/* Image */}
                           <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
                             <img 
                               src={item.image} 
                               alt={item.name}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              className="w-full h-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105 transform-gpu"
                               loading="lazy"
                               decoding="async"
                             />

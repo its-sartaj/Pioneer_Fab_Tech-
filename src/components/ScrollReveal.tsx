@@ -97,7 +97,11 @@ const UNREVEALED_SELECTOR =
  */
 export const useGlobalScrollReveal = (triggerKey?: unknown) => {
   useEffect(() => {
-    if (!('IntersectionObserver' in window)) {
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduced || !('IntersectionObserver' in window)) {
       document.querySelectorAll(REVEAL_SELECTOR).forEach((el) => el.classList.add('is-revealed'));
       return;
     }
@@ -113,7 +117,7 @@ export const useGlobalScrollReveal = (triggerKey?: unknown) => {
       },
       {
         threshold: 0.01,
-        rootMargin: '40px 0px -12px 0px',
+        rootMargin: '0px 0px 80px 0px',
       }
     );
 
@@ -122,19 +126,30 @@ export const useGlobalScrollReveal = (triggerKey?: unknown) => {
 
     const observeAll = () => {
       const targets = document.querySelectorAll(UNREVEALED_SELECTOR);
-      const viewportBottom = window.innerHeight * 0.98;
+      if (targets.length === 0) return;
 
+      const viewportBottom = window.innerHeight + 60;
+      const toRevealImmediately: Element[] = [];
+      const toObserve: Element[] = [];
+
+      // Read phase: batch geometry reads before any DOM writes to avoid layout thrashing
       targets.forEach((target) => {
         if (observedSet.has(target)) return;
         const rect = target.getBoundingClientRect();
-
         if (rect.top <= viewportBottom) {
-          // Already in view or scrolled past on initial load / back navigation
-          target.classList.add('is-revealed');
+          toRevealImmediately.push(target);
         } else {
-          observedSet.add(target);
-          observer.observe(target);
+          toObserve.push(target);
         }
+      });
+
+      // Write phase
+      toRevealImmediately.forEach((target) => {
+        target.classList.add('is-revealed');
+      });
+      toObserve.forEach((target) => {
+        observedSet.add(target);
+        observer.observe(target);
       });
     };
 
@@ -142,21 +157,25 @@ export const useGlobalScrollReveal = (triggerKey?: unknown) => {
     observeAll();
     const timer = setTimeout(observeAll, 140);
 
-    // Watch ONLY structural DOM additions (skip counter text ticks & attribute flips)
+    // Watch ONLY structural DOM additions that contain unrevealed elements
     const mutationObserver = new MutationObserver((mutations) => {
-      let hasNewElements = false;
+      let hasRevealCandidate = false;
       for (let i = 0; i < mutations.length; i++) {
         const added = mutations[i].addedNodes;
         for (let j = 0; j < added.length; j++) {
-          if (added[j].nodeType === 1) {
-            hasNewElements = true;
-            break;
+          const node = added[j];
+          if (node.nodeType === 1) {
+            const el = node as Element;
+            if (el.matches(UNREVEALED_SELECTOR) || el.querySelector(UNREVEALED_SELECTOR)) {
+              hasRevealCandidate = true;
+              break;
+            }
           }
         }
-        if (hasNewElements) break;
+        if (hasRevealCandidate) break;
       }
 
-      if (hasNewElements && pendingObserveRaf === null) {
+      if (hasRevealCandidate && pendingObserveRaf === null) {
         pendingObserveRaf = requestAnimationFrame(() => {
           pendingObserveRaf = null;
           observeAll();

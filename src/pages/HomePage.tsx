@@ -28,31 +28,63 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
         <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/90 shadow-sm reveal-on-scroll">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             
-            {/* Left Column: Company Profile & About Us Text */}
+            {/* Left Column: Company Profile Text */}
             <div className="lg:col-span-7 space-y-5">
-              <div className="reveal-word">
-                <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+              <div className="space-y-1.5 reveal-word">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
                   PIONEER FAB TECH
-                </h1>
+                </h2>
+                <div className="pt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1">
+                  <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#d95800]">
+                    COMPANY PROFILE
+                  </span>
+                </div>
+                <p className="text-xs sm:text-sm font-bold text-slate-700 tracking-tight">
+                  Metal Products Trading | Architectural &amp; Industrial Fabrication
+                </p>
               </div>
 
-              <div className="space-y-4 text-slate-600 text-sm sm:text-[15px] leading-relaxed reveal-word delay-150">
+              <div className="space-y-3.5 text-slate-600 text-sm sm:text-[15px] leading-relaxed reveal-word delay-150">
+                <h3 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
+                  Company Overview
+                </h3>
                 <p>
-                  Pioneer Fab Tech is a professionally driven architectural and industrial metal fabrication company specializing in delivering high-quality, precision-engineered fabrication solutions for modern infrastructure, commercial developments and industrial applications.
+                  Pioneer Fab Tech is a diversified business enterprise engaged in the trading and supply of industrial metal products, along with architectural and industrial fabrication solutions. The company caters to a broad spectrum of requirements across engineering, construction, infrastructure, commercial and industrial sectors.
                 </p>
                 <p>
-                  With a strong focus on innovation, craftsmanship and technical excellence, we provide comprehensive fabrication services that combine structural strength, functional performance and contemporary aesthetics.
+                  With two specialized business divisions, Pioneer Fab Tech brings together an extensive range of metal materials and customized fabrication capabilities under one business identity.
                 </p>
                 <p>
-                  Our expertise spans architectural metalwork, customized steel fabrication, advanced laser cutting, glass and stainless-steel installations, and specialized industrial fabrication. From concept development and customized manufacturing to fabrication and installation, we aim to deliver solutions that meet the unique requirements of every project.
+                  Our trading division deals in a comprehensive selection of stainless steel and non-ferrous metal products, including sheets, coils, pipes, tubes, flanges, fittings, bars and other industrial materials.
                 </p>
                 <p>
-                  At Pioneer Fab Tech, we believe that every structure deserves precision, durability and attention to detail. Our commitment is to provide dependable workmanship, quality materials and professional service at every stage of execution.
+                  Our fabrication division undertakes architectural and industrial metalwork, including spiral and helical staircases, CNC laser-cut decorative partitions, commercial glass facades, elevator portal cladding, stainless steel and glass railings, handrails and heavy industrial fabrication.
+                </p>
+              </div>
+
+              <div className="space-y-3 pt-2 border-t border-slate-100 text-slate-600 text-sm sm:text-[15px] leading-relaxed reveal-word delay-200">
+                <h3 className="text-sm sm:text-base font-extrabold uppercase tracking-wide text-[#d95800]">
+                  OUR BUSINESS COMMITMENT
+                </h3>
+                <p>
+                  Pioneer Fab Tech is committed to providing dependable material sourcing and customized fabrication solutions with a focus on product specifications, workmanship, precision and customer requirements.
+                </p>
+                <p>
+                  We aim to establish lasting business relationships through professional service, responsible business practices and consistent attention to quality.
+                </p>
+              </div>
+
+              <div className="pt-2 border-l-4 border-[#d95800] pl-4 reveal-word delay-200">
+                <div className="text-xs sm:text-sm font-black uppercase tracking-wider text-slate-900">
+                  PIONEER FAB TECH
+                </div>
+                <p className="text-sm font-bold text-[#c95100]">
+                  Complete Metal Products &amp; Fabrication Solutions.
                 </p>
               </div>
 
               {/* About Us Action Button - Navigates to About page on click */}
-              <div className="pt-3 reveal-word delay-200">
+              <div className="pt-2 reveal-word delay-200">
                 <a
                   href="#about"
                   onClick={(e) => {
@@ -61,10 +93,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       onNavigate('about');
                     }
                   }}
-                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md hover:shadow-lg hover:translate-x-0.5 active:translate-x-0 group"
+                  className="inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition-[transform,background-color,box-shadow] duration-250 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer shadow-md hover:shadow-lg hover:translate-x-0.5 active:translate-x-0 group"
                 >
                   <span>About Us</span>
-                  <ArrowRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-4 h-4 text-amber-400 group-hover:translate-x-1 transition-transform duration-250 ease-[cubic-bezier(0.22,1,0.36,1)]" />
                 </a>
               </div>
             </div>
@@ -75,7 +107,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 <img 
                   src="/assets/images/homepage_architectural_staircase_1794246211574.jpg" 
                   alt="Pioneer Fab Tech Architectural Stainless Steel Spiral & Helical Staircase Engineering" 
-                  className="w-full h-[340px] sm:h-[480px] lg:h-[560px] object-cover group-hover:scale-103 transition-transform duration-500"
+                  className="w-full h-[340px] sm:h-[480px] lg:h-[620px] object-cover group-hover:scale-103 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu"
                   loading="eager"
                   decoding="async"
                 />
@@ -105,14 +137,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 <div
                   key={service.id}
                   onClick={() => onNavigate('services', service.id)}
-                  className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-[0_8px_24px_rgba(120,40,0,0.2)] hover:shadow-[0_14px_32px_rgba(100,35,0,0.32)] transition-all duration-300 hover:-translate-y-1 cursor-pointer select-none snap-start flex flex-col justify-between"
+                  className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-[0_8px_24px_rgba(120,40,0,0.2)] hover:shadow-[0_14px_32px_rgba(100,35,0,0.32)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 cursor-pointer select-none flex flex-col justify-between transform-gpu"
                 >
                   {/* Clean Rectangular Image Container with White Framing */}
                   <div className="w-full aspect-[4/3] overflow-hidden bg-slate-100">
                     <img 
                       src={service.heroImage} 
                       alt={service.title} 
-                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu"
                       draggable={false}
                       loading="lazy"
                       decoding="async"
@@ -206,7 +238,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               <div key={card.num} className={`reveal-on-scroll ${card.delayClass} flex`}>
                 <div
                   onClick={() => setActiveWhyCard((prev) => (prev === card.num ? null : card.num))}
-                  className={`group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between cursor-pointer w-full ${
+                  className={`group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer w-full transform-gpu ${
                     isTouchActive
                       ? 'is-touch-active border-[#ea6800] shadow-[0_16px_42px_rgba(184,68,0,0.32)] -translate-y-1'
                       : 'border-slate-100/90'
@@ -217,7 +249,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
 
                   <div className="relative z-10">
                     <div className="flex items-start justify-between">
-                      <div className={`transition-all duration-300 group-hover:scale-110 origin-left ${isTouchActive ? 'text-white scale-110' : 'text-[#d95800] group-hover:text-white'}`}>
+                      <div className={`transition-[transform,color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-110 origin-left ${isTouchActive ? 'text-white scale-110' : 'text-[#d95800] group-hover:text-white'}`}>
                         {card.icon}
                       </div>
                       <span className={`text-6xl sm:text-7xl font-bold transition-colors duration-300 select-none leading-none tracking-tighter ${isTouchActive ? 'text-white/25' : 'text-slate-100/90 group-hover:text-white/25'}`}>
@@ -318,14 +350,14 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 <div
                   key={item.id}
                   onClick={() => onNavigate('materials', item.id)}
-                  className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-[0_8px_24px_rgba(120,40,0,0.2)] hover:shadow-[0_14px_32px_rgba(100,35,0,0.32)] transition-all duration-300 hover:-translate-y-1 cursor-pointer select-none snap-start flex flex-col"
+                  className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-[0_8px_24px_rgba(120,40,0,0.2)] hover:shadow-[0_14px_32px_rgba(100,35,0,0.32)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 cursor-pointer select-none flex flex-col transform-gpu"
                 >
                   {/* Clean Rectangular Image Container with White Framing */}
                   <div className="w-full aspect-[4/3] overflow-hidden bg-slate-100">
                     <img 
                       src={item.image} 
                       alt={item.title} 
-                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu"
                       draggable={false}
                       loading="lazy"
                       decoding="async"

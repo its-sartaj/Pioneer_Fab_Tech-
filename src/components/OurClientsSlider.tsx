@@ -176,9 +176,12 @@ export const OurClientsSlider: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [touchedIdx, setTouchedIdx] = useState<number | null>(null);
+  const [dragOffsetPx, setDragOffsetPx] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const lastWidthRef = useRef<number>(0);
   const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const isHorizontalSwipeRef = useRef<boolean | null>(null);
   const touchResumeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [cardWidth, setCardWidth] = useState(280);
   const gap = 24;
@@ -236,7 +239,10 @@ export const OurClientsSlider: React.FC = () => {
 
   // Slide smoothly every 2.8s when visible & idle
   useEffect(() => {
-    if (isPaused || !isVisible) return;
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (isPaused || !isVisible || prefersReduced) return;
 
     const timer = setInterval(() => {
       if (document.hidden) return;
@@ -262,19 +268,43 @@ export const OurClientsSlider: React.FC = () => {
     };
   }, []);
 
-  // Touch swipe support on phones
+  // Live finger-tracking touch swipe on phones without blocking vertical scroll
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartXRef.current = e.touches[0]?.clientX ?? null;
+    touchStartYRef.current = e.touches[0]?.clientY ?? null;
+    isHorizontalSwipeRef.current = null;
     if (touchResumeTimerRef.current) clearTimeout(touchResumeTimerRef.current);
     setIsPaused(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const x = e.touches[0]?.clientX ?? touchStartXRef.current;
+    const y = e.touches[0]?.clientY ?? touchStartYRef.current;
+    const dx = x - touchStartXRef.current;
+    const dy = y - touchStartYRef.current;
+
+    if (isHorizontalSwipeRef.current === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) {
+      isHorizontalSwipeRef.current = Math.abs(dx) > Math.abs(dy);
+    }
+
+    if (isHorizontalSwipeRef.current) {
+      setIsTransitionEnabled(false);
+      setDragOffsetPx(Math.max(-cardWidth * 0.9, Math.min(cardWidth * 0.9, dx)));
+    }
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (touchStartXRef.current !== null) {
       const deltaX = (e.changedTouches[0]?.clientX ?? touchStartXRef.current) - touchStartXRef.current;
       touchStartXRef.current = null;
+      touchStartYRef.current = null;
+      isHorizontalSwipeRef.current = null;
+
+      setIsTransitionEnabled(true);
+      setDragOffsetPx(0);
+
       if (Math.abs(deltaX) > 40) {
-        setIsTransitionEnabled(true);
         if (deltaX < 0) {
           setOffsetIndex((prev) => (prev >= total ? 1 : prev + 1));
         } else {
@@ -285,6 +315,8 @@ export const OurClientsSlider: React.FC = () => {
     if (touchResumeTimerRef.current) clearTimeout(touchResumeTimerRef.current);
     touchResumeTimerRef.current = setTimeout(() => setIsPaused(false), 2600);
   };
+
+  const translateX = -(offsetIndex * (cardWidth + gap)) + dragOffsetPx;
 
   return (
     <section className="py-12 sm:py-16 bg-white overflow-hidden">
@@ -304,17 +336,18 @@ export const OurClientsSlider: React.FC = () => {
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
           onTouchCancel={handleTouchEnd}
         >
           <div
             onTransitionEnd={handleTransitionEnd}
             className={`flex transform-gpu ${
-              isTransitionEnabled ? 'transition-transform duration-600 ease-out' : ''
+              isTransitionEnabled ? 'transition-transform duration-[620ms] ease-[cubic-bezier(0.22,1,0.36,1)]' : ''
             }`}
             style={{
               gap: `${gap}px`,
-              transform: `translate3d(-${offsetIndex * (cardWidth + gap)}px, 0, 0)`,
+              transform: `translate3d(${translateX}px, 0, 0)`,
             }}
           >
             {slidingTrack.map((client, idx) => {
@@ -324,7 +357,7 @@ export const OurClientsSlider: React.FC = () => {
                   key={`${client.id}-${idx}`}
                   onClick={() => setTouchedIdx((prev) => (prev === idx ? null : idx))}
                   style={{ width: `${cardWidth}px` }}
-                  className={`relative overflow-hidden shrink-0 bg-white rounded-2xl border p-6 sm:p-7 flex items-center justify-center min-h-[150px] sm:min-h-[175px] shadow-xs hover:shadow-xl hover:shadow-orange-950/20 transition-all duration-300 group hover:-translate-y-1.5 select-none cursor-pointer ${
+                  className={`relative overflow-hidden shrink-0 bg-white rounded-2xl border p-6 sm:p-7 flex items-center justify-center min-h-[150px] sm:min-h-[175px] shadow-xs hover:shadow-xl hover:shadow-orange-950/20 transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group hover:-translate-y-1.5 select-none cursor-pointer ${
                     isTouchFilled
                       ? 'is-touch-active border-[#c2410c] -translate-y-1'
                       : 'border-slate-700/80 hover:border-[#c2410c]'

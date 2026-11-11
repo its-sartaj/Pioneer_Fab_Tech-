@@ -12,6 +12,7 @@ import { COMPANY_INFO } from '../data/siteData';
 import { PageId } from './Navbar';
 import { WhatsAppIcon } from './FloatingActions';
 import { useIsMobileView } from '../utils/useIsMobileView';
+import { smoothScrollTo } from '../utils/smoothScroll';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -85,7 +86,7 @@ const SafetyIcon: React.FC<{ className?: string }> = ({ className = "w-3.5 h-3.5
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   const isMobileView = useIsMobileView(768);
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    smoothScrollTo(0);
   };
 
   return (
