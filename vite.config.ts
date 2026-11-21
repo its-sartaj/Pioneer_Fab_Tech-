@@ -5,7 +5,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig(({ mode }) => {
   const isProd = mode === 'production';
-  const base = process.env.VITE_BASE_PATH || (isProd ? '/Pioneer_Fab_Tech-/' : '/');
+  const base = process.env.VITE_BASE_PATH || '/';
 
   return {
     base,
@@ -15,10 +15,13 @@ export default defineConfig(({ mode }) => {
       {
         name: 'asset-base-rewriter',
         transformIndexHtml(html) {
-          return html.replace(/(href|src)=["']\/assets\//g, `$1="${base}assets/`);
+          if (base !== '/') {
+            return html.replace(/(href|src)=["']\/assets\//g, `$1="${base}assets/`);
+          }
+          return html;
         },
         transform(code, id) {
-          if (isProd && (id.endsWith('.tsx') || id.endsWith('.ts'))) {
+          if (isProd && base !== '/' && (id.endsWith('.tsx') || id.endsWith('.ts'))) {
             return code.replace(/(['"])\/assets\//g, `$1${base}assets/`);
           }
         },
