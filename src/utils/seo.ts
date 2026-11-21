@@ -12,7 +12,7 @@ const BASE_DOMAIN = 'https://pioneerfabtech.com';
 
 const PAGE_SEO_DATA: Record<PageId, PageMetadata> = {
   home: {
-    title: 'Pioneer Fab Tech - Industrial & Architectural Metal Fabrication',
+    title: 'Pioneer Fab Tech | Metal Fabrication, Laser Cutting & SS Railings in Mumbai, Vasai',
     description: 'Pioneer Fab Tech is a premier industrial & architectural metal fabrication company in Mumbai & Vasai-Virar with 15+ years experience. Specializing in spiral staircases, laser cutting, CNC bending, SS & glass railings, architectural facades, and luxury lift cladding. Call +91 91722 09282.',
     keywords: 'metal fabrication Mumbai, laser cutting Vasai Virar, spiral staircase fabrication Mumbai, SS railing manufacturers, architectural metal facade Mumbai, industrial sheet metal fabrication, CNC bending Vasai, Hyatt hotel fabrication contractor, stainless steel fabrication, heavy steel sheds Palghar',
     canonical: `${BASE_DOMAIN}/`,
