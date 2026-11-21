@@ -87,7 +87,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
       <section className="relative py-14 sm:py-18 bg-slate-900 text-white overflow-hidden text-center">
         <img
           src="/assets/achievements_bg.jpg"
-          alt="Material Supply Banner"
+          alt="Pioneer Fab Tech Prime Certified Stainless Steel & Industrial Metal Material Supply"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />

@@ -143,7 +143,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   <div className="w-full aspect-[4/3] overflow-hidden bg-slate-100">
                     <img 
                       src={service.heroImage} 
-                      alt={service.title} 
+                      alt={`${service.title} - Pioneer Fab Tech Metal Fabrication Mumbai`} 
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu"
                       draggable={false}
                       loading="lazy"
@@ -356,7 +356,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   <div className="w-full aspect-[4/3] overflow-hidden bg-slate-100">
                     <img 
                       src={item.image} 
-                      alt={item.title} 
+                      alt={`${item.title} - Pioneer Fab Tech Industrial Material Supply`} 
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu"
                       draggable={false}
                       loading="lazy"

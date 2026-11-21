@@ -52,7 +52,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
       <div className="relative py-14 sm:py-18 bg-slate-900 overflow-hidden text-center">
         <img
           src="/assets/achievements_bg.jpg"
-          alt="About Us Header"
+          alt="About Pioneer Fab Tech - Industrial & Architectural Metal Fabrication Specialist Mumbai"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />

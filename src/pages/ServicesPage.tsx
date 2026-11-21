@@ -49,7 +49,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate, selected
       <div className="relative py-14 sm:py-18 bg-slate-900 overflow-hidden text-center">
         <img
           src="/assets/achievements_bg.jpg"
-          alt="Our Services Header"
+          alt="Pioneer Fab Tech Precision Metal Fabrication Services in Mumbai and Vasai"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
@@ -110,7 +110,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate, selected
               <div className="relative aspect-4/3 rounded-2xl overflow-hidden shadow-md bg-slate-100 border border-slate-200">
                 <img 
                   src={activeService.heroImage} 
-                  alt={activeService.title} 
+                  alt={`${activeService.title} - ${activeService.category} by Pioneer Fab Tech Mumbai`} 
                   decoding="async"
                   className="w-full h-full object-cover"
                 />

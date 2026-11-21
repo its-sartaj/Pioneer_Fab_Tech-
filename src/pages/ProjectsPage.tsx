@@ -95,7 +95,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
       <div className="relative py-14 sm:py-18 bg-slate-900 overflow-hidden text-center">
         <img
           src="/assets/achievements_bg.jpg"
-          alt="Our Projects Header"
+          alt="Pioneer Fab Tech Completed Hotel & Industrial Fabrication Projects Portfolio"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
@@ -160,7 +160,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                 <div className="relative aspect-[16/10] sm:aspect-[21/10] w-full bg-slate-900 overflow-hidden">
                   <img 
                     src={currentProject.image} 
-                    alt={currentProject.title}
+                    alt={`${currentProject.title} in ${currentProject.location} - ${currentProject.categoryLabel} by Pioneer Fab Tech`}
                     decoding="async"
                     className="w-full h-full object-cover"
                   />
@@ -361,7 +361,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                       <div className="relative aspect-4/3 overflow-hidden bg-slate-100">
                         <img 
                           src={project.image} 
-                          alt={project.title} 
+                          alt={`${project.title} - ${project.categoryLabel} by Pioneer Fab Tech`} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu"
                           loading="lazy"
                           decoding="async"

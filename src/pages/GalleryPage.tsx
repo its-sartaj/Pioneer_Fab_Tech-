@@ -310,7 +310,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
         >
           <img
             src={GALLERY_ITEMS[selectedPhotoIndex].src}
-            alt="Enlarged Gallery View"
+            alt={`Pioneer Fab Tech architectural & industrial metal fabrication project ${selectedPhotoIndex + 1} Mumbai Vasai`}
             key={selectedPhotoIndex}
             decoding="async"
             onClick={(e) => e.stopPropagation()}
@@ -341,7 +341,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
         {/* Background photo */}
         <img
           src="/assets/achievements_bg.jpg"
-          alt="Gallery Banner"
+          alt="Pioneer Fab Tech Architectural & Industrial Metal Fabrication Project Gallery"
           decoding="async"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
@@ -403,7 +403,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
                     <div className="gallery-parallax-wrap w-full h-full top-0 md:h-[114%] md:-top-[7%] relative transform-gpu">
                       <img
                         src={item.src}
-                        alt={`Fabrication Work ${idx + 1}`}
+                        alt={`Pioneer Fab Tech metal fabrication work ${idx + 1} - Mumbai Vasai`}
                         className="w-full h-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04] select-none transform-gpu"
                         loading={idx < 6 ? 'eager' : 'lazy'}
                         decoding="async"

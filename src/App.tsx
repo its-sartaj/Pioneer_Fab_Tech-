@@ -7,6 +7,7 @@ import { PageSkeleton } from './components/PageSkeleton';
 import { useGlobalScrollReveal } from './components/ScrollReveal';
 import { initSmoothScroll, smoothScrollTo } from './utils/smoothScroll';
 import { pageLoaders, prefetchIdlePages } from './utils/prefetchPages';
+import { updatePageSeo } from './utils/seo';
 
 // Code-split secondary pages (especially GSAP-powered Gallery) for fast mobile initial load
 const AboutPage = lazy(() => pageLoaders.about().then((m) => ({ default: m.AboutPage })));
@@ -80,6 +81,11 @@ export default function App() {
 
   // Initialize smooth scroll reveal animations across all pages
   useGlobalScrollReveal(`${currentPage}:${selectedItemTarget || ''}`);
+
+  // Dynamic SEO metadata updates (document.title, description, og, canonical) on route change
+  useEffect(() => {
+    updatePageSeo(currentPage, selectedItemTarget);
+  }, [currentPage, selectedItemTarget]);
 
   // Initialize silky desktop wheel inertia & idle chunk prefetching
   useEffect(() => {
