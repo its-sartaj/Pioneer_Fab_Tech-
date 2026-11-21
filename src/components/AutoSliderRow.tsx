@@ -87,12 +87,16 @@ export const AutoSliderRow: React.FC<AutoSliderRowProps> = ({
     return () => observer.disconnect();
   }, []);
 
-  // Auto-slide effect: smooth eased glide when idle, never fights touch/drag/wheel
+  // Auto-slide effect: smooth eased glide when idle on desktop; yields 100% to native touch on phones
   useEffect(() => {
     const prefersReduced =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    if (isPaused || !isVisible || prefersReduced) return;
+    const isMobileDevice =
+      typeof window !== 'undefined' &&
+      (window.matchMedia?.('(max-width: 768px)').matches || ('ontouchstart' in window && window.matchMedia?.('(pointer: coarse)').matches));
+
+    if (isPaused || !isVisible || prefersReduced || isMobileDevice) return;
 
     const timer = setInterval(() => {
       const el = containerRef.current;

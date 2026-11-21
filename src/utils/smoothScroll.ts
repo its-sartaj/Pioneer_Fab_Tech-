@@ -184,6 +184,14 @@ export const smoothScrollIntoView = (element: HTMLElement | null, extraOffset = 
 export const initSmoothScroll = (): (() => void) => {
   if (typeof window === 'undefined') return () => {};
 
+  // Bypass on mobile & touch devices: touch devices have native 120Hz momentum scrolling in hardware
+  const isTouchDevice =
+    ('ontouchstart' in window || (typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0)) &&
+    window.matchMedia?.('(pointer: coarse)').matches;
+  if (isTouchDevice) {
+    return () => {};
+  }
+
   isInitialized = true;
   syncSmoothScroll(window.scrollY);
 

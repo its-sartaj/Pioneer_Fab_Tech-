@@ -212,7 +212,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
                     isActive || isExiting
                       ? 'transition-transform duration-[4500ms] ease-out'
                       : 'transition-none'
-                  } ${isZoomed ? 'scale-[1.07] will-change-transform' : 'scale-100'}`}
+                  } ${isZoomed ? 'sm:scale-[1.07] sm:will-change-transform' : 'scale-100'}`}
                 />
               </picture>
             </div>

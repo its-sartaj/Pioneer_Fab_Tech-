@@ -221,35 +221,35 @@
 .delay-500 { transition-delay: 330ms; }
 .delay-600 { transition-delay: 380ms; }
 
-/* Brisk, ultra-responsive mobile reveal timing & shorter offsets */
-@media (max-width: 767px) {
-  .reveal-on-scroll {
-    transform: translate3d(0, 14px, 0);
-    transition-duration: 0.38s;
+/* Butter-smooth, zero-jank mobile scroll: content is 100% visible immediately without mid-scroll transform jank */
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
-  .reveal-word {
-    transform: translate3d(0, 10px, 0);
-    transition-duration: 0.36s;
-  }
-  .reveal-image {
-    transform: translate3d(0, 12px, 0) scale3d(0.988, 0.988, 1);
-    transition-duration: 0.4s;
-  }
-  .reveal-from-left {
-    transform: translate3d(-12px, 0, 0);
-    transition-duration: 0.38s;
-  }
+  .reveal-on-scroll,
+  .reveal-word,
+  .reveal-image,
+  .reveal-from-left,
   .reveal-from-right {
-    transform: translate3d(12px, 0, 0);
-    transition-duration: 0.38s;
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
-  .delay-75  { transition-delay: 35ms; }
-  .delay-150 { transition-delay: 70ms; }
-  .delay-200 { transition-delay: 100ms; }
-  .delay-300 { transition-delay: 130ms; }
-  .delay-400 { transition-delay: 160ms; }
-  .delay-500 { transition-delay: 190ms; }
-  .delay-600 { transition-delay: 220ms; }
+  .delay-75,
+  .delay-150,
+  .delay-200,
+  .delay-300,
+  .delay-400,
+  .delay-500,
+  .delay-600 {
+    transition-delay: 0ms !important;
+  }
+  /* Optimize heavy below-the-fold content rendering for 60/120fps scrolling */
+  section:not(:first-of-type) {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 480px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

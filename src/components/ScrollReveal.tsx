@@ -100,12 +100,17 @@ export const useGlobalScrollReveal = (triggerKey?: unknown) => {
     const prefersReduced =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const isMobile =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(max-width: 768px)').matches;
 
-    if (prefersReduced || !('IntersectionObserver' in window)) {
+    // On mobile devices and reduced-motion, reveal all immediately with zero CPU/layout overhead
+    if (prefersReduced || isMobile || !('IntersectionObserver' in window)) {
       document.querySelectorAll(REVEAL_SELECTOR).forEach((el) => el.classList.add('is-revealed'));
       return;
     }
 
+    const observedSet = new WeakSet<Element>();
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -116,78 +121,28 @@ export const useGlobalScrollReveal = (triggerKey?: unknown) => {
         });
       },
       {
-        threshold: 0.01,
-        rootMargin: '0px 0px 80px 0px',
+        threshold: 0.05,
+        rootMargin: '0px 0px 100px 0px',
       }
     );
 
-    const observedSet = new WeakSet<Element>();
-    let pendingObserveRaf: number | null = null;
-
     const observeAll = () => {
       const targets = document.querySelectorAll(UNREVEALED_SELECTOR);
-      if (targets.length === 0) return;
-
-      const viewportBottom = window.innerHeight + 60;
-      const toRevealImmediately: Element[] = [];
-      const toObserve: Element[] = [];
-
-      // Read phase: batch geometry reads before any DOM writes to avoid layout thrashing
-      targets.forEach((target) => {
-        if (observedSet.has(target)) return;
-        const rect = target.getBoundingClientRect();
-        if (rect.top <= viewportBottom) {
-          toRevealImmediately.push(target);
-        } else {
-          toObserve.push(target);
+      for (let i = 0; i < targets.length; i++) {
+        const target = targets[i];
+        if (!observedSet.has(target)) {
+          observedSet.add(target);
+          observer.observe(target);
         }
-      });
-
-      // Write phase
-      toRevealImmediately.forEach((target) => {
-        target.classList.add('is-revealed');
-      });
-      toObserve.forEach((target) => {
-        observedSet.add(target);
-        observer.observe(target);
-      });
+      }
     };
 
     // Initial observation
     observeAll();
-    const timer = setTimeout(observeAll, 140);
-
-    // Watch ONLY structural DOM additions that contain unrevealed elements
-    const mutationObserver = new MutationObserver((mutations) => {
-      let hasRevealCandidate = false;
-      for (let i = 0; i < mutations.length; i++) {
-        const added = mutations[i].addedNodes;
-        for (let j = 0; j < added.length; j++) {
-          const node = added[j];
-          if (node.nodeType === 1) {
-            const el = node as Element;
-            if (el.matches(UNREVEALED_SELECTOR) || el.querySelector(UNREVEALED_SELECTOR)) {
-              hasRevealCandidate = true;
-              break;
-            }
-          }
-        }
-        if (hasRevealCandidate) break;
-      }
-
-      if (hasRevealCandidate && pendingObserveRaf === null) {
-        pendingObserveRaf = requestAnimationFrame(() => {
-          pendingObserveRaf = null;
-          observeAll();
-        });
-      }
-    });
-    mutationObserver.observe(document.body, { childList: true, subtree: true });
+    const timer = setTimeout(observeAll, 120);
 
     return () => {
       clearTimeout(timer);
-      if (pendingObserveRaf !== null) cancelAnimationFrame(pendingObserveRaf);
-      mutationObserver.disconnect();
       observer.disconnect();
     };
   }, [triggerKey]);
