@@ -150,7 +150,9 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 alt="Pioneer Fab Tech - Innovation Precision Excellence" 
                 loading="lazy"
                 decoding="async"
-                className="h-12 sm:h-14 w-auto object-contain max-w-full"
+                width="210"
+                height="70"
+                className="h-12 sm:h-14 w-auto aspect-[3/1] object-contain max-w-full"
               />
             </div>
 

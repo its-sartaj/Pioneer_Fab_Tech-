@@ -264,7 +264,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                 src={COMPANY_INFO.logoUrl} 
                 alt="Pioneer Fab Tech - Innovation Precision Excellence" 
                 decoding="async"
-                className="h-11 sm:h-12 lg:h-14 w-auto max-w-[220px] sm:max-w-[250px] lg:max-w-[270px] object-contain transition-transform duration-200 hover:scale-[1.01]"
+                width="240"
+                height="80"
+                className="h-11 sm:h-12 lg:h-14 w-auto max-w-[220px] sm:max-w-[250px] lg:max-w-[270px] aspect-[3/1] object-contain transition-transform duration-200 hover:scale-[1.01]"
               />
             </button>
 
@@ -438,7 +440,9 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
               src={COMPANY_INFO.logoUrl} 
               alt="Pioneer Fab Tech" 
               decoding="async"
-              className="h-9 sm:h-10 w-auto object-contain"
+              width="210"
+              height="70"
+              className="h-9 sm:h-10 w-auto aspect-[3/1] object-contain"
             />
           </div>
           <button 

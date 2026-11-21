@@ -8,6 +8,8 @@ interface HeroSliderProps {
 interface SlideItem {
   id: number;
   image: string;
+  imageMob: string;
+  imageDesk: string;
   badge: string;
   headline: string;
   description: string;
@@ -18,7 +20,9 @@ interface SlideItem {
 const SLIDES: SlideItem[] = [
   {
     id: 1,
-    image: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.00_PM__1__3cfa08e4.jpeg',
+    image: '/assets/aistudio/hero_slide_1_desk.webp',
+    imageMob: '/assets/aistudio/hero_slide_1_mob.webp',
+    imageDesk: '/assets/aistudio/hero_slide_1_desk.webp',
     badge: 'Architectural Structural Fabrication',
     headline: 'Architectural Steel & Precision Spiral Staircases',
     description: 'Bespoke helical staircases, double-height atrium steelwork, and floor-to-ceiling glass lobby installations engineered with IS 2062 heavy structural steel and master craftsmanship.',
@@ -27,7 +31,9 @@ const SLIDES: SlideItem[] = [
   },
   {
     id: 2,
-    image: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.01_PM_5eb73795.jpeg',
+    image: '/assets/aistudio/hero_slide_2_desk.webp',
+    imageMob: '/assets/aistudio/hero_slide_2_mob.webp',
+    imageDesk: '/assets/aistudio/hero_slide_2_desk.webp',
     badge: 'CNC Fiber Laser & PVD Coating',
     headline: 'Luxury CNC Laser Cut Jali & Decorative Partitions',
     description: 'Sub-millimeter CNC fiber laser cut metal screens, luxury titanium PVD gold partitions, and architectural geometric room dividers for premium residences and hospitality interiors.',
@@ -36,7 +42,9 @@ const SLIDES: SlideItem[] = [
   },
   {
     id: 3,
-    image: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.04_PM__1__313234b2.jpeg',
+    image: '/assets/aistudio/hero_slide_3_desk.webp',
+    imageMob: '/assets/aistudio/hero_slide_3_mob.webp',
+    imageDesk: '/assets/aistudio/hero_slide_3_desk.webp',
     badge: 'Commercial Facades & Glazing',
     headline: 'Commercial Glass Facades & Boutique Storefronts',
     description: 'Heavy-duty stainless steel & aluminium architectural storefronts, frameless structural glass facades, and automated luxury commercial entrance systems engineered for lasting durability.',
@@ -49,6 +57,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState<number | null>(null);
   const [hasEntered, setHasEntered] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const [direction, setDirection] = useState<'up' | 'down'>('up');
   const [isVisible, setIsVisible] = useState(true);
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -65,6 +74,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
   }, []);
 
   const advanceSlide = (getNext: (curr: number) => number, nextDir: 'up' | 'down') => {
+    setHasInteracted(true);
     setCurrentIdx((curr) => {
       const next = getNext(curr);
       if (next !== curr) {
@@ -178,18 +188,33 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
                 isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'
               }`}
             >
-              <img
-                src={slide.image}
-                alt={slide.headline}
-                loading="eager"
-                decoding={idx === 0 ? 'sync' : 'async'}
-                fetchPriority={idx === 0 ? 'high' : 'low'}
-                className={`w-full h-full object-cover object-center sm:object-[center_35%] transform-gpu ${
-                  isActive || isExiting
-                    ? 'transition-transform duration-[4500ms] ease-out'
-                    : 'transition-none'
-                } ${isZoomed ? 'scale-[1.07] will-change-transform' : 'scale-100'}`}
-              />
+              <picture className="w-full h-full block">
+                <source
+                  media="(max-width: 768px)"
+                  srcSet={slide.imageMob}
+                  type="image/webp"
+                />
+                <source
+                  srcSet={slide.imageDesk}
+                  type="image/webp"
+                />
+                <img
+                  src={slide.imageDesk}
+                  srcSet={`${slide.imageMob} 720w, ${slide.imageDesk} 1080w`}
+                  sizes="100vw"
+                  alt={slide.headline}
+                  loading="eager"
+                  decoding={idx === 0 ? 'sync' : 'async'}
+                  fetchPriority={idx === 0 ? 'high' : 'low'}
+                  width="1080"
+                  height="1064"
+                  className={`w-full h-full object-cover object-center sm:object-[center_35%] transform-gpu ${
+                    isActive || isExiting
+                      ? 'transition-transform duration-[4500ms] ease-out'
+                      : 'transition-none'
+                  } ${isZoomed ? 'scale-[1.07] will-change-transform' : 'scale-100'}`}
+                />
+              </picture>
             </div>
           );
         })}
@@ -209,7 +234,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
           {/* Premium Architectural Display Headline */}
           <div 
             key={`title-${currentSlide.id}`}
-            className={direction === 'up' ? 'animate-hero-up' : 'animate-hero-down'}
+            className={hasInteracted ? (direction === 'up' ? 'animate-hero-up' : 'animate-hero-down') : ''}
           >
             <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-[3.85rem] font-bold tracking-tight text-white leading-[1.14]">
               {currentSlide.headline}
@@ -220,7 +245,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
           <p 
             key={`desc-${currentSlide.id}`}
             className={`font-hero-desc text-base sm:text-lg lg:text-[1.125rem] text-slate-200/90 leading-relaxed font-normal max-w-2xl ${
-              direction === 'up' ? 'animate-hero-up' : 'animate-hero-down'
+              hasInteracted ? (direction === 'up' ? 'animate-hero-up' : 'animate-hero-down') : ''
             }`}
           >
             {currentSlide.description}

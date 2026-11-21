@@ -105,11 +105,13 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
             <div className="lg:col-span-5 reveal-from-right delay-200">
               <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl border border-slate-200 group bg-slate-100">
                 <img 
-                  src="/assets/images/homepage_architectural_staircase_1794246211574.jpg" 
+                  src="/assets/images/homepage_architectural_staircase_1794246211574.webp" 
                   alt="Pioneer Fab Tech Architectural Stainless Steel Spiral & Helical Staircase Engineering" 
                   className="w-full h-[340px] sm:h-[480px] lg:h-[620px] object-cover group-hover:scale-103 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] transform-gpu"
-                  loading="eager"
+                  loading="lazy"
                   decoding="async"
+                  width="768"
+                  height="620"
                 />
               </div>
             </div>
@@ -294,57 +296,57 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                 {
                   id: 'ss-pipe-fittings',
                   title: 'Forged Fittings',
-                  image: '/assets/images/precision_pipe_fittings_1793956287823.jpg',
+                  image: '/assets/images/precision_pipe_fittings_1793956287823.webp',
                 },
                 {
                   id: 'ss-flange',
                   title: 'Flanges',
-                  image: '/assets/images/ss_flange_assortment_1794209392457.jpg',
+                  image: '/assets/images/ss_flange_assortment_1794209392457.webp',
                 },
                 {
                   id: 'ss-pipes-tubes',
                   title: 'Pipe & Tubes',
-                  image: '/assets/images/ss_pipes_tubes_1794209432429.jpg',
+                  image: '/assets/images/ss_pipes_tubes_1794209432429.webp',
                 },
                 {
                   id: 'ss-sheet',
                   title: 'SS Sheet',
-                  image: '/assets/images/ss_sheet_stack_1794209390147.jpg',
+                  image: '/assets/images/ss_sheet_stack_1794209390147.webp',
                 },
                 {
                   id: 'ss-coil',
                   title: 'SS Coil',
-                  image: '/assets/images/ss_coil_rolls_1794209391067.jpg',
+                  image: '/assets/images/ss_coil_rolls_1794209391067.webp',
                 },
                 {
                   id: 'copper-bars-sheet',
                   title: 'Copper Bars & Sheet',
-                  image: '/assets/images/copper_bars_sheet_1794209392520.jpg',
+                  image: '/assets/images/copper_bars_sheet_1794209392520.webp',
                 },
                 {
                   id: 'aluminium-sheet-road',
                   title: 'Aluminium Sheet & Rod',
-                  image: '/assets/images/aluminium_sheet_rod_1794209409308.jpg',
+                  image: '/assets/images/aluminium_sheet_rod_1794209409308.webp',
                 },
                 {
                   id: 'titanium-product',
                   title: 'Titanium Product',
-                  image: '/assets/images/titanium_products_1794209411212.jpg',
+                  image: '/assets/images/titanium_products_1794209411212.webp',
                 },
                 {
                   id: 'ss-rounds-bar',
                   title: 'Stainless Steel Rounds Bar',
-                  image: '/assets/images/ss_round_bars_1794209412255.jpg',
+                  image: '/assets/images/ss_round_bars_1794209412255.webp',
                 },
                 {
                   id: 'ss-flat-bar',
                   title: 'Stainless Steel Flat Bar',
-                  image: '/assets/images/ss_flat_bars_1794209411215.jpg',
+                  image: '/assets/images/ss_flat_bars_1794209411215.webp',
                 },
                 {
                   id: 'ss-structure',
                   title: 'Stainless Steel Structure',
-                  image: '/assets/images/ss_structure_beams_1794209453745.jpg',
+                  image: '/assets/images/ss_structure_beams_1794209453745.webp',
                 },
               ].map((item) => (
                 <div
