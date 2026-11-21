@@ -8,7 +8,7 @@ interface PageMetadata {
 }
 
 const SITE_NAME = 'Pioneer Fab Tech';
-const BASE_DOMAIN = 'https://pioneerfabtech.com';
+const BASE_DOMAIN = 'https://www.pioneerfabtech.com';
 
 const PAGE_SEO_DATA: Record<PageId, PageMetadata> = {
   home: {

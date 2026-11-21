@@ -1,5 +1,5 @@
 # Robots.txt for Pioneer Fab Tech
-# https://pioneerfabtech.com/
+# https://www.pioneerfabtech.com/
 
 User-agent: *
 Allow: /
@@ -16,4 +16,4 @@ User-agent: Bingbot
 Allow: /
 
 # Sitemap Location
-Sitemap: https://pioneerfabtech.com/sitemap.xml
+Sitemap: https://www.pioneerfabtech.com/sitemap.xml
