@@ -101,6 +101,10 @@ export function updatePageSeo(page: PageId, projectTitle?: string | null): void 
   setMeta('property', 'og:title', title);
   setMeta('property', 'og:description', meta.description);
   setMeta('property', 'og:url', meta.canonical);
+  setMeta('property', 'og:site_name', SITE_NAME);
+
+  // App & Site Identification
+  setMeta('name', 'application-name', SITE_NAME);
 
   // Twitter Tags
   setMeta('name', 'twitter:title', title);
