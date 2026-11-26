@@ -6,12 +6,7 @@ import {
   X, 
   Menu,
   ChevronRight,
-  ArrowRight,
-  Sparkles,
-  Building2,
-  ShieldCheck,
-  Award,
-  MessageCircle
+  ArrowRight
 } from 'lucide-react';
 import { COMPANY_INFO, SERVICES, PROJECTS, INFRASTRUCTURE_SPECS, OFFICIAL_CERTIFICATES, MATERIAL_SUPPLY_ITEMS } from '../data/siteData';
 import { WhatsAppIcon } from './FloatingActions';
@@ -320,7 +315,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                   >
                     {/* Clean cell link with exact bold typography from reference screenshot */}
                     <a
-                      href={link.id === 'home' ? '#' : `#${link.id}`}
+                      href={link.id === 'home' ? '/' : `/${link.id}`}
                       onClick={(e) => {
                         if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
                           e.preventDefault();
@@ -367,11 +362,17 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                           {subItems.map((item, idx) => {
                             const isItemHovered = currentHoverIdx === idx;
                             return (
-                              <div
+                              <a
                                 key={item.id}
+                                href={`/${item.targetPage}/${item.id}`}
                                 style={{ animationDelay: `${idx * 20}ms` }}
                                 onMouseEnter={() => setHoverIdx(idx)}
-                                onClick={() => handleLinkClick(item.targetPage, item.id)}
+                                onClick={(e) => {
+                                  if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleLinkClick(item.targetPage, item.id);
+                                  }
+                                }}
                                 className={`px-4 py-2.5 border-b border-slate-100 last:border-b-0 flex items-center gap-2.5 cursor-pointer transition-colors duration-150 text-left animate-dropdown-item ${
                                   isItemHovered
                                     ? 'bg-orange-50/90 text-[#d95800] font-bold'
@@ -389,7 +390,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                                 <span className="text-xs leading-snug line-clamp-1">
                                   {item.title}
                                 </span>
-                              </div>
+                              </a>
                             );
                           })}
                         </div>
@@ -406,7 +407,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(true)}
-                className="relative group p-2 rounded-xl bg-slate-900 text-white shadow-md border border-slate-700 hover:border-amber-400 hover:bg-slate-800 transition-[background-color,border-color,transform] duration-200 active:scale-95 cursor-pointer flex items-center justify-center w-10 h-10"
+                className="relative group p-2 rounded-xl bg-slate-900 text-white shadow-md border border-slate-700 hover:border-amber-400 hover:bg-slate-800 transition-[background-color,border-color,transform] duration-200 active:scale-95 cursor-pointer flex items-center justify-center w-12 h-12"
                 aria-label="Open navigation menu"
                 title="Open menu"
               >
@@ -448,7 +449,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
           <button 
             type="button"
             onClick={() => setMobileMenuOpen(false)}
-            className="w-9 h-9 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer"
+            className="w-12 h-12 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer"
             aria-label="Close menu"
           >
             <X className="w-5 h-5" />
@@ -539,9 +540,15 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                       <div className="bg-slate-50/95 border border-slate-200/90 rounded-2xl p-2 shadow-2xs">
                         <div className="space-y-1 max-h-[340px] overflow-y-auto pr-1">
                           {subItems.map((item) => (
-                            <div
+                            <a
                               key={item.id}
-                              onClick={() => handleLinkClick(item.targetPage, item.id)}
+                              href={`/${item.targetPage}/${item.id}`}
+                              onClick={(e) => {
+                                if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                                  e.preventDefault();
+                                  handleLinkClick(item.targetPage, item.id);
+                                }
+                              }}
                               className="px-3.5 py-2.5 rounded-xl bg-white hover:bg-amber-50/80 border border-slate-200/80 hover:border-amber-300 transition-colors duration-150 cursor-pointer flex items-center gap-2.5 group shadow-2xs"
                             >
                               <div className="w-3.5 flex items-center justify-center shrink-0">
@@ -551,7 +558,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                                 {item.title}
                               </span>
                               <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#d95800] group-hover:translate-x-0.5 transition-transform duration-200 shrink-0" />
-                            </div>
+                            </a>
                           ))}
                         </div>
                       </div>

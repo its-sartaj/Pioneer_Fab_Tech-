@@ -40,8 +40,9 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
       {showScrollTop && (
         <div className="relative group">
           <button
+            type="button"
             onClick={onScrollToTop}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 md:backdrop-blur-md text-slate-700 shadow-lg hover:shadow-xl border border-slate-200/90 flex items-center justify-center hover:bg-slate-50 hover:text-slate-950 transition-[transform,background-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 cursor-pointer"
+            className="w-12 h-12 rounded-full bg-white/95 md:backdrop-blur-md text-slate-700 shadow-lg hover:shadow-xl border border-slate-200/90 flex items-center justify-center hover:bg-slate-50 hover:text-slate-950 transition-[transform,background-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-110 active:scale-95 cursor-pointer"
             title="Scroll to Top"
             aria-label="Scroll to top of page"
           >
@@ -73,7 +74,7 @@ export const FloatingActions: React.FC<FloatingActionsProps> = ({
         <div className="absolute bottom-full mb-2.5 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center opacity-0 group-hover:opacity-100 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] pointer-events-none group-hover:-translate-y-1 z-50">
           <div className="px-3 py-1.5 rounded-lg bg-slate-900/95 backdrop-blur-md text-white text-xs font-semibold whitespace-nowrap shadow-xl border border-white/10 flex items-center gap-1.5">
             <Phone className="w-3 h-3 text-blue-400" />
-            <span>Call +91 90295 55233</span>
+            <span>Call {COMPANY_INFO.phone}</span>
           </div>
           <div className="w-2 h-2 bg-slate-900 rotate-45 -mt-1 border-r border-b border-white/10" />
         </div>

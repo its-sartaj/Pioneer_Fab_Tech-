@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { DarkOrangeLiquidFill } from './DarkOrangeLiquidFill';
+import { COMPANY_INFO } from '../data/siteData';
 
 interface AchievementMetric {
   id: string;
@@ -12,21 +13,21 @@ interface AchievementMetric {
 const ACHIEVEMENTS: AchievementMetric[] = [
   {
     id: 'clients',
-    targetCount: 500,
+    targetCount: COMPANY_INFO.happyClients,
     suffix: '+',
     label: 'HAPPY CLIENT',
     icon: 'user',
   },
   {
     id: 'experience',
-    targetCount: 10,
+    targetCount: COMPANY_INFO.experienceYears,
     suffix: '+',
     label: 'YEARS OF EXPERIENCE',
     icon: 'gear-wrench',
   },
   {
     id: 'delivery',
-    targetCount: 1000,
+    targetCount: COMPANY_INFO.deliveredProjects,
     suffix: '+',
     label: 'PROJECT DELIVERY',
     icon: 'vessel',
@@ -246,9 +247,11 @@ export const OurAchievementsSection: React.FC = () => {
 
             return (
               <div key={item.id} className={`reveal-on-scroll ${staggerClass}`}>
-                <div
+                <button
+                  type="button"
                   onClick={() => setActiveCardId((prev) => (prev === item.id ? null : item.id))}
-                  className={`relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border bg-[#0a1d37]/80 md:bg-[#091b34]/75 p-7 sm:p-9 text-center flex flex-col items-center justify-between min-h-[260px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group hover:-translate-y-2 cursor-pointer ${
+                  aria-pressed={isTouchFilled}
+                  className={`w-full relative isolate overflow-hidden rounded-2xl sm:rounded-3xl border bg-[#0a1d37]/80 md:bg-[#091b34]/75 p-7 sm:p-9 text-center flex flex-col items-center justify-between min-h-[260px] sm:min-h-[340px] shadow-xl hover:border-[#ea6800]/90 hover:shadow-[0_14px_38px_rgba(219,93,0,0.45)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group hover:-translate-y-2 cursor-pointer ${
                     isTouchFilled
                       ? 'is-touch-active border-[#ea6800]/90 shadow-[0_14px_38px_rgba(219,93,0,0.45)] -translate-y-1'
                       : 'border-white/35'
@@ -293,7 +296,7 @@ export const OurAchievementsSection: React.FC = () => {
                       {item.label}
                     </h3>
                   </div>
-                </div>
+                </button>
               </div>
             );
           })}

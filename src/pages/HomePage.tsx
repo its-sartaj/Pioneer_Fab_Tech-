@@ -86,7 +86,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               {/* About Us Action Button - Navigates to About page on click */}
               <div className="pt-2 reveal-word delay-200">
                 <a
-                  href="#about"
+                  href="/about"
                   onClick={(e) => {
                     if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
                       e.preventDefault();
@@ -136,9 +136,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <div className="reveal-on-scroll delay-150">
             <AutoSliderRow intervalMs={3200} className="gap-5 sm:gap-6 py-2">
               {SERVICES.map((service) => (
-                <div
+                <a
                   key={service.id}
-                  onClick={() => onNavigate('services', service.id)}
+                  href={`/services/${service.id}`}
+                  draggable={false}
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                      e.preventDefault();
+                      onNavigate('services', service.id);
+                    }
+                  }}
                   className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-[0_8px_24px_rgba(120,40,0,0.2)] hover:shadow-[0_14px_32px_rgba(100,35,0,0.32)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 cursor-pointer select-none flex flex-col justify-between transform-gpu"
                 >
                   {/* Clean Rectangular Image Container with White Framing */}
@@ -159,7 +166,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       {service.title}
                     </h3>
                   </div>
-                </div>
+                </a>
               ))}
             </AutoSliderRow>
           </div>
@@ -238,9 +245,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
               const isTouchActive = activeWhyCard === card.num;
               return (
               <div key={card.num} className={`reveal-on-scroll ${card.delayClass} flex`}>
-                <div
+                <button
+                  type="button"
                   onClick={() => setActiveWhyCard((prev) => (prev === card.num ? null : card.num))}
-                  className={`group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer w-full transform-gpu ${
+                  aria-pressed={isTouchActive}
+                  className={`text-left group relative isolate overflow-hidden bg-white rounded-none sm:rounded-sm p-7 sm:p-9 shadow-[0_10px_35px_rgba(0,0,0,0.06)] border hover:border-[#ea6800] hover:shadow-[0_16px_42px_rgba(184,68,0,0.32)] transition-[transform,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 flex flex-col justify-between cursor-pointer w-full transform-gpu ${
                     isTouchActive
                       ? 'is-touch-active border-[#ea6800] shadow-[0_16px_42px_rgba(184,68,0,0.32)] -translate-y-1'
                       : 'border-slate-100/90'
@@ -265,7 +274,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       {card.description}
                     </p>
                   </div>
-                </div>
+                </button>
               </div>
               );
             })}
@@ -334,7 +343,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   image: '/assets/images/titanium_products_1794209411212.webp',
                 },
                 {
-                  id: 'ss-rounds-bar',
+                  id: 'ss-round-bar',
                   title: 'Stainless Steel Rounds Bar',
                   image: '/assets/images/ss_round_bars_1794209412255.webp',
                 },
@@ -349,9 +358,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   image: '/assets/images/ss_structure_beams_1794209453745.webp',
                 },
               ].map((item) => (
-                <div
+                <a
                   key={item.id}
-                  onClick={() => onNavigate('materials', item.id)}
+                  href={`/materials/${item.id}`}
+                  draggable={false}
+                  onClick={(e) => {
+                    if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                      e.preventDefault();
+                      onNavigate('materials', item.id);
+                    }
+                  }}
                   className="group w-[280px] sm:w-[320px] md:w-[340px] shrink-0 bg-white rounded-md p-3 sm:p-3.5 shadow-[0_8px_24px_rgba(120,40,0,0.2)] hover:shadow-[0_14px_32px_rgba(100,35,0,0.32)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 cursor-pointer select-none flex flex-col transform-gpu"
                 >
                   {/* Clean Rectangular Image Container with White Framing */}
@@ -372,7 +388,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                       {item.title}
                     </h3>
                   </div>
-                </div>
+                </a>
               ))}
             </AutoSliderRow>
           </div>

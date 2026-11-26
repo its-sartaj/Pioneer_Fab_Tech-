@@ -117,7 +117,7 @@ export const ContactPage: React.FC<ContactPageProps> = ({ onNavigate }) => {
               rel="noopener noreferrer"
               className="text-xs font-medium text-[#c95100] hover:text-[#ea6800] hover:underline transition-colors"
             >
-              +91 90295 55233
+              {COMPANY_INFO.phone}
             </a>
           </div>
 

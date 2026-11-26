@@ -196,7 +196,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate, selected
                 </button>
 
                 <a
-                  href={`https://wa.me/919029555233?text=${encodeURIComponent(`Hi Pioneer Fab Tech, I am interested in ${activeService.title}. Can we discuss drawing & pricing?`)}`}
+                  href={`${COMPANY_INFO.whatsappUrl}?text=${encodeURIComponent(`Hi Pioneer Fab Tech, I am interested in ${activeService.title}. Can we discuss drawing & pricing?`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md transition-all"

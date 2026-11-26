@@ -15,6 +15,7 @@ const ServicesPage = lazy(() => pageLoaders.services().then((m) => ({ default: m
 const ProjectsPage = lazy(() => pageLoaders.projects().then((m) => ({ default: m.ProjectsPage })));
 const GalleryPage = lazy(() => pageLoaders.gallery().then((m) => ({ default: m.GalleryPage })));
 const MaterialSupplyPage = lazy(() => pageLoaders.materials().then((m) => ({ default: m.MaterialSupplyPage })));
+const InfrastructurePage = lazy(() => pageLoaders.infrastructure().then((m) => ({ default: m.InfrastructurePage })));
 const CertificatesPage = lazy(() => pageLoaders.certificates().then((m) => ({ default: m.CertificatesPage })));
 const ContactPage = lazy(() => pageLoaders.contact().then((m) => ({ default: m.ContactPage })));
 const EnquiryPage = lazy(() => pageLoaders.enquiry().then((m) => ({ default: m.EnquiryPage })));
@@ -118,16 +119,15 @@ export default function App() {
     setSelectedItemTarget(itemId || null);
     setCurrentPage(page);
 
-    const targetHash = itemId ? `#${page}/${itemId}` : (page === 'home' ? '' : `#${page}`);
-    const currentHash = window.location.hash.replace(/^#\/?/, '').trim();
-    const cleanTarget = targetHash.replace(/^#\/?/, '').trim();
+    const basePath = (import.meta.env.BASE_URL || '/').replace(/\/+$/, '');
+    const routeSuffix = itemId ? `/${page}/${itemId}` : (page === 'home' ? '/' : `/${page}`);
+    const targetPath = basePath && basePath !== '/' ? `${basePath}${routeSuffix}` : routeSuffix;
 
-    if (currentHash !== cleanTarget) {
-      if (!targetHash) {
-        window.history.pushState(null, '', window.location.pathname);
-      } else {
-        window.history.pushState(null, '', targetHash);
-      }
+    const currentFull = window.location.pathname.replace(/\/+$/, '') || '/';
+    const normalizedTarget = targetPath.replace(/\/+$/, '') || '/';
+
+    if (currentFull !== normalizedTarget || window.location.hash) {
+      window.history.pushState(null, '', targetPath);
     }
 
     if (!itemId) {
@@ -200,9 +200,10 @@ export default function App() {
               <ProjectsPage onNavigate={handleNavigate} selectedItemId={selectedItemTarget} />
             )}
             {currentPage === 'gallery' && <GalleryPage onNavigate={handleNavigate} />}
-            {(currentPage === 'materials' || currentPage === 'infrastructure') && (
+            {currentPage === 'materials' && (
               <MaterialSupplyPage onNavigate={handleNavigate} selectedItemId={selectedItemTarget} />
             )}
+            {currentPage === 'infrastructure' && <InfrastructurePage onNavigate={handleNavigate} />}
             {currentPage === 'certificates' && <CertificatesPage onNavigate={handleNavigate} />}
             {currentPage === 'contact' && <ContactPage onNavigate={handleNavigate} />}
             {currentPage === 'enquiry' && <EnquiryPage />}

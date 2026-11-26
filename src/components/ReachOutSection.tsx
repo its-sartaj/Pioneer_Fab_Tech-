@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { CheckCircle2, Send } from 'lucide-react';
+import React, { useId, useState } from 'react';
+import { CheckCircle2, Mail, MessageCircle, Send } from 'lucide-react';
+import { COMPANY_INFO } from '../data/siteData';
 
 interface ReachOutSectionProps {
   /** Optional wrapper classes (used to adapt outer padding/background on Home vs Contact page) */
@@ -15,6 +16,13 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
   className = '',
   containerClassName = '',
 }) => {
+  const formIdPrefix = useId();
+  const nameId = `${formIdPrefix}-name`;
+  const emailId = `${formIdPrefix}-email`;
+  const phoneId = `${formIdPrefix}-phone`;
+  const messageId = `${formIdPrefix}-message`;
+  const captchaId = `${formIdPrefix}-captcha`;
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,6 +40,21 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
   const num2 = 2;
   const expectedAnswer = num1 + num2;
 
+  const buildInquiryText = () =>
+    [
+      '*NEW QUOTE REQUEST - PIONEER FAB TECH*',
+      `Name: ${formData.name.trim()}`,
+      `Email: ${formData.email.trim()}`,
+      `Phone: ${formData.phone.trim()}`,
+      `Message: ${formData.message.trim()}`,
+      'Source: https://www.pioneerfabtech.com/',
+    ].join('\n');
+
+  const openWhatsAppInquiry = () => {
+    const text = encodeURIComponent(buildInquiryText());
+    window.open(`${COMPANY_INFO.whatsappUrl}?text=${text}`, '_blank', 'noopener,noreferrer');
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (parseInt(formData.captcha.trim(), 10) !== expectedAnswer) {
@@ -39,8 +62,13 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
       return;
     }
     setCaptchaError(false);
+    openWhatsAppInquiry();
     setSubmitted(true);
   };
+
+  const mailtoHref = `mailto:${COMPANY_INFO.email}?subject=${encodeURIComponent(
+    `Quote Request from ${formData.name.trim() || 'Website Visitor'}`
+  )}&body=${encodeURIComponent(buildInquiryText().replace(/\*/g, ''))}`;
 
   return (
     <div className={className}>
@@ -64,22 +92,39 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
               </h2>
 
               {submitted ? (
-                <div className="p-8 text-center bg-emerald-50 border border-emerald-200 space-y-3">
+                <div className="p-8 text-center bg-emerald-50 border border-emerald-200 space-y-4">
                   <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
                   <h3 className="text-base font-bold text-slate-900">
-                    Quote Request Received!
+                    Quote Request Ready!
                   </h3>
                   <p className="text-xs text-slate-600">
-                    Thank you, <span className="font-semibold">{formData.name}</span>. Our fabrication team will contact you shortly on{' '}
-                    <span className="font-semibold">{formData.phone}</span>.
+                    Thank you, <span className="font-semibold">{formData.name}</span>. Your message for{' '}
+                    <span className="font-semibold">{formData.phone}</span> has been prepared in WhatsApp. You can also send directly by email below.
                   </p>
+                  <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
+                    <button
+                      type="button"
+                      onClick={openWhatsAppInquiry}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold cursor-pointer transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                      <span>Open WhatsApp</span>
+                    </button>
+                    <a
+                      href={mailtoHref}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-colors"
+                    >
+                      <Mail className="w-3.5 h-3.5" />
+                      <span>Send via Email</span>
+                    </a>
+                  </div>
                   <button
                     type="button"
                     onClick={() => {
                       setSubmitted(false);
                       setFormData({ name: '', email: '', phone: '', message: '', captcha: '' });
                     }}
-                    className="text-xs font-bold text-[#c95100] hover:text-[#ea6800] hover:underline pt-2 cursor-pointer transition-colors"
+                    className="text-xs font-bold text-[#c95100] hover:text-[#ea6800] hover:underline pt-1 cursor-pointer transition-colors block mx-auto"
                   >
                     Send another inquiry
                   </button>
@@ -88,7 +133,11 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Your Name */}
                   <div>
+                    <label htmlFor={nameId} className="sr-only">
+                      Your Name
+                    </label>
                     <input
+                      id={nameId}
                       type="text"
                       required
                       placeholder="Your Name"
@@ -100,7 +149,11 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
 
                   {/* Your Email */}
                   <div>
+                    <label htmlFor={emailId} className="sr-only">
+                      Your Email
+                    </label>
                     <input
+                      id={emailId}
                       type="email"
                       required
                       placeholder="Your Email"
@@ -112,7 +165,11 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
 
                   {/* Your Number */}
                   <div>
+                    <label htmlFor={phoneId} className="sr-only">
+                      Your Phone Number
+                    </label>
                     <input
+                      id={phoneId}
                       type="tel"
                       required
                       placeholder="Your Number"
@@ -124,7 +181,11 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
 
                   {/* Your Message... */}
                   <div>
+                    <label htmlFor={messageId} className="sr-only">
+                      Your Message
+                    </label>
                     <textarea
+                      id={messageId}
                       rows={4}
                       required
                       placeholder="Your Message..."
@@ -139,10 +200,11 @@ export const ReachOutSection: React.FC<ReachOutSectionProps> = ({
                     <span className="text-xs text-slate-600 block font-medium">
                       Security Question -
                     </span>
-                    <span className="text-sm font-bold text-slate-900 block">
+                    <label htmlFor={captchaId} className="text-sm font-bold text-slate-900 block">
                       What is {num1} + {num2} ?
-                    </span>
+                    </label>
                     <input
+                      id={captchaId}
                       type="text"
                       required
                       placeholder="Your Answer"

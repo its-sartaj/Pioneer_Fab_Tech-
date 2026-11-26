@@ -195,8 +195,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 { id: 'contact', label: 'Contact Us' },
               ].map((link) => (
                 <li key={link.id}>
-                  <button
-                    onClick={() => onNavigate(link.id as PageId)}
+                  <a
+                    href={link.id === 'home' ? '/' : `/${link.id}`}
+                    onClick={(e) => {
+                      if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                        e.preventDefault();
+                        onNavigate(link.id as PageId);
+                      }
+                    }}
                     className="group flex items-center gap-3 text-slate-200 hover:text-[#ff9500] transition-colors text-left cursor-pointer w-full"
                   >
                     <span className="w-5 h-5 rounded-full bg-slate-900 border border-slate-700/80 text-slate-400 group-hover:border-[#ff7a00] group-hover:text-[#ff7a00] flex items-center justify-center shrink-0 transition-colors">
@@ -206,7 +212,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                       <span className="font-medium tracking-wide pb-0.5 block">{link.label}</span>
                       <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none scale-x-0 group-hover:scale-x-100" />
                     </div>
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -266,8 +272,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 const IconComponent = item.icon;
                 return (
                   <li key={idx}>
-                    <button
-                      onClick={() => onNavigate('services')}
+                    <a
+                      href="/services"
+                      onClick={(e) => {
+                        if (!e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                          e.preventDefault();
+                          onNavigate('services');
+                        }
+                      }}
                       title={item.fullTitle}
                       className="group flex items-center gap-3 text-slate-200 hover:text-[#ff9500] transition-colors text-left cursor-pointer w-full"
                     >
@@ -280,7 +292,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                           <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-[#8B2E1D] transition-transform duration-[550ms] ease-out origin-left pointer-events-none scale-x-0 group-hover:scale-x-100" />
                         </div>
                       </div>
-                    </button>
+                    </a>
                   </li>
                 );
               })}
@@ -313,9 +325,8 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   <MapPin className="w-3.5 h-3.5 fill-slate-950 text-slate-950 stroke-[2.2]" />
                 </div>
                 <div className="leading-snug text-slate-200 font-medium">
-                  <p>S. No.233 H.No.2 Shop No.03 Jay</p>
-                  <p>Ambe Chawl Lake Vasai virar, Palghar</p>
-                  <p>Maharashtra 401208</p>
+                  <p>{COMPANY_INFO.address}</p>
+                  <p>{COMPANY_INFO.pincode}</p>
                 </div>
               </div>
 
@@ -371,7 +382,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         >
           
           <div className={`text-xs sm:text-[13px] text-slate-400 tracking-wide font-normal text-center ${isMobileView ? '' : 'md:text-left'}`}>
-            © 2026 Pioneer Fab Tech. All Rights Reserved. &nbsp;|&nbsp; Designed & Developed by Sajid Web Solution
+            {COMPANY_INFO.copyright}
           </div>
 
           {/* Clean Curved Capsule Housing 3 Buttons (Desktop & Tablet > 768px only) */}

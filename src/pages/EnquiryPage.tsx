@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useId } from 'react';
 import { 
   Send, 
   Upload, 
@@ -9,11 +9,8 @@ import {
   Phone, 
   MapPin, 
   FileText, 
-  Image as ImageIcon,
-  HelpCircle,
   X,
-  Layers,
-  ArrowRight
+  Mail
 } from 'lucide-react';
 import { COMPANY_INFO } from '../data/siteData';
 
@@ -46,6 +43,13 @@ const SAMPLE_REFERENCE_DRAWINGS = [
 ];
 
 export const EnquiryPage: React.FC = () => {
+  const fieldPrefix = useId();
+  const locationId = `${fieldPrefix}-location`;
+  const descriptionId = `${fieldPrefix}-description`;
+  const nameId = `${fieldPrefix}-name`;
+  const phoneId = `${fieldPrefix}-phone`;
+  const emailId = `${fieldPrefix}-email`;
+
   const [selectedRequirements, setSelectedRequirements] = useState<string[]>([
     'Spiral / Helical Staircase'
   ]);
@@ -60,6 +64,7 @@ export const EnquiryPage: React.FC = () => {
   const [uploadedPreview, setUploadedPreview] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   // Clean up object URL when replaced or component unmounts
   useEffect(() => {
@@ -109,27 +114,37 @@ ${description.trim() || 'Standard site inspection requested'}
 📎 *Drawing / Reference:* ${uploadedFileName || (selectedReference ? `Sample design preset: ${selectedReference}` : 'Will share over WhatsApp / site visit')}
 ---------------------------------------
 Sent via Pioneer Fab Tech Official Web Portal
-Website: vasai-virar, Maharashtra`;
+Website: https://www.pioneerfabtech.com/`;
   };
 
   const handleWhatsAppSend = () => {
     const text = encodeURIComponent(generateSummaryText());
-    window.open(`https://wa.me/919029555233?text=${text}`, '_blank');
+    window.open(`${COMPANY_INFO.whatsappUrl}?text=${text}`, '_blank', 'noopener,noreferrer');
   };
+
+  const mailtoHref = `mailto:${COMPANY_INFO.email}?subject=${encodeURIComponent(
+    `Project Quote Enquiry from ${name.trim() || 'Website Client'}`
+  )}&body=${encodeURIComponent(generateSummaryText().replace(/\*/g, ''))}`;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !phone.trim()) {
-      alert('Please provide your name and phone number to request a quote.');
+      setValidationError('Please provide your name and phone number to request a quote.');
       return;
     }
+    setValidationError(null);
+    handleWhatsAppSend();
     setSubmitted(true);
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(generateSummaryText());
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(generateSummaryText());
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      // Clipboard API may be blocked in restricted contexts
+    }
   };
 
   return (
@@ -219,12 +234,13 @@ Website: vasai-virar, Maharashtra`;
 
               {/* 3. Project Location */}
               <div>
-                <label className="block text-sm font-bold text-slate-900 mb-2">
+                <label htmlFor={locationId} className="block text-sm font-bold text-slate-900 mb-2">
                   3. Project Location <span className="text-amber-600">*</span>
                 </label>
                 <div className="relative">
                   <MapPin className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
+                    id={locationId}
                     type="text"
                     required
                     placeholder="e.g. Bandra West, Mumbai / Vasai / Thane / Pune / Vapi"
@@ -250,12 +266,13 @@ Website: vasai-virar, Maharashtra`;
               {/* 4. Work Description & Dimensions */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-bold text-slate-900">
+                  <label htmlFor={descriptionId} className="block text-sm font-bold text-slate-900">
                     4. Work Description & Dimensions
                   </label>
                   <span className="text-xs text-slate-400">Approximate is fine</span>
                 </div>
                 <textarea
+                  id={descriptionId}
                   rows={4}
                   placeholder="Describe your design concept, height, linear footage, preferred metal (SS 304, Mild Steel, Brass), finish (Gold PVD, Matt Black, Mirror), or glass specs..."
                   value={description}
@@ -368,35 +385,43 @@ Website: vasai-virar, Maharashtra`;
 
               {/* 6. Name and Phone Number */}
               <div className="pt-2 border-t border-slate-200">
-                <label className="block text-sm font-bold text-slate-900 mb-3">
+                <span className="block text-sm font-bold text-slate-900 mb-3">
                   6. Contact Details <span className="text-amber-600">*</span>
-                </label>
+                </span>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">
+                    <label htmlFor={nameId} className="block text-xs font-semibold text-slate-600 mb-1">
                       Full Name *
                     </label>
                     <input
+                      id={nameId}
                       type="text"
                       required
                       placeholder="e.g. Rajesh Sharma / Ar. Sneha Patel"
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        if (validationError) setValidationError(null);
+                      }}
                       className="w-full px-3.5 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-slate-600 mb-1">
+                    <label htmlFor={phoneId} className="block text-xs font-semibold text-slate-600 mb-1">
                       Phone Number (WhatsApp) *
                     </label>
                     <div className="relative">
                       <Phone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
+                        id={phoneId}
                         type="tel"
                         required
                         placeholder="+91 98765 43210"
                         value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
+                        onChange={(e) => {
+                          setPhone(e.target.value);
+                          if (validationError) setValidationError(null);
+                        }}
                         className="w-full pl-10 pr-4 py-2.5 text-sm bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-amber-500"
                       />
                     </div>
@@ -404,10 +429,11 @@ Website: vasai-virar, Maharashtra`;
                 </div>
 
                 <div className="mt-3">
-                  <label className="block text-xs font-semibold text-slate-600 mb-1">
+                  <label htmlFor={emailId} className="block text-xs font-semibold text-slate-600 mb-1">
                     Email Address (Optional)
                   </label>
                   <input
+                    id={emailId}
                     type="email"
                     placeholder="name@company.com"
                     value={email}
@@ -416,6 +442,12 @@ Website: vasai-virar, Maharashtra`;
                   />
                 </div>
               </div>
+
+              {validationError && (
+                <p role="alert" className="text-xs font-semibold text-red-600 bg-red-50 border border-red-200 rounded-lg px-3.5 py-2.5">
+                  {validationError}
+                </p>
+              )}
 
               {/* Form Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -571,15 +603,22 @@ Website: vasai-virar, Maharashtra`;
               <button
                 type="button"
                 onClick={handleWhatsAppSend}
-                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-colors"
+                className="w-full inline-flex items-center justify-center gap-2 py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span>Also Notify Us on WhatsApp for Priority</span>
+                <span>Open WhatsApp Enquiry</span>
               </button>
+              <a
+                href={mailtoHref}
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-xl transition-colors"
+              >
+                <Mail className="w-4 h-4" />
+                <span>Send via Email Instead</span>
+              </a>
               <button
                 type="button"
                 onClick={() => setSubmitted(false)}
-                className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors"
+                className="w-full py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer"
               >
                 Done
               </button>

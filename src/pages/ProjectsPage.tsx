@@ -76,7 +76,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
 
   const handleWhatsAppEnquiry = (projectTitle: string) => {
     const text = encodeURIComponent(`Hi Pioneer Fab Tech, I am interested in your project: "${projectTitle}". I would like to discuss engineering specifications and get a quotation for a similar requirement.`);
-    window.open(`https://wa.me/919029555233?text=${text}`, '_blank');
+    window.open(`${COMPANY_INFO.whatsappUrl}?text=${text}`, '_blank', 'noopener,noreferrer');
   };
 
   const filteredProjects = PROJECTS.filter((proj) => {
@@ -327,6 +327,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
                   <div className="w-full md:w-64">
                     <input
                       type="text"
+                      aria-label="Search projects by city, client, or title"
                       placeholder="Search by city or project..."
                       value={searchLocation}
                       onChange={(e) => setSearchLocation(e.target.value)}

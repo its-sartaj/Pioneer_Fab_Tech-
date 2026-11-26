@@ -394,9 +394,11 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
                 className="gallery-grid-card"
               >
                 {/* Every box has the exact same aspect-[4/3] uniform dimension */}
-                <div
+                <button
+                  type="button"
                   onClick={() => setSelectedPhotoIndex(idx)}
-                  className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm hover:shadow-xl transition-shadow duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer group"
+                  aria-label={`View fabrication work photo ${idx + 1}`}
+                  className="text-left block relative w-full aspect-[4/3] rounded-2xl overflow-hidden bg-slate-900 border border-slate-200/90 shadow-sm hover:shadow-xl transition-shadow duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer group"
                 >
                   {/* Outer parallax wrapper keeps GSAP scroll translate separate from CSS hover scale */}
                   <div className="absolute inset-0 overflow-hidden">
@@ -421,7 +423,7 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
                       <ArrowUpRight className="w-3.5 h-3.5 text-amber-600" />
                     </span>
                   </div>
-                </div>
+                </button>
               </div>
             ))}
           </div>

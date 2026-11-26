@@ -43,6 +43,8 @@ export function loadPdfJs(): Promise<any> {
 
     const script = document.createElement('script');
     script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+    script.integrity = 'sha384-gqGm4nMwqhWz7+ROxJuTKP7HMkzUsqDX24ib+9BBt9MkquIDCp13yQ811pOOgL1C';
+    script.crossOrigin = 'anonymous';
     script.async = true;
     script.dataset.pdfjsCdn = 'true';
     script.onload = () => {

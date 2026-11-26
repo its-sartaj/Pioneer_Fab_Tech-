@@ -63,8 +63,8 @@ export const COMPANY_INFO = {
   phone: '+91 90295 55233',
   phoneRaw: '+919029555233',
   whatsappUrl: 'https://wa.me/919029555233',
-  address: 'S.No.233 H.No.2 Shop No.03 Jay Ambe Chawl Lake Vasai virar, Palghar Maharashtra 401208',
-  locationCity: 'Vasai Virar, Palghar, Maharashtra',
+  address: 'S.No.233, H.No.2, Shop No.03, Jay Ambe Chawl Lake, Vasai-Virar, Maharashtra',
+  locationCity: 'Vasai-Virar, Palghar, Maharashtra',
   pincode: '401208',
   establishedYear: '2012',
   experienceYears: 14,
@@ -757,7 +757,7 @@ export const MATERIAL_SUPPLY_ITEMS: MaterialSupplyItem[] = [
   {
     id: 'aluminium-sheet-road',
     itemNumber: '05',
-    name: 'ALUMINIUM SHEET & ROAD',
+    name: 'ALUMINIUM SHEET & ROD',
     subtitle: 'Aluminium Sheets, Chequered Plates & Extruded Solid Rods',
     category: 'aluminium',
     categoryLabel: 'Aluminium Products',
@@ -842,7 +842,7 @@ export const MATERIAL_SUPPLY_ITEMS: MaterialSupplyItem[] = [
   {
     id: 'ss-flat-bar',
     itemNumber: '10',
-    name: 'STAINLESS STEEL FLATE BAR',
+    name: 'STAINLESS STEEL FLAT BAR',
     subtitle: 'Hot Rolled Annealed & Pickled (HRAP) & Cold Drawn SS Flat Bars',
     category: 'stainless-steel',
     categoryLabel: 'Stainless Steel',

@@ -75,7 +75,7 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
 
   const handleWhatsAppEnquiry = (itemName: string) => {
     const text = encodeURIComponent(`Hi Pioneer Fab Tech, I would like to inquire about pricing, stock availability, and Mill Test Certificates for ${itemName}.`);
-    window.open(`https://wa.me/919029555233?text=${text}`, '_blank');
+    window.open(`${COMPANY_INFO.whatsappUrl}?text=${text}`, '_blank', 'noopener,noreferrer');
   };
 
   return (

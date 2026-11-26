@@ -241,7 +241,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
           <button
             type="button"
             onClick={() => setSelectedCert(null)}
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/25 hover:bg-black/45 border border-white/25 text-white flex items-center justify-center transition-colors cursor-pointer ml-0.5"
+            className="w-12 h-12 rounded-full bg-black/25 hover:bg-black/45 border border-white/25 text-white flex items-center justify-center transition-colors cursor-pointer ml-0.5"
             title="Close (Esc)"
             aria-label="Close certificate preview"
           >
@@ -311,10 +311,12 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
           {CERTIFICATES.map((cert, idx) => {
             const delayClasses = ['', 'delay-75', 'delay-150'];
             return (
-              <div
+              <button
+                type="button"
                 key={cert.id}
                 onClick={() => openCertificate(cert)}
-                className={`flex flex-col items-center w-full max-w-[340px] group cursor-pointer reveal-on-scroll ${delayClasses[idx] || ''}`}
+                aria-label={`Preview ${cert.title}`}
+                className={`text-left flex flex-col items-center w-full max-w-[340px] group cursor-pointer reveal-on-scroll ${delayClasses[idx] || ''}`}
               >
               {/* Rectangular Black Frame */}
               <div className="w-full bg-white border-2 border-black p-2 sm:p-2.5 shadow-md hover:shadow-2xl transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-1 relative transform-gpu">
@@ -338,7 +340,7 @@ export const CertificatesPage: React.FC<CertificatesPageProps> = ({ onNavigate }
                   {cert.badgeLabel}
                 </div>
               </div>
-              </div>
+              </button>
             );
           })}
         </div>

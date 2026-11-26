@@ -353,11 +353,14 @@ export const OurClientsSlider: React.FC = () => {
             {slidingTrack.map((client, idx) => {
               const isTouchFilled = touchedIdx === idx;
               return (
-                <div
+                <button
+                  type="button"
                   key={`${client.id}-${idx}`}
                   onClick={() => setTouchedIdx((prev) => (prev === idx ? null : idx))}
+                  aria-label={`${client.name} client logo`}
+                  aria-pressed={isTouchFilled}
                   style={{ width: `${cardWidth}px` }}
-                  className={`relative overflow-hidden shrink-0 bg-white rounded-2xl border p-6 sm:p-7 flex items-center justify-center min-h-[150px] sm:min-h-[175px] shadow-xs hover:shadow-xl hover:shadow-orange-950/20 transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group hover:-translate-y-1.5 select-none cursor-pointer ${
+                  className={`relative overflow-hidden shrink-0 bg-white rounded-2xl border p-6 sm:p-7 flex items-center justify-center min-h-[150px] sm:min-h-[175px] shadow-xs hover:shadow-xl hover:shadow-orange-950/20 transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group hover:-translate-y-1.5 select-none cursor-pointer text-left ${
                     isTouchFilled
                       ? 'is-touch-active border-[#c2410c] -translate-y-1'
                       : 'border-slate-700/80 hover:border-[#c2410c]'
@@ -370,7 +373,7 @@ export const OurClientsSlider: React.FC = () => {
                   <div className="relative z-10 w-full flex items-center justify-center group-hover:scale-103 transition-transform duration-300">
                     {client.renderLogo(isTouchFilled)}
                   </div>
-                </div>
+                </button>
               );
             })}
           </div>
