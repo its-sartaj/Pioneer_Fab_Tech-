@@ -111,8 +111,7 @@ export const OriginalPdfFirstPage: React.FC<OriginalPdfFirstPageProps> = ({
         if (!isCancelled) {
           setLoading(false);
         }
-      } catch (err) {
-        console.warn('PDF.js full-view render failed, using fallback preview', err);
+      } catch {
         if (!isCancelled) {
           setUseFallbackImage(true);
           setLoading(false);

@@ -34,7 +34,7 @@ interface SubMenuItem {
   id: string;
   title: string;
   subtitle: string;
-  image: string;
+  image?: string;
   tag: string;
   specs?: string;
   targetPage: PageId;
@@ -44,7 +44,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const dropdownTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Notify parent component about mobile menu state (to hide floating action buttons)
   useEffect(() => {
@@ -56,7 +56,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
   const [hoveredProjectIdx, setHoveredProjectIdx] = useState<number>(0);
   const [hoveredAboutIdx, setHoveredAboutIdx] = useState<number>(0);
   const [hoveredMaterialIdx, setHoveredMaterialIdx] = useState<number>(0);
-  const [hoveredInfraIdx, setHoveredInfraIdx] = useState<number>(0);
   const [hoveredCertIdx, setHoveredCertIdx] = useState<number>(0);
 
   // Close mobile menu on page change
@@ -154,7 +153,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
       id: 'company-overview',
       title: 'Company Profile & Heritage',
       subtitle: 'Over a decade of architectural metalcraft in Vasai-Virar, Palghar',
-      image: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.05_PM__1__7d891123.jpeg',
       tag: 'Company Story',
       specs: 'Founded in Vasai • 850+ Projects Delivered',
       targetPage: 'about',
@@ -163,7 +161,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
       id: 'core-process',
       title: '5-Step Engineering Workflow',
       subtitle: 'From CAD drafting & laser profiling to turnkey site installation',
-      image: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM_2f9ff5e2.jpeg',
       tag: 'Engineering Workflow',
       specs: 'IS 2062 & SS 304/316 Certified Fabrication',
       targetPage: 'about',
@@ -172,7 +169,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
       id: 'leadership',
       title: 'Quality & In-House Workshop',
       subtitle: 'Direct manufacturing facility without middleman markups',
-      image: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.02_PM__1__b8d93cd1.jpeg',
       tag: 'In-House Facility',
       specs: 'Modern CNC Fiber Laser & Hydraulic Bending',
       targetPage: 'about',
@@ -300,8 +296,6 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onMobil
                   currentHoverIdx = hoveredCertIdx;
                   setHoverIdx = setHoveredCertIdx;
                 }
-
-                const currentPreviewItem = subItems[currentHoverIdx] || subItems[0];
 
                 return (
                   <div 

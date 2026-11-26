@@ -2,12 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { 
   CheckCircle2, 
   ArrowRight, 
-  Layers, 
-  Clock, 
-  Compass, 
-  ShieldCheck, 
-  ChevronRight,
-  MessageCircle
+  ChevronRight
 } from 'lucide-react';
 import { SERVICES, COMPANY_INFO } from '../data/siteData';
 import { PageId } from '../components/Navbar';
@@ -48,9 +43,11 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ onNavigate, selected
       {/* 1. Header Banner matching About Us */}
       <div className="relative py-14 sm:py-18 bg-slate-900 overflow-hidden text-center">
         <img
-          src="/assets/achievements_bg.jpg"
+          src="/assets/achievements_bg.webp"
           alt="Pioneer Fab Tech Precision Metal Fabrication Services in Mumbai and Vasai"
           decoding="async"
+          width="1376"
+          height="768"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a1829]/80 via-[#0a1829]/75 to-[#0a1829]/90" />

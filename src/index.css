@@ -59,11 +59,6 @@
 }
 
 /* Hero Slider Animations */
-@keyframes heroProgressBar {
-  0% { width: 0%; }
-  100% { width: 100%; }
-}
-
 @keyframes heroSlideUp {
   0% { 
     opacity: 0; 
@@ -92,10 +87,6 @@
 
 .animate-hero-down {
   animation: heroSlideDown 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.animate-hero-progress {
-  animation: heroProgressBar 4.5s linear forwards;
 }
 
 /* Dropdown Panel & Sub-Items Staggered Slide-Up */
@@ -217,9 +208,26 @@
 .delay-150 { transition-delay: 110ms; }
 .delay-200 { transition-delay: 165ms; }
 .delay-300 { transition-delay: 220ms; }
-.delay-400 { transition-delay: 275ms; }
-.delay-500 { transition-delay: 330ms; }
-.delay-600 { transition-delay: 380ms; }
+
+/* GPU-accelerated Gallery Card Reveal (replaces GSAP ScrollTrigger) */
+.gallery-grid-card {
+  opacity: 0;
+  transform: translate3d(0, 12px, 0) scale3d(0.985, 0.985, 1);
+  transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@media (min-width: 768px) {
+  .gallery-grid-card[data-direction="left"] {
+    transform: translate3d(-10px, 6px, 0) scale3d(0.985, 0.985, 1);
+  }
+  .gallery-grid-card[data-direction="right"] {
+    transform: translate3d(10px, 6px, 0) scale3d(0.985, 0.985, 1);
+  }
+}
+.gallery-grid-card.is-gallery-revealed {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+}
 
 /* Butter-smooth, zero-jank mobile scroll: content is 100% visible immediately without mid-scroll transform jank */
 @media (max-width: 768px) {
@@ -239,10 +247,7 @@
   .delay-75,
   .delay-150,
   .delay-200,
-  .delay-300,
-  .delay-400,
-  .delay-500,
-  .delay-600 {
+  .delay-300 {
     transition-delay: 0ms !important;
   }
   /* Optimize heavy below-the-fold content rendering for 60/120fps scrolling */
@@ -257,7 +262,8 @@
   .reveal-word,
   .reveal-image,
   .reveal-from-left,
-  .reveal-from-right {
+  .reveal-from-right,
+  .gallery-grid-card {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
@@ -274,185 +280,6 @@
     opacity: 1 !important;
     transform: none !important;
   }
-}
-
-/* ========================================================
-   CSS Left-to-Right Animated Underline Hover Effect
-   Using transform: scaleX() and transition
-   Color: Deep Burgundy (#8B2E1D)
-   ======================================================== */
-
-.hover-underline-burgundy {
-  position: relative;
-  display: inline-block;
-  text-decoration: none;
-}
-
-.hover-underline-burgundy::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2.5px;
-  bottom: -2px;
-  left: 0;
-  background-color: #8B2E1D;
-  transform: scaleX(0);
-  transform-origin: bottom left;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.hover-underline-burgundy:hover::after,
-.hover-underline-burgundy:focus-visible::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-/* Sweep variant: expands from left, exits toward right */
-.hover-underline-burgundy-sweep {
-  position: relative;
-  display: inline-block;
-  text-decoration: none;
-}
-
-.hover-underline-burgundy-sweep::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2.5px;
-  bottom: -2px;
-  left: 0;
-  background-color: #8B2E1D;
-  transform: scaleX(0);
-  transform-origin: bottom right;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.hover-underline-burgundy-sweep:hover::after,
-.hover-underline-burgundy-sweep:focus-visible::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-/* Group hover variant for parent containers (e.g., buttons, cards, list items) */
-.group-hover-underline-burgundy {
-  position: relative;
-  display: inline-block;
-}
-
-.group-hover-underline-burgundy::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2.5px;
-  bottom: -2px;
-  left: 0;
-  background-color: #8B2E1D;
-  transform: scaleX(0);
-  transform-origin: bottom left;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.group:hover .group-hover-underline-burgundy::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-/* ========================================================
-   Full-Width Bottom Border Hover Animation
-   ======================================================== */
-
-/* 1. Left-to-Right Full-Width Bottom Border */
-.full-width-bottom-border-ltr {
-  position: relative;
-}
-
-.full-width-bottom-border-ltr::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: var(--border-hover-color, #8B2E1D);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-
-.full-width-bottom-border-ltr:hover::after,
-.full-width-bottom-border-ltr:focus-within::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-/* 2. Center-Outward Full-Width Bottom Border */
-.full-width-bottom-border-center {
-  position: relative;
-}
-
-.full-width-bottom-border-center::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: var(--border-hover-color, #8B2E1D);
-  transform: scaleX(0);
-  transform-origin: center;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-
-.full-width-bottom-border-center:hover::after,
-.full-width-bottom-border-center:focus-within::after {
-  transform: scaleX(1);
-  transform-origin: center;
-}
-
-/* 3. Left-In / Right-Out Sweep Full-Width Bottom Border */
-.full-width-bottom-border-sweep {
-  position: relative;
-}
-
-.full-width-bottom-border-sweep::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: var(--border-hover-color, #8B2E1D);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-
-.full-width-bottom-border-sweep:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
-
-/* Parent/Group Hover Full-Width Bottom Border */
-.group-full-width-border-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 3px;
-  background-color: #8B2E1D;
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
-}
-
-.group:hover .group-full-width-border-bottom,
-.group-hover\/navitem:hover .group-full-width-border-bottom {
-  transform: scaleX(1);
 }
 
 /* Lightbox Modal Keyframes */

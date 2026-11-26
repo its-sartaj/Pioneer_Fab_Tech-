@@ -36,10 +36,10 @@ const CATEGORIES = [
 ];
 
 const SAMPLE_REFERENCE_DRAWINGS = [
-  { id: 'sample-spiral', name: 'Spiral Stair CAD Layout', thumb: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.05_PM_0a02320f.jpeg' },
-  { id: 'sample-jali', name: 'Geometric Jali Screen 3D', thumb: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.05_PM__2__0873d20e.jpeg' },
-  { id: 'sample-facade', name: 'Storefront Elevation', thumb: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.04_PM__1__313234b2.jpeg' },
-  { id: 'sample-lift', name: 'Elevator Cladding Detail', thumb: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM__2__e0b466fd.jpeg' },
+  { id: 'sample-spiral', name: 'Spiral Stair CAD Layout', thumb: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.05_PM_0a02320f.webp' },
+  { id: 'sample-jali', name: 'Geometric Jali Screen 3D', thumb: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.05_PM__2__0873d20e.webp' },
+  { id: 'sample-facade', name: 'Storefront Elevation', thumb: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.04_PM__1__313234b2.webp' },
+  { id: 'sample-lift', name: 'Elevator Cladding Detail', thumb: '/assets/aistudio/WhatsApp_Image_2026-11-03_at_1.04.03_PM__2__e0b466fd.webp' },
 ];
 
 export const EnquiryPage: React.FC = () => {

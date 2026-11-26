@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { 
   MapPin, 
-  Layers, 
   CheckCircle2, 
   ArrowRight, 
   Filter,
@@ -9,12 +8,11 @@ import {
   ChevronLeft,
   ChevronRight,
   Grid,
-  Calendar,
   ShieldCheck,
   Phone,
   Eye
 } from 'lucide-react';
-import { PROJECTS, ProjectItem, COMPANY_INFO } from '../data/siteData';
+import { PROJECTS, COMPANY_INFO } from '../data/siteData';
 import { PageId } from '../components/Navbar';
 import { smoothScrollIntoView } from '../utils/smoothScroll';
 
@@ -94,9 +92,11 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onNavigate, selected
       {/* 1. Header Banner matching About Us */}
       <div className="relative py-14 sm:py-18 bg-slate-900 overflow-hidden text-center">
         <img
-          src="/assets/achievements_bg.jpg"
+          src="/assets/achievements_bg.webp"
           alt="Pioneer Fab Tech Completed Hotel & Industrial Fabrication Projects Portfolio"
           decoding="async"
+          width="1376"
+          height="768"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a1829]/80 via-[#0a1829]/75 to-[#0a1829]/90" />

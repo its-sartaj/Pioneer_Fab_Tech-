@@ -220,10 +220,12 @@ export const OurAchievementsSection: React.FC = () => {
     >
       {/* Industrial factory night photograph background with dark overlay */}
       <img
-        src="/assets/achievements_bg.jpg"
+        src="/assets/achievements_bg.webp"
         alt="Industrial Engineering Plant"
         loading="lazy"
         decoding="async"
+        width="1376"
+        height="768"
         className="absolute inset-0 w-full h-full object-cover object-center opacity-30 select-none pointer-events-none"
       />
       {/* Deep blue/slate overlay matching reference image */}

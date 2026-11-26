@@ -1,13 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight, ArrowUpRight } from 'lucide-react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { PageId } from '../components/Navbar';
 import { useIsMobileView } from '../utils/useIsMobileView';
-
-// Register GSAP ScrollTrigger plugin
-gsap.registerPlugin(ScrollTrigger);
 
 interface GalleryPageProps {
   onNavigate: (page: PageId) => void;
@@ -21,67 +16,67 @@ export interface GalleryItem {
 
 // 61 Architectural & Industrial Fabrication Gallery Photos
 export const GALLERY_ITEMS: GalleryItem[] = [
-  { id: 'gal-1', src: '/assets/gallery/work_01.jpeg', direction: 'bottom' },
-  { id: 'gal-2', src: '/assets/gallery/work_02.jpeg', direction: 'right' },
-  { id: 'gal-3', src: '/assets/gallery/work_03.jpeg', direction: 'left' },
-  { id: 'gal-4', src: '/assets/gallery/work_04.jpeg', direction: 'left' },
-  { id: 'gal-5', src: '/assets/gallery/work_05.jpeg', direction: 'bottom' },
-  { id: 'gal-6', src: '/assets/gallery/work_06.jpeg', direction: 'right' },
-  { id: 'gal-7', src: '/assets/gallery/work_07.jpeg', direction: 'right' },
-  { id: 'gal-8', src: '/assets/gallery/work_08.jpeg', direction: 'bottom' },
-  { id: 'gal-9', src: '/assets/gallery/work_09.jpeg', direction: 'left' },
-  { id: 'gal-10', src: '/assets/gallery/work_10.jpeg', direction: 'bottom' },
-  { id: 'gal-11', src: '/assets/gallery/work_11.jpeg', direction: 'left' },
-  { id: 'gal-12', src: '/assets/gallery/work_12.jpeg', direction: 'right' },
-  { id: 'gal-13', src: '/assets/gallery/work_13.jpeg', direction: 'bottom' },
-  { id: 'gal-14', src: '/assets/gallery/work_14.jpeg', direction: 'left' },
-  { id: 'gal-15', src: '/assets/gallery/work_15.jpeg', direction: 'right' },
-  { id: 'gal-16', src: '/assets/gallery/work_16.jpeg', direction: 'bottom' },
-  { id: 'gal-17', src: '/assets/gallery/work_17.jpeg', direction: 'right' },
-  { id: 'gal-18', src: '/assets/gallery/work_18.jpeg', direction: 'left' },
-  { id: 'gal-19', src: '/assets/gallery/work_19.jpeg', direction: 'bottom' },
-  { id: 'gal-20', src: '/assets/gallery/work_20.jpeg', direction: 'right' },
-  { id: 'gal-21', src: '/assets/gallery/work_21.jpeg', direction: 'left' },
-  { id: 'gal-22', src: '/assets/gallery/work_22.jpeg', direction: 'left' },
-  { id: 'gal-23', src: '/assets/gallery/work_23.jpeg', direction: 'bottom' },
-  { id: 'gal-24', src: '/assets/gallery/work_24.jpeg', direction: 'right' },
-  { id: 'gal-25', src: '/assets/gallery/work_25.jpeg', direction: 'left' },
-  { id: 'gal-26', src: '/assets/gallery/work_26.jpeg', direction: 'bottom' },
-  { id: 'gal-27', src: '/assets/gallery/work_27.jpeg', direction: 'right' },
-  { id: 'gal-28', src: '/assets/gallery/work_28.jpeg', direction: 'left' },
-  { id: 'gal-29', src: '/assets/gallery/work_29.jpeg', direction: 'bottom' },
-  { id: 'gal-30', src: '/assets/gallery/work_30.jpeg', direction: 'right' },
-  { id: 'gal-31', src: '/assets/gallery/work_31.jpeg', direction: 'left' },
-  { id: 'gal-32', src: '/assets/gallery/work_32.jpeg', direction: 'bottom' },
-  { id: 'gal-33', src: '/assets/gallery/work_33.jpeg', direction: 'right' },
-  { id: 'gal-34', src: '/assets/gallery/work_34.jpeg', direction: 'left' },
-  { id: 'gal-35', src: '/assets/gallery/work_35.jpeg', direction: 'bottom' },
-  { id: 'gal-36', src: '/assets/gallery/work_36.jpeg', direction: 'right' },
-  { id: 'gal-37', src: '/assets/gallery/work_37.jpeg', direction: 'left' },
-  { id: 'gal-38', src: '/assets/gallery/work_38.jpeg', direction: 'bottom' },
-  { id: 'gal-39', src: '/assets/gallery/work_39.jpeg', direction: 'right' },
-  { id: 'gal-40', src: '/assets/gallery/work_40.jpeg', direction: 'left' },
-  { id: 'gal-41', src: '/assets/gallery/work_41.jpeg', direction: 'bottom' },
-  { id: 'gal-42', src: '/assets/gallery/work_42.jpeg', direction: 'right' },
-  { id: 'gal-43', src: '/assets/gallery/work_43.jpeg', direction: 'left' },
-  { id: 'gal-44', src: '/assets/gallery/work_44.jpeg', direction: 'bottom' },
-  { id: 'gal-45', src: '/assets/gallery/work_45.jpeg', direction: 'right' },
-  { id: 'gal-46', src: '/assets/gallery/work_46.jpeg', direction: 'left' },
-  { id: 'gal-47', src: '/assets/gallery/work_47.jpeg', direction: 'bottom' },
-  { id: 'gal-48', src: '/assets/gallery/work_48.jpeg', direction: 'right' },
-  { id: 'gal-49', src: '/assets/gallery/work_49.jpeg', direction: 'left' },
-  { id: 'gal-50', src: '/assets/gallery/work_50.jpeg', direction: 'bottom' },
-  { id: 'gal-51', src: '/assets/gallery/work_51.jpeg', direction: 'right' },
-  { id: 'gal-52', src: '/assets/gallery/work_52.jpeg', direction: 'left' },
-  { id: 'gal-53', src: '/assets/gallery/work_53.jpeg', direction: 'bottom' },
-  { id: 'gal-54', src: '/assets/gallery/work_54.jpeg', direction: 'right' },
-  { id: 'gal-55', src: '/assets/gallery/work_55.jpeg', direction: 'left' },
-  { id: 'gal-56', src: '/assets/gallery/work_56.jpeg', direction: 'bottom' },
-  { id: 'gal-57', src: '/assets/gallery/work_57.jpeg', direction: 'right' },
-  { id: 'gal-58', src: '/assets/gallery/work_58.jpeg', direction: 'left' },
-  { id: 'gal-59', src: '/assets/gallery/work_59.jpeg', direction: 'bottom' },
-  { id: 'gal-60', src: '/assets/gallery/work_60.jpeg', direction: 'right' },
-  { id: 'gal-61', src: '/assets/gallery/work_61.jpeg', direction: 'left' },
+  { id: 'gal-1', src: '/assets/gallery/work_01.webp', direction: 'bottom' },
+  { id: 'gal-2', src: '/assets/gallery/work_02.webp', direction: 'right' },
+  { id: 'gal-3', src: '/assets/gallery/work_03.webp', direction: 'left' },
+  { id: 'gal-4', src: '/assets/gallery/work_04.webp', direction: 'left' },
+  { id: 'gal-5', src: '/assets/gallery/work_05.webp', direction: 'bottom' },
+  { id: 'gal-6', src: '/assets/gallery/work_06.webp', direction: 'right' },
+  { id: 'gal-7', src: '/assets/gallery/work_07.webp', direction: 'right' },
+  { id: 'gal-8', src: '/assets/gallery/work_08.webp', direction: 'bottom' },
+  { id: 'gal-9', src: '/assets/gallery/work_09.webp', direction: 'left' },
+  { id: 'gal-10', src: '/assets/gallery/work_10.webp', direction: 'bottom' },
+  { id: 'gal-11', src: '/assets/gallery/work_11.webp', direction: 'left' },
+  { id: 'gal-12', src: '/assets/gallery/work_12.webp', direction: 'right' },
+  { id: 'gal-13', src: '/assets/gallery/work_13.webp', direction: 'bottom' },
+  { id: 'gal-14', src: '/assets/gallery/work_14.webp', direction: 'left' },
+  { id: 'gal-15', src: '/assets/gallery/work_15.webp', direction: 'right' },
+  { id: 'gal-16', src: '/assets/gallery/work_16.webp', direction: 'bottom' },
+  { id: 'gal-17', src: '/assets/gallery/work_17.webp', direction: 'right' },
+  { id: 'gal-18', src: '/assets/gallery/work_18.webp', direction: 'left' },
+  { id: 'gal-19', src: '/assets/gallery/work_19.webp', direction: 'bottom' },
+  { id: 'gal-20', src: '/assets/gallery/work_20.webp', direction: 'right' },
+  { id: 'gal-21', src: '/assets/gallery/work_21.webp', direction: 'left' },
+  { id: 'gal-22', src: '/assets/gallery/work_22.webp', direction: 'left' },
+  { id: 'gal-23', src: '/assets/gallery/work_23.webp', direction: 'bottom' },
+  { id: 'gal-24', src: '/assets/gallery/work_24.webp', direction: 'right' },
+  { id: 'gal-25', src: '/assets/gallery/work_25.webp', direction: 'left' },
+  { id: 'gal-26', src: '/assets/gallery/work_26.webp', direction: 'bottom' },
+  { id: 'gal-27', src: '/assets/gallery/work_27.webp', direction: 'right' },
+  { id: 'gal-28', src: '/assets/gallery/work_28.webp', direction: 'left' },
+  { id: 'gal-29', src: '/assets/gallery/work_29.webp', direction: 'bottom' },
+  { id: 'gal-30', src: '/assets/gallery/work_30.webp', direction: 'right' },
+  { id: 'gal-31', src: '/assets/gallery/work_31.webp', direction: 'left' },
+  { id: 'gal-32', src: '/assets/gallery/work_32.webp', direction: 'bottom' },
+  { id: 'gal-33', src: '/assets/gallery/work_33.webp', direction: 'right' },
+  { id: 'gal-34', src: '/assets/gallery/work_34.webp', direction: 'left' },
+  { id: 'gal-35', src: '/assets/gallery/work_35.webp', direction: 'bottom' },
+  { id: 'gal-36', src: '/assets/gallery/work_36.webp', direction: 'right' },
+  { id: 'gal-37', src: '/assets/gallery/work_37.webp', direction: 'left' },
+  { id: 'gal-38', src: '/assets/gallery/work_38.webp', direction: 'bottom' },
+  { id: 'gal-39', src: '/assets/gallery/work_39.webp', direction: 'right' },
+  { id: 'gal-40', src: '/assets/gallery/work_40.webp', direction: 'left' },
+  { id: 'gal-41', src: '/assets/gallery/work_41.webp', direction: 'bottom' },
+  { id: 'gal-42', src: '/assets/gallery/work_42.webp', direction: 'right' },
+  { id: 'gal-43', src: '/assets/gallery/work_43.webp', direction: 'left' },
+  { id: 'gal-44', src: '/assets/gallery/work_44.webp', direction: 'bottom' },
+  { id: 'gal-45', src: '/assets/gallery/work_45.webp', direction: 'right' },
+  { id: 'gal-46', src: '/assets/gallery/work_46.webp', direction: 'left' },
+  { id: 'gal-47', src: '/assets/gallery/work_47.webp', direction: 'bottom' },
+  { id: 'gal-48', src: '/assets/gallery/work_48.webp', direction: 'right' },
+  { id: 'gal-49', src: '/assets/gallery/work_49.webp', direction: 'left' },
+  { id: 'gal-50', src: '/assets/gallery/work_50.webp', direction: 'bottom' },
+  { id: 'gal-51', src: '/assets/gallery/work_51.webp', direction: 'right' },
+  { id: 'gal-52', src: '/assets/gallery/work_52.webp', direction: 'left' },
+  { id: 'gal-53', src: '/assets/gallery/work_53.webp', direction: 'bottom' },
+  { id: 'gal-54', src: '/assets/gallery/work_54.webp', direction: 'right' },
+  { id: 'gal-55', src: '/assets/gallery/work_55.webp', direction: 'left' },
+  { id: 'gal-56', src: '/assets/gallery/work_56.webp', direction: 'bottom' },
+  { id: 'gal-57', src: '/assets/gallery/work_57.webp', direction: 'right' },
+  { id: 'gal-58', src: '/assets/gallery/work_58.webp', direction: 'left' },
+  { id: 'gal-59', src: '/assets/gallery/work_59.webp', direction: 'bottom' },
+  { id: 'gal-60', src: '/assets/gallery/work_60.webp', direction: 'right' },
+  { id: 'gal-61', src: '/assets/gallery/work_61.webp', direction: 'left' },
 ];
 
 export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
@@ -90,91 +85,43 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
   const lightboxTouchStartXRef = useRef<number | null>(null);
   const isMobileView = useIsMobileView(768);
 
-  // GSAP ScrollTrigger: crisp reveal everywhere, parallax only on fine-pointer desktop
+  // Lightweight GPU-accelerated IntersectionObserver card reveal (preserves exact directional glide without bundling GSAP)
   useEffect(() => {
-    if (!containerRef.current || GALLERY_ITEMS.length === 0) return;
+    const root = containerRef.current;
+    if (!root || GALLERY_ITEMS.length === 0) return;
+
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('.gallery-grid-card'));
+    if (cards.length === 0) return;
 
     const prefersReduced =
       typeof window !== 'undefined' &&
       window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) return;
+    if (prefersReduced || !('IntersectionObserver' in window)) {
+      cards.forEach((card) => card.classList.add('is-gallery-revealed'));
+      return;
+    }
 
-    const mm = gsap.matchMedia();
+    const isDesktop = !isMobileView;
+    cards.forEach((card, index) => {
+      const delayMs = isDesktop ? (index % 3) * 30 : (index % 2) * 20;
+      card.style.transitionDelay = `${delayMs}ms`;
+    });
 
-    mm.add(
-      {
-        isDesktop: '(min-width: 768px) and (hover: hover)',
-        isMobileOrTouch: '(max-width: 767px), (hover: none)',
-      },
-      (context) => {
-        const { isDesktop } = context.conditions as { isDesktop: boolean; isMobileOrTouch: boolean };
-        const cards = gsap.utils.toArray<HTMLElement>('.gallery-grid-card');
-        if (cards.length === 0) return;
-
-        cards.forEach((card, index) => {
-          const direction = card.getAttribute('data-direction');
-          const initialX = isDesktop ? (direction === 'left' ? -10 : direction === 'right' ? 10 : 0) : 0;
-          const initialY = isDesktop ? (initialX === 0 ? 12 : 6) : 14;
-
-          gsap.fromTo(
-            card,
-            {
-              opacity: 0,
-              scale: isDesktop ? 0.985 : 0.99,
-              x: initialX,
-              y: initialY,
-            },
-            {
-              opacity: 1,
-              scale: 1,
-              x: 0,
-              y: 0,
-              duration: isDesktop ? 0.34 : 0.28,
-              ease: 'power2.out',
-              clearProps: 'transform,willChange',
-              scrollTrigger: {
-                trigger: card,
-                start: 'top 96%',
-                toggleActions: 'play none none none',
-              },
-              delay: isDesktop ? (index % 3) * 0.03 : (index % 2) * 0.02,
-            }
-          );
-
-          // Parallax lives on .gallery-parallax-wrap so it never collides with CSS hover scale on <img>
-          if (isDesktop) {
-            const parallaxWrap = card.querySelector<HTMLElement>('.gallery-parallax-wrap');
-            if (parallaxWrap) {
-              gsap.fromTo(
-                parallaxWrap,
-                { yPercent: -3 },
-                {
-                  yPercent: 3,
-                  ease: 'none',
-                  scrollTrigger: {
-                    trigger: card,
-                    start: 'top bottom',
-                    end: 'bottom top',
-                    scrub: 0.4,
-                  },
-                }
-              );
-            }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-gallery-revealed');
+            observer.unobserve(entry.target);
           }
         });
       },
-      containerRef
+      { threshold: 0.04, rootMargin: '0px 0px 40px 0px' }
     );
 
-    const timer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 300);
-
-    return () => {
-      clearTimeout(timer);
-      mm.revert();
-    };
-  }, []);
+    cards.forEach((card) => observer.observe(card));
+    return () => observer.disconnect();
+  }, [isMobileView]);
 
   // Preload adjacent lightbox images for zero-flash Next/Prev swiping
   useEffect(() => {
@@ -340,9 +287,11 @@ export const GalleryPage: React.FC<GalleryPageProps> = ({ onNavigate }) => {
       <div className="relative py-14 sm:py-18 bg-slate-900 overflow-hidden text-center">
         {/* Background photo */}
         <img
-          src="/assets/achievements_bg.jpg"
+          src="/assets/achievements_bg.webp"
           alt="Pioneer Fab Tech Architectural & Industrial Metal Fabrication Project Gallery"
           decoding="async"
+          width="1376"
+          height="768"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
         {/* Blue/black gradient overlay matching reference */}

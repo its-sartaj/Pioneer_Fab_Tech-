@@ -10,6 +10,10 @@ interface SlideItem {
   image: string;
   imageMob: string;
   imageDesk: string;
+  deskWidth: number;
+  deskHeight: number;
+  mobWidth: number;
+  mobHeight: number;
   badge: string;
   headline: string;
   description: string;
@@ -23,6 +27,10 @@ const SLIDES: SlideItem[] = [
     image: '/assets/aistudio/hero_slide_1_desk.webp',
     imageMob: '/assets/aistudio/hero_slide_1_mob.webp',
     imageDesk: '/assets/aistudio/hero_slide_1_desk.webp',
+    deskWidth: 1080,
+    deskHeight: 1064,
+    mobWidth: 720,
+    mobHeight: 709,
     badge: 'Architectural Structural Fabrication',
     headline: 'Architectural Steel & Precision Spiral Staircases',
     description: 'Bespoke helical staircases, double-height atrium steelwork, and floor-to-ceiling glass lobby installations engineered with IS 2062 heavy structural steel and master craftsmanship.',
@@ -34,6 +42,10 @@ const SLIDES: SlideItem[] = [
     image: '/assets/aistudio/hero_slide_2_desk.webp',
     imageMob: '/assets/aistudio/hero_slide_2_mob.webp',
     imageDesk: '/assets/aistudio/hero_slide_2_desk.webp',
+    deskWidth: 1080,
+    deskHeight: 1016,
+    mobWidth: 720,
+    mobHeight: 677,
     badge: 'CNC Fiber Laser & PVD Coating',
     headline: 'Luxury CNC Laser Cut Jali & Decorative Partitions',
     description: 'Sub-millimeter CNC fiber laser cut metal screens, luxury titanium PVD gold partitions, and architectural geometric room dividers for premium residences and hospitality interiors.',
@@ -45,6 +57,10 @@ const SLIDES: SlideItem[] = [
     image: '/assets/aistudio/hero_slide_3_desk.webp',
     imageMob: '/assets/aistudio/hero_slide_3_mob.webp',
     imageDesk: '/assets/aistudio/hero_slide_3_desk.webp',
+    deskWidth: 1080,
+    deskHeight: 1072,
+    mobWidth: 720,
+    mobHeight: 714,
     badge: 'Commercial Facades & Glazing',
     headline: 'Commercial Glass Facades & Boutique Storefronts',
     description: 'Heavy-duty stainless steel & aluminium architectural storefronts, frameless structural glass facades, and automated luxury commercial entrance systems engineered for lasting durability.',
@@ -193,21 +209,25 @@ export const HeroSlider: React.FC<HeroSliderProps> = () => {
                   media="(max-width: 768px)"
                   srcSet={slide.imageMob}
                   type="image/webp"
+                  width={slide.mobWidth}
+                  height={slide.mobHeight}
                 />
                 <source
                   srcSet={slide.imageDesk}
                   type="image/webp"
+                  width={slide.deskWidth}
+                  height={slide.deskHeight}
                 />
                 <img
                   src={slide.imageDesk}
                   srcSet={`${slide.imageMob} 720w, ${slide.imageDesk} 1080w`}
                   sizes="100vw"
                   alt={slide.headline}
-                  loading="eager"
+                  loading={idx === 0 ? 'eager' : 'lazy'}
                   decoding={idx === 0 ? 'sync' : 'async'}
                   fetchPriority={idx === 0 ? 'high' : 'low'}
-                  width="1080"
-                  height="1064"
+                  width={slide.deskWidth}
+                  height={slide.deskHeight}
                   className={`w-full h-full object-cover object-center sm:object-[center_35%] transform-gpu ${
                     isActive || isExiting
                       ? 'transition-transform duration-[4500ms] ease-out'

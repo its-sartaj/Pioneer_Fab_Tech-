@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   ArrowRight 
 } from 'lucide-react';
-import { COMPANY_INFO, SERVICES, MATERIAL_SUPPLY_ITEMS } from '../data/siteData';
+import { COMPANY_INFO, SERVICES } from '../data/siteData';
 import { AutoSliderRow } from '../components/AutoSliderRow';
 import { PageId } from '../components/Navbar';
 import { HeroSlider } from '../components/HeroSlider';

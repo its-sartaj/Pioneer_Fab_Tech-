@@ -42,7 +42,6 @@ export const prefetchIdlePages = (): (() => void) => {
     'contact',
     'certificates',
     'enquiry',
-    'gallery',
   ];
 
   // Respect Save-Data / very slow connections

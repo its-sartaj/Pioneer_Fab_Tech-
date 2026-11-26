@@ -86,9 +86,11 @@ export const MaterialSupplyPage: React.FC<MaterialSupplyPageProps> = ({ onNaviga
          ===================================================================== */}
       <section className="relative py-14 sm:py-18 bg-slate-900 text-white overflow-hidden text-center">
         <img
-          src="/assets/achievements_bg.jpg"
+          src="/assets/achievements_bg.webp"
           alt="Pioneer Fab Tech Prime Certified Stainless Steel & Industrial Metal Material Supply"
           decoding="async"
+          width="1376"
+          height="768"
           className="absolute inset-0 w-full h-full object-cover object-center opacity-35"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#0a1829]/80 via-[#0a1829]/75 to-[#0a1829]/90" />
